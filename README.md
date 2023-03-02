@@ -15,11 +15,19 @@ py -3 -m venv venv
 venv\Scripts\activate
 ```
 Then the with ```RestaurantOne``` as your working directory 
-install the dependencies using pip
+install the dependencies using pip or using poetry
+**NOTE:** with poetry make sure the python version is 3.9.12
 
 ```bash
 pip install -r requirements.txt
 ```
+or
+
+```bash
+poetry install
+```
+**Database Setup**
+
 
 ## Documentations
 
