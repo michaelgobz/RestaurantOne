@@ -34,5 +34,5 @@ poetry install
 ## Architecture
 
 ## AUTHORS
-[Michael Goboola](https://github.com/michaelgobz/)<br\>
+[Michael Goboola](https://github.com/michaelgobz/)<br />
 [Jed Bahena](https://github.com/Jed-hub)
