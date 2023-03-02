@@ -2,6 +2,24 @@
 Restaurant management application developed using Flask and Postgresql
 
 ## Installation
+This project use python 3.11.0 as the runtime on the [flask]() web framework. we start with cloning off github
+
+```bash
+git clone https://github.com/michaelgobz/RestaurantOne
+```
+Then ```cd``` into the RestaurantOne folder and create virtual environment
+
+```bash
+cd RestaurantOne
+py -3 -m venv venv
+venv\Scripts\activate
+```
+Then the with ```RestaurantOne``` as your working directory 
+install the dependencies using pip
+
+```bash
+pip install -r requirements.txt
+```
 
 ## Documentations
 
