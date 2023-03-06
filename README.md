@@ -1,13 +1,19 @@
 # RestaurantOne
-Restaurant management application developed using Flask and Postgresql
+Restaurant management application developed using Flask, react and Postgresql
 
 ## Installation
-This project use python 3.9.12 as the runtime on the [flask](https://flask.palletsprojects.com/en/2.2.x/) web framework and [postgresql](https://www.postgresql.org/docs/). we start with cloning off github
+The project uses a monorepo structure where the ui and the backend are hosted on the same repository.<br />
+For starters, there are 2 directories to watch out for the root that houses the backend and ```ui``` directory that house the ui components that are built on [react](https://reactjs.org). <br />
+The ui needs ```nodejs v18``` to build the react components and use the ```@material-ui``` ui took kit<br />
+
+This backend uses python 3.9.12 as the runtime on the [flask](https://flask.palletsprojects.com/en/2.2.x/) web framework and [postgresql](https://www.postgresql.org/docs/). we start with cloning off github
+
+**server setup**
 
 ```bash
 git clone https://github.com/michaelgobz/RestaurantOne
 ```
-Then ```cd``` into the RestaurantOne folder and create virtual environment
+Then ```cd``` into the RestaurantOne folder and create virtual environment to setup the server dependencies
 
 ```bash
 cd RestaurantOne
@@ -28,11 +34,28 @@ poetry install
 ```
 **Database Setup**
 
+**ui setup**
+To setup the ui you will need to ```cd``` into ```ui``` directory then run <br />
+```bash
+npm install
+```
+or using yarn 
+
+```bash
+yarn install
+```
+to install the required dependencies, when its done then you can run <br />
+
+```bash
+npm build 
+npm start
+```
+which will build and start the ui server then you can interact with the ui via the loopback host <br />
 
 ## Documentations
 
 ## Architecture
 
-## AUTHORS
+## Authors
 [Michael Goboola](https://github.com/michaelgobz/)<br />
 [Jed Bahena](https://github.com/Jed-hub)
