@@ -22,7 +22,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "start-server": "flask --app app --debug false --flask-env production ",
+    "start-server": "flask --app app",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
