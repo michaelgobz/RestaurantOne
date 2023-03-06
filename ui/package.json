@@ -18,7 +18,11 @@
     "react-router-dom":"^6.0.2",
     "react-router":"^6.0.2",
     "@emotion/react":"^11.7.0",
-    "markdown-to-jsx":"^7.1.5"
+    "markdown-to-jsx":"^7.1.5",
+    "react-markdown":"^7.1.1",
+    "react-syntax-highlighter":"^17.3.0",
+    "react-icons":"^4.3.1",
+    "react-hooks": "1.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
