@@ -11,7 +11,7 @@ flask-bootstrap
 flask-moment==0.11.0
 flask-debugtoolbar==0.11.0
 flask-script==2.0.6
-countries==1.0.0
+countries==0.2.0
 phonenumbers==8.12.24
 rave_python==1.2.16
 redis==4.5.1
