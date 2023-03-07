@@ -33,7 +33,8 @@ or
 poetry install
 ```
 
-**ui** **setup** <br />
+**UI** **Setup** <br />
+
 To setup the ui you will need to ```cd``` into ```ui``` directory then run <br />
 ```bash
 npm install
@@ -51,10 +52,10 @@ npm start
 ```
 which will build and start the ui server then you can interact with the ui via the loopback host <br />
 
-## Documentations
+**Documentations**
 
-## Architecture
+**Architecture**
 
-## Authors
+**Authors**
 [Michael Goboola](https://github.com/michaelgobz/)<br />
 [Jed Bahena](https://github.com/Jed-hub)
