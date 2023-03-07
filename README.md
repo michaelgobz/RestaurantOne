@@ -56,6 +56,6 @@ which will build and start the ui server then you can interact with the ui via t
 
 **Architecture**
 
-**Authors**
+**Authors**<br />
 [Michael Goboola](https://github.com/michaelgobz/)<br />
 [Jed Bahena](https://github.com/Jed-hub)
