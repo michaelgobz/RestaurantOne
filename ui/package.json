@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "authors":"Michael Goboola <michselleonsrd@gmail.com> && Jed Bahena <jedbahena@gmail.com>",
-  "proxy": "http://localhost:3000",
+  "description": "UI for the project",
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
@@ -31,7 +31,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "start-server": "flask --app app",
+    "start-server": "python ../app.py",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
