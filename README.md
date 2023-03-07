@@ -32,9 +32,8 @@ or
 ```bash
 poetry install
 ```
-**Database Setup**
 
-**ui setup**
+**ui** **setup** <br />
 To setup the ui you will need to ```cd``` into ```ui``` directory then run <br />
 ```bash
 npm install
