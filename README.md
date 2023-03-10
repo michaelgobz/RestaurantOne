@@ -6,7 +6,7 @@ The project uses a monorepo structure where the ui and the backend are hosted on
 For starters, there are 2 directories to watch out for the root that houses the backend and ```ui``` directory that house the ui components that are built on [react](https://reactjs.org). <br />
 The ui needs ```nodejs v18``` to build the react components and use the ```@material-ui``` ui took kit<br />
 
-This backend uses python 3.9.12 as the runtime on the [flask](https://flask.palletsprojects.com/en/2.2.x/) web framework and [postgresql](https://www.postgresql.org/docs/). we start with cloning off github
+This backend uses python 3.9.12 as the runtime on the [flask](https://flask.palletsprojects.com/en/2.2.x/) web framework and [postgresql](https://www.postgresql.org/docs/) database. we start with cloning off github
 
 **server setup**
 
