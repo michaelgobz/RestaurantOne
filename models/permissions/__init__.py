@@ -1,3 +1,5 @@
+"""Defines the permissions protocol provided with methods to check permissions."""
+
 from typing import TYPE_CHECKING, Collection, Union
 
 from .auth_filters import (
@@ -20,41 +22,36 @@ from .enums import (
     get_permissions_codename,
     get_permissions_enum_dict,
     get_permissions_enum_list,
-    
+
 )
 __all__ = [
     "PERMISSIONS_ENUMS",
-    "is_app",
-    "is_staff_user",
+    "is_operator_user",
     "is_user",
-    "AppPermission",
-    "ChannelPermissions",
+    "AccountPermissions"
     "CheckoutPermissions",
-    "DiscountPermissions",
-    "GiftcardPermissions",
     "MenuPermissions",
     "OrderPermissions",
-    "PagePermissions",
-    "PageTypePermissions",
     "PaymentPermissions",
-    "PluginsPermissions",
     "ProductPermissions",
     "ProductTypePermissions",
     "ShippingPermissions",
-    "SitePermissions",
-    "get_permission_names",
-    "get_permissions",
     "get_permissions_codename",
     "get_permissions_enum_dict",
     "get_permissions_enum_list",
-    "get_permissions_from_codenames",
-    "get_permissions_from_names",
-    "split_permission_codename",
 ]
+
+
+def get_user_from_context(context):
+    # order is important
+    # user if None then is passed as anonymous
+    # more users could be returned
+    return context.user
+
 
 if TYPE_CHECKING:
     # from ...account.models import User
-  
+
 
 def one_of_permissions_or_auth_filter_required(context, permissions):
     """Determine whether user or app has rights to perform an action.
@@ -67,12 +64,13 @@ def one_of_permissions_or_auth_filter_required(context, permissions):
     authorization_filters = [
         p for p in permissions if isinstance(p, AuthorizationFilters)
     ]
-    permissions = [p for p in permissions if not isinstance(p, AuthorizationFilters)]
+    permissions = [p for p in permissions if not isinstance(
+        p, AuthorizationFilters)]
 
     granted_by_permissions = False
     granted_by_authorization_filters = False
-    
-    #TODO: develop the get_user_from_context function
+
+    # TODO: develop the get_user_from_context function
 
     requestor = get_user_from_context(context)
 
@@ -98,7 +96,7 @@ def permission_required(
     requestor: object, perms: Collection[BasePermissionEnum]
 ) -> bool:
     # get the instance of User
-    User ={} # just a mock
+    User = {}  # just a mock
     if isinstance(requestor, User):
         return requestor.has_perms(perms)
     elif requestor:
