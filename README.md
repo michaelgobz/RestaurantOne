@@ -47,10 +47,13 @@ yarn install
 to install the required dependencies, when its done then you can run <br />
 
 ```bash
+npm run start server
+npm run migrate 
+npm run populateDb
 npm build 
 npm start
 ```
-which will build and start the ui server then you can interact with the ui via the loopback host <br />
+which will start the api server, migrate the database, populate it build and start client then you can interact with the ui via the loopback host <br />
 
 **Documentations**
 
