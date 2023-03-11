@@ -1,7 +1,6 @@
 """CLI module."""
-from model import CLI
+from model import cli as model_cli
 
-cli = CLI()
 
 if __name__ == '__main__':
-    cli.cli()  
+    model_cli()
