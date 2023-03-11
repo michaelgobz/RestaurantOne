@@ -49,12 +49,10 @@ def get_user_from_context(context):
     return context.user
 
 
-if TYPE_CHECKING:
-    # from ...account.models import User
-
+# TODO: Tailor this class round the user model considering the a tight context instance
 
 def one_of_permissions_or_auth_filter_required(context, permissions):
-    """Determine whether user or app has rights to perform an action.
+    """Determine whether user  has rights to perform an action.
 
     The `context` parameter is the Context instance associated with the request.
     """
@@ -69,8 +67,6 @@ def one_of_permissions_or_auth_filter_required(context, permissions):
 
     granted_by_permissions = False
     granted_by_authorization_filters = False
-
-    # TODO: develop the get_user_from_context function
 
     requestor = get_user_from_context(context)
 
