@@ -1,10 +1,22 @@
 """application entry point
     """
 
+import os
 from flask import Flask, request, jsonify
+from flask_sqlalchemy import SQLAlchemy
+from dotenv import load_dotenv
+
+load_dotenv()
   
 # Initializing flask app
 app = Flask(__name__)
+
+# Secret Key
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+
+# Database 
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
+db = SQLAlchemy(app)
   
   
 # Route for seeing a data
