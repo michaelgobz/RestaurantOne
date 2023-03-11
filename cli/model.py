@@ -1,7 +1,7 @@
 """model module for the cli app"""
 import click
 # import the migrate functions from respective modules
-db_client = ""
+client:str = ""
 random_data = dict()
 migrate_tasks = dict()
 
@@ -21,7 +21,7 @@ def migrate():
 
 
 @click.command()
-def load_data():
+def populate_db():
     """load data to the database"""
     click.echo('Loading data into the database')
     # call the load_data function from the respective module
@@ -29,4 +29,4 @@ def load_data():
 
 
 cli.add_command(migrate)
-cli.add_command(load_data)
+cli.add_command(populate_db)
