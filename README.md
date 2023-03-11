@@ -35,7 +35,7 @@ poetry install
 
 **UI** **Setup** <br />
 
-To setup the ui you will need to ```cd``` into ```ui``` directory then run <br />
+To setup the ui you will need to ```cd``` into ```client``` directory then run <br />
 ```bash
 npm install
 ```
