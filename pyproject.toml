@@ -9,6 +9,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "3.9.12"
 Flask = "1.1.2"
+click = "8.1.3"
 SQLAlchemy = "1.3.24"
 redis = "4.5.1"
 flask-redis = "0.4.0"
