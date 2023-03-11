@@ -8,6 +8,7 @@
         "noreferrer",
         "setdata",
         "simplebar",
+        "sqlalchemy",
         "venv",
         "webstack"
     ]
