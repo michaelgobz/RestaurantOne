@@ -1,6 +1,6 @@
 """Defines the permissions protocol provided with methods to check permissions."""
 
-from typing import TYPE_CHECKING, Collection, Union
+from typing import  Collection
 
 from .auth_filters import (
     AuthorizationFilters,

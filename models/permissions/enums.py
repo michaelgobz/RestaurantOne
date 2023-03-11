@@ -1,8 +1,6 @@
 """ permissions enums """
 
 from enum import Enum
-from typing import Iterable, List
-
 
 class BasePermissionEnum(Enum):
     @property
