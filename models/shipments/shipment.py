@@ -1,15 +1,18 @@
-from app import db
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String, ForeignKey
 
-class Shipment(db.Model):
+Base = declarative_base()
+
+class Shipment(Base):
 # Representation of a shipment
 
     __tablename__ = 'shipments'
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50))
-    description = db.Column(db.String(250))
-    capacity = db.Column(db.Integer)
-    operator = db.Column(db.String(50))
-    method = db.Column(db.String(50))
-    means = db.Column(db.String(50))
-    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'), nullable=False)
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50))
+    description = Column(String(250))
+    capacity = Column(Integer)
+    operator = Column(String(50))
+    method = Column(String(50))
+    means = Column(String(50))
+    restaurant_id = Column(Integer, ForeignKey('restaurant.id'), nullable=False)
