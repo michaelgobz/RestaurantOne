@@ -1,23 +1,27 @@
-from __main__ import db
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import relationship
 
-class User(db.Model):
+Base = declarative_base()
+
+class User(Base):
  #  Representation of a user
 
    __tablename__ = 'users'
 
-   id = db.Column(db.Integer, primary_key=True)
-   email = db.Column(db.String(120), unique=True, nullable=False)
-   password = db.Column(db.String(60), nullable=False)
-   first_name = db.Column(db.String(50), nullable=False)
-   last_name = db.Column(db.String(50), nullable=False)
-   phone = db.Column(db.Integer, unique=True, nullable=True)
-   country = db.Column(db.String(50), nullable=True)
-   location = db.Column(db.String(50), nullable=True)
-   address = db.Column(db.String(150), nullable=True)
-   role = db.Column(db.String(50), nullable=False)
-   permissions = db.Column(db.String, nullable=False)
-   avatar = db.Column(db.String(20), nullable=False, default='default.jpg')
-   orders = db.relationship('Order', backref='user', lazy=True)
-   reservations = db.relationship('Reservation', backref='user')
-   payment_methods = db.Column(db.String, nullable=True)
-   reviews = db.Column(db.String(1000), nullable=True)
+   id = Column(Integer, primary_key=True)
+   email = Column(String(120), unique=True, nullable=False)
+   password = Column(String(60), nullable=False)
+   first_name = Column(String(50), nullable=False)
+   last_name = Column(String(50), nullable=False)
+   phone = Column(Integer, unique=True, nullable=True)
+   country = Column(String(50), nullable=True)
+   location = Column(String(50), nullable=True)
+   address = Column(String(150), nullable=True)
+   role = Column(String(50), nullable=False)
+   permissions = Column(String, nullable=False)
+   avatar = Column(String(20), nullable=False, default='default.jpg')
+   orders = relationship('Order', backref='user', lazy=True)
+   reservations = relationship('Reservation', backref='user')
+   payment_methods = Column(String, nullable=True)
+   reviews = Column(String(1000), nullable=True)
