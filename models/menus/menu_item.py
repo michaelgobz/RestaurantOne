@@ -1,16 +1,19 @@
-from app import db
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String, Text
 
-class MenuItem(db.Model):
+Base = declarative_base()
+
+class MenuItem(Base):
 #   Representation of a menu item
 
     __tablename__ = 'menu_items'
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False)
-    description = db.Column(db.Text, nullable=False)
-    category = db.Column(db.String(50), nullable=True)
-    price = db.Column(db.Integer, nullable=False, default=0)
-    foods = db.Column(db.String(50), nullable=False)
-    toppings = db.Column(db.String(50), nullable=True)
-    serving_model = db.Column(db.String(50), nullable=True)
-    tax_associated = db.Column(db.Integer, nullable=True)
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50), nullable=False)
+    description = Column(Text, nullable=False)
+    category = Column(String(50), nullable=True)
+    price = Column(Integer, nullable=False, default=0)
+    foods = Column(String(50), nullable=False)
+    toppings = Column(String(50), nullable=True)
+    serving_model = Column(String(50), nullable=True)
+    tax_associated = Column(Integer, nullable=True)
