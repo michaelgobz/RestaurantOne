@@ -1,6 +1,4 @@
 import { Helmet } from 'react-helmet-async';
-import { useNavigate } from 'react-router';
-import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { styled, useTheme } from '@mui/material/styles';
 import { Link, Container, Typography, Divider, Stack, Button } from '@mui/material';
@@ -49,6 +47,7 @@ export default function LoginPage() {
   const mdUp = useResponsive('up', 'md');
   const theme = useTheme();
   const PRIMARY_MAIN = theme.palette.primary.main;
+  const url = window.location.host + '/auth/signup'
 
 
   return (
@@ -207,7 +206,7 @@ l32 24 -41 17 c-32 13 -43 24 -48 48 -9 43 -17 44 -44 5z"/>
 
             <Typography variant="body2" sx={{ mb: 5 }}>
               Don’t have an account? {''}
-              <Link to='/auth/signup' component={RouterLink} variant="subtitle2">Get started</Link>
+              <Link href={url} variant="subtitle2">Get started</Link>
             </Typography>
 
             <Stack direction="row" spacing={2}>
