@@ -1,26 +1,26 @@
 
 // O auth supported for google, facebook, twitter, github
 export function handleGithubLogin() {
-    window.alert('Github login');
+    console.log('Github login');
 };
 
 export function handleGoogleLogin() {
-    window.alert('Google login');
+    console.log('Google login');
 };
 
 export function handleTwitterLogin() {
-    window.alert('Twitter login');
+    console.log('Twitter login');
 };
 
 // O auth support  Google, Twitter, Github
 export function handleGithubSignUp() {
-    window.alert('Github');
+    console.log('Github');
 }
 
 export function handleGoogleSignUp() {
-    window.alert('Google');
+    console.log('Google');
 }
 
 export function handleTwitterSignUp() {
-    window.alert('Twitter');
+    console.log('Twitter');
 }

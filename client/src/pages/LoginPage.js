@@ -39,6 +39,8 @@ const StyledContent = styled('div')(({ theme }) => ({
   padding: theme.spacing(12, 0),
 }));
 
+const signup = '/auth /signup'
+
 
 // ----------------------------------------------------------------------
 
@@ -47,7 +49,7 @@ export default function LoginPage() {
   const mdUp = useResponsive('up', 'md');
   const theme = useTheme();
   const PRIMARY_MAIN = theme.palette.primary.main;
-  const url = window.location.host + '/auth/signup'
+  const url = window.location.host + signup;
 
 
   return (
