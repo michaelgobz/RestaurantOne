@@ -1,10 +1,9 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 // @mui
-import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox ,Typography} from '@mui/material';
+import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // components
-import Iconify from '../../../../components/iconify';
+import Iconify from '../../../components/iconify';
 
 // ----------------------------------------------------------------------
 
@@ -18,8 +17,8 @@ export default function SignUpForm() {
   return (
     <>
       <Stack spacing={3}>
-        <TextField name="Lirstname" label="First Name" />
-        <TextField name="Lastname" label="Last Name" />
+        <TextField name="firstname" label="First Name" />
+        <TextField name="lastname" label="Last Name" />
         <TextField name="email" label="Email address" />
         <TextField
           name="password"

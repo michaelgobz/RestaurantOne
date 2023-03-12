@@ -2,9 +2,11 @@
     "cSpell.words": [
         "apexcharts",
         "Bahena",
+        "firstname",
         "flowtype",
         "Goboola",
         "iconify",
+        "lastname",
         "nocheck",
         "noopener",
         "noreferrer",
@@ -27,7 +29,10 @@
     "python.linting.pylintArgs": [
     "--init-hook",
     "import sys; sys.path.append('<path to folder your module is in>')"
-]
+],
+"[javascript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+}
    
 
 }
