@@ -1,23 +1,27 @@
-from app import db
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String, Text, Boolean
+from sqlalchemy.orm import relationship
 
-class Restaurant(db.Model):
+Base = declarative_base()
+
+class Restaurant(Base):
 # Representation of a restaurant
 
     __tablename__ = 'restaurants'
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False)
-    description = db.Column(db.Text, nullable=False)
-    location = db.Column(db.String(50), nullable=True)
-    mission_statement = db.Column(db.String(50), nullable=True)
-    is_operational = db.Column(db.Boolean, nullable=True)
-    order_fulfilling = db.Column(db.Boolean, nullable=True)
-    menus = db.relationship('Menu', backref='restaurant', lazy=True)
-    products = db.Column(db.String)
-    orders = db.relationship('Order', backref='restaurant', lazy=True)
-    payment_methods = db.Column(db.String)
-    reservations = db.relationship('Reservation', backref='restaurant', lazy=True)
-    customers = db.Column(db.Integer, nullable=False, default=0)
-    shipments = db.relationship('Shipment', backref='restaurant', lazy=True)
-    offers = db.Column(db.String(50))
-    suppliers = db.Column(db.String(50))
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50), nullable=False)
+    description = Column(Text, nullable=False)
+    location = Column(String(50), nullable=True)
+    mission_statement = Column(String(50), nullable=True)
+    is_operational = Column(Boolean, nullable=True)
+    order_fulfilling = Column(Boolean, nullable=True)
+    menus = relationship('Menu', backref='restaurant', lazy=True)
+    products = Column(String)
+    orders = relationship('Order', backref='restaurant', lazy=True)
+    payment_methods = Column(String)
+    reservations = relationship('Reservation', backref='restaurant', lazy=True)
+    customers = Column(Integer, nullable=False, default=0)
+    shipments = relationship('Shipment', backref='restaurant', lazy=True)
+    offers = Column(String(50))
+    suppliers = Column(String(50))
