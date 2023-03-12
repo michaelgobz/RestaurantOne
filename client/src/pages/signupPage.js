@@ -9,6 +9,8 @@ import Iconify from '../components/iconify';
 // sections
 import SignUpForm from '../sections/auth/signup/SignUpForm';
 
+import { handleGoogleSignUp, handleGithubSignUp, handleTwitterSignUp } from '../utils/authHandlers';
+
 // ----------------------------------------------------------------------
 
 const StyledRoot = styled('div')(({ theme }) => ({
@@ -37,22 +39,11 @@ const StyledContent = styled('div')(({ theme }) => ({
   padding: theme.spacing(12, 0),
 }));
 
-// O auth support  Google, Twitter, Github
-const handleGithubSignUp = () => {
-window.alert('Github');
-}
-
-const handleGoogleSignUp = () => {
-window.alert('Google');
-}
-
-const handleTwitterSignUp = () => {
-window.alert('Twitter');
-}
 
 // ----------------------------------------------------------------------
 
 export default function LoginPage() {
+
   const mdUp = useResponsive('up', 'md');
   const theme = useTheme();
   const PRIMARY_MAIN = theme.palette.primary.main;
