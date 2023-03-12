@@ -1,21 +1,24 @@
-from app import db
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String, Text, Boolean, DateTime
 
-class Product(db.Model):
+Base = declarative_base()
+
+class Product(Base):
 # Representation of a product
 
     __tablename__ = 'products'
 
-    id = db.Column(db.Integer, primary_key=True)
-    short_name = db.Column(db.String(50), nullable=False)
-    long_name = db.Column(db.String(50), nullable=True)
-    description = db.Column(db.Text, nullable=False)
-    menu_category = db.Column(db.String(50), nullable=True)
-    menu_item = db.Column(db.String(50), nullable=True)
-    owner = db.Column(db.String(50), nullable=True)
-    price = db.Column(db.Integer, nullable=False, default=0)
-    varients = db.Column(db.String(50), nullable=True)
-    is_available = db.Column(db.Boolean, nullable=False)
-    is_deliverable = db.Column(db.Boolean, nullable=False)
-    duration_of_preparation = db.Column(db.DateTime)
-    max_quantity = db.Column(db.Integer, nullable=False, default=0)
-    location = db.Column(db.String(50), nullable=True)
+    id = Column(Integer, primary_key=True)
+    short_name = Column(String(50), nullable=False)
+    long_name = Column(String(50), nullable=True)
+    description = Column(Text, nullable=False)
+    menu_category = Column(String(50), nullable=True)
+    menu_item = Column(String(50), nullable=True)
+    owner = Column(String(50), nullable=True)
+    price = Column(Integer, nullable=False, default=0)
+    varients = Column(String(50), nullable=True)
+    is_available = Column(Boolean, nullable=False)
+    is_deliverable = Column(Boolean, nullable=False)
+    duration_of_preparation = Column(DateTime)
+    max_quantity = Column(Integer, nullable=False, default=0)
+    location = Column(String(50), nullable=True)
