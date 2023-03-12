@@ -1,22 +1,25 @@
-from app import db
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String, Text, DateTime, ForeignKey
 
-class Reservation(db.Model):
+Base = declarative_base()
+
+class Reservation(Base):
  #   Representation of a reservation
 
     __tablename__ = 'reservations'
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50))
-    description = db.Column(db.Text, nullable=True)
-    duration = db.Column(db.DateTime, nullable=True)
-    start = db.Column(db.DateTime, nullable=True)
-    end = db.Column(db.DateTime, nullable=True)
-    nb_of_person = db.Column(db.Integer, nullable=False, default=0)
-    additional_info = db.Column(db.Text, nullable=True)
-    tables = db.Column(db.Integer, nullable=True)
-    category = db.Column(db.String(50), nullable=True)
-    price = db.Column(db.Integer, nullable=False, default=0)
-    tax = db.Column(db.Integer, nullable=True)
-    menu_item = db.Column(db.String(50), nullable=True)
-    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    id = Column(Integer, primary_key=True)
+    name = Column(String(50))
+    description = Column(Text, nullable=True)
+    duration = Column(DateTime, nullable=True)
+    start = Column(DateTime, nullable=True)
+    end = Column(DateTime, nullable=True)
+    nb_of_person = Column(Integer, nullable=False, default=0)
+    additional_info = Column(Text, nullable=True)
+    tables = Column(Integer, nullable=True)
+    category = Column(String(50), nullable=True)
+    price = Column(Integer, nullable=False, default=0)
+    tax = Column(Integer, nullable=True)
+    menu_item = Column(String(50), nullable=True)
+    restaurant_id = Column(Integer, ForeignKey('restaurant.id'), nullable=False)
+    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
