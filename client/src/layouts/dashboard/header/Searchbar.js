@@ -17,6 +17,7 @@ const StyledSearchbar = styled('div')(({ theme }) => ({
   top: 0,
   left: 0,
   zIndex: 99,
+  length: '100%',
   width: '100%',
   display: 'flex',
   position: 'absolute',

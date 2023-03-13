@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Box, Stack, AppBar, Toolbar, IconButton } from '@mui/material';
+import { Link, Tabs, Box, Stack, AppBar, Toolbar, IconButton } from '@mui/material';
 // utils
 import { bgBlur } from '../../../utils/cssStyles';
 // components
@@ -24,7 +24,7 @@ const StyledRoot = styled(AppBar)(({ theme }) => ({
   ...bgBlur({ color: theme.palette.background.default }),
   boxShadow: 'none',
   [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${NAV_WIDTH + 1}px)`,
+    width: '100%',
   },
 }));
 
@@ -43,6 +43,12 @@ Header.propTypes = {
 };
 
 export default function Header({ onOpenNav }) {
+
+  const value = ""
+  const handleChange = () => {
+    console.log("tab changed")
+  }
+
   return (
     <StyledRoot>
       <StyledToolbar>
@@ -57,7 +63,27 @@ export default function Header({ onOpenNav }) {
           <Iconify icon="eva:menu-2-fill" />
         </IconButton>
 
-        <Searchbar />
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          textColor="secondary"
+          indicatorColor="secondary"
+          aria-label="nav tabs example"
+
+        >
+          <Link
+            component="button"
+            variant="body2"
+            onClick={() => {
+              console.info("I'm a button.");
+            }}
+          >
+            Button Link
+          </Link>
+
+        </Tabs>
+
+
         <Box sx={{ flexGrow: 1 }} />
 
         <Stack
@@ -68,6 +94,7 @@ export default function Header({ onOpenNav }) {
             sm: 1,
           }}
         >
+          <Searchbar />
           <LanguagePopover />
           <NotificationsPopover />
           <AccountPopover />
