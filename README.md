@@ -4,6 +4,8 @@ Restaurant management application developed using Flask, react and Postgresql
 ## status
 [![CodeQL](https://github.com/michaelgobz/RestaurantOne/actions/workflows/codeql.yml/badge.svg)](https://github.com/michaelgobz/RestaurantOne/actions/workflows/codeql.yml)
 
+[![.github/workflows/azure-webapps-node.yml](https://github.com/michaelgobz/RestaurantOne/actions/workflows/azure-webapps-node.yml/badge.svg)](https://github.com/michaelgobz/RestaurantOne/actions/workflows/azure-webapps-node.yml)
+
 
 
 ## Installation
