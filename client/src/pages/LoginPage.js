@@ -48,7 +48,6 @@ export default function LoginPage() {
 
   const mdUp = useResponsive('up', 'md');
   const theme = useTheme();
-  const PRIMARY_MAIN = theme.palette.primary.main;
   const url = window.location.host + signup;
 
 

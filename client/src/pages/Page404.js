@@ -19,6 +19,7 @@ const StyledContent = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function Page404() {
+
   return (
     <>
       <Helmet>
@@ -42,7 +43,7 @@ export default function Page404() {
             sx={{ height: 260, mx: 'auto', my: { xs: 5, sm: 10 } }}
           />
 
-          <Button to="/products" size="large" variant="contained" component={RouterLink}>
+          <Button to='/customer' size="large" variant="contained" component={RouterLink}>
             Go to products
           </Button>
         </StyledContent>
