@@ -9,16 +9,20 @@ import account from '../../../_mock/account';
 
 const MENU_OPTIONS = [
   {
-    label: 'Home',
-    icon: 'eva:home-fill',
+    label: 'Orders',
+    icon: 'eva:order-list-fill',
   },
   {
-    label: 'Profile',
+    label: 'Reservations',
+    icon: 'eva:calendar-fill',
+  },
+  {
+    label: 'Account',
     icon: 'eva:person-fill',
   },
   {
-    label: 'Settings',
-    icon: 'eva:settings-2-fill',
+    label: 'Reviews',
+    icon: 'eva:review-fill',
   },
 ];
 

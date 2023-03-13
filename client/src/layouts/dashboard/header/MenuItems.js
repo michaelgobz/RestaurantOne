@@ -2,15 +2,13 @@ import { Tabs, Tab } from '@mui/material'
 
 export function MenuItems() {
 
-    let value
+    let value = "one" // default value
     const setValue = (val) => {
         value = val
     }
     const handleChange = () => {
-        value = "two"
-        console.log("tab changed")
+        setValue(value)
     }
-
     return (
         <>
             <Tabs
