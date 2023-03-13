@@ -1,6 +1,6 @@
 import { Navigate, useRoutes } from 'react-router-dom';
 // layouts
-import DashboardLayout from './layouts/dashboard';
+import DefaultLayout from './layouts/dashboard';
 import SimpleLayout from './layouts/simple';
 //
 import BlogPage from './pages/BlogPage';
@@ -17,11 +17,15 @@ export default function Router() {
   const routes = useRoutes([
     {
       path: '/customer',
-      element: <DashboardLayout />,
+      element: <DefaultLayout />,
       children: [
         {
           element: <Navigate to="/customer/products" />,
           index: true
+        },
+        {
+          path: 'products',
+          element: <ProductsPage />
         },
         {
           path: 'checkout',
