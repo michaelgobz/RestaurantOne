@@ -39,7 +39,7 @@ const StyledContent = styled('div')(({ theme }) => ({
   padding: theme.spacing(12, 0),
 }));
 
-const signup = '/auth /signup'
+const signup = '/auth/signup'
 
 
 // ----------------------------------------------------------------------
