@@ -212,15 +212,15 @@ l32 24 -41 17 c-32 13 -43 24 -48 48 -9 43 -17 44 -44 5z"/>
             </Typography>
 
             <Stack direction="row" spacing={2}>
-              <Button fullWidth size="large" color="inherit" variant="outlined" onClick={handleGoogleLogin()}>
+              <Button fullWidth size="large" color="inherit" variant="outlined" onClick={handleGoogleLogin}>
                 <Iconify icon="eva:google-fill" color="#DF3E30" width={22} height={22} />
               </Button>
 
-              <Button fullWidth size="large" color="inherit" variant="outlined" onClick={handleGithubLogin()}>
+              <Button fullWidth size="large" color="inherit" variant="outlined" onClick={handleGithubLogin}>
                 <Iconify icon="eva:github-fill" color="#1877F2" width={22} height={22} />
               </Button>
 
-              <Button fullWidth size="large" color="inherit" variant="outlined" onClick={handleTwitterLogin()}>
+              <Button fullWidth size="large" color="inherit" variant="outlined" onClick={handleTwitterLogin}>
                 <Iconify icon="eva:twitter-fill" color="#1C9CEA" width={22} height={22} />
               </Button>
             </Stack>
