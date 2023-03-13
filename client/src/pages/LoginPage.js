@@ -1,5 +1,4 @@
 import { Helmet } from 'react-helmet-async';
-import { useNavigate } from 'react-router-dom';
 // @mui
 import { styled, useTheme } from '@mui/material/styles';
 import { Link, Container, Typography, Divider, Stack, Button } from '@mui/material';
@@ -9,6 +8,8 @@ import useResponsive from '../hooks/useResponsive';
 import Iconify from '../components/iconify';
 // sections
 import { LoginForm } from '../sections/auth/login';
+import { handleGoogleLogin, handleGithubLogin, handleTwitterLogin } from '../utils/authHandlers';
+
 
 // ----------------------------------------------------------------------
 
@@ -38,18 +39,8 @@ const StyledContent = styled('div')(({ theme }) => ({
   padding: theme.spacing(12, 0),
 }));
 
-// O auth supported for google, facebook, twitter, github
-const handleGithubLogin = () => {
-  window.alert('Github login');
-};
+const signup = '/auth /signup'
 
-const handleGoogleLogin = () => {
-  window.alert('Google login');
-};
-
-const handleTwitterLogin = () => {
-  window.alert('Twitter login');
-};
 
 // ----------------------------------------------------------------------
 
@@ -58,6 +49,7 @@ export default function LoginPage() {
   const mdUp = useResponsive('up', 'md');
   const theme = useTheme();
   const PRIMARY_MAIN = theme.palette.primary.main;
+  const url = window.location.host + signup;
 
 
   return (
@@ -216,7 +208,7 @@ l32 24 -41 17 c-32 13 -43 24 -48 48 -9 43 -17 44 -44 5z"/>
 
             <Typography variant="body2" sx={{ mb: 5 }}>
               Don’t have an account? {''}
-              <Link variant="subtitle2" href="http://localhost:3001/auth/signup">Get started</Link>
+              <Link href={url} variant="subtitle2">Get started</Link>
             </Typography>
 
             <Stack direction="row" spacing={2}>

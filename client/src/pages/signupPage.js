@@ -1,13 +1,15 @@
 import { Helmet } from 'react-helmet-async';
 // @mui
 import { styled, useTheme } from '@mui/material/styles';
-import { Link, Container, Typography, Divider, Stack, Button } from '@mui/material';
+import { Container, Typography, Divider, Stack, Button } from '@mui/material';
 // hooks
 import useResponsive from '../hooks/useResponsive';
 // components
 import Iconify from '../components/iconify';
 // sections
-import SignUpForm from '../sections/auth/login/signupForm';
+import SignUpForm from '../sections/auth/signup/SignUpForm';
+
+import { handleGoogleSignUp, handleGithubSignUp, handleTwitterSignUp } from '../utils/authHandlers';
 
 // ----------------------------------------------------------------------
 
@@ -37,22 +39,11 @@ const StyledContent = styled('div')(({ theme }) => ({
   padding: theme.spacing(12, 0),
 }));
 
-// O auth support  Google, Twitter, Github
-const handleGithubSignUp = () => {
-window.alert('Github');
-}
-
-const handleGoogleSignUp = () => {
-window.alert('Google');
-}
-
-const handleTwitterSignUp = () => {
-window.alert('Twitter');
-}
 
 // ----------------------------------------------------------------------
 
 export default function LoginPage() {
+
   const mdUp = useResponsive('up', 'md');
   const theme = useTheme();
   const PRIMARY_MAIN = theme.palette.primary.main;
