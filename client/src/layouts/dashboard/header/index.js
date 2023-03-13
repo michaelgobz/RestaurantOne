@@ -1,16 +1,14 @@
 import PropTypes from 'prop-types';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Link, Tabs, Box, Stack, AppBar, Toolbar, IconButton } from '@mui/material';
+import { Tab, Tabs, Box, Stack, AppBar, Toolbar, IconButton } from '@mui/material';
 // utils
 import { bgBlur } from '../../../utils/cssStyles';
 // components
-import Iconify from '../../../components/iconify';
-//
 import Searchbar from './Searchbar';
 import AccountPopover from './AccountPopover';
-import LanguagePopover from './LanguagePopover';
 import NotificationsPopover from './NotificationsPopover';
+import { MenuItems } from './MenuItems';
 
 // ----------------------------------------------------------------------
 
@@ -44,11 +42,6 @@ Header.propTypes = {
 
 export default function Header({ onOpenNav }) {
 
-  const value = ""
-  const handleChange = () => {
-    console.log("tab changed")
-  }
-
   return (
     <StyledRoot>
       <StyledToolbar>
@@ -59,31 +52,9 @@ export default function Header({ onOpenNav }) {
             color: 'text.primary',
             display: { lg: 'none' },
           }}
-        >
-          <Iconify icon="eva:menu-2-fill" />
-        </IconButton>
-
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          textColor="secondary"
-          indicatorColor="secondary"
-          aria-label="nav tabs example"
-
-        >
-          <Link
-            component="button"
-            variant="body2"
-            onClick={() => {
-              console.info("I'm a button.");
-            }}
-          >
-            Button Link
-          </Link>
-
-        </Tabs>
-
-
+        />
+    
+        <MenuItems/>
         <Box sx={{ flexGrow: 1 }} />
 
         <Stack
@@ -95,7 +66,6 @@ export default function Header({ onOpenNav }) {
           }}
         >
           <Searchbar />
-          <LanguagePopover />
           <NotificationsPopover />
           <AccountPopover />
         </Stack>
