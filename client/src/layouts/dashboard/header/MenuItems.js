@@ -1,11 +1,12 @@
+import { useState } from 'react'
+import { useNavigate } from 'react-router';// import useState hook from react
 import { Tabs, Tab } from '@mui/material'
 
 export function MenuItems() {
 
-    let value = "one" // default value
-    const setValue = (val) => {
-        value = val
-    }
+    const [value, setValue] = useState('one');
+    const navigate = useNavigate();
+
     const handleChange = () => {
         setValue(value)
     }
@@ -28,6 +29,7 @@ export function MenuItems() {
                 <Tab value="two"
                     onFocus={() => {
                         setValue("two")
+                        navigate("/reservations")
                     }}
                     label="Reservation" />
             </Tabs>

@@ -16,28 +16,54 @@ import DashboardAppPage from './pages/DashboardAppPage';
 export default function Router() {
   const routes = useRoutes([
     {
-      path: '/dashboard',
+      path: '/customer',
       element: <DashboardLayout />,
       children: [
-        { element: <Navigate to="/dashboard/app" />, index: true },
-        { path: 'app', element: <DashboardAppPage /> },
-        { path: 'user', element: <UserPage /> },
-        { path: 'products', element: <ProductsPage /> },
-        { path: 'blog', element: <BlogPage /> },
+        {
+          element: <Navigate to="/customer/products" />,
+          index: true
+        },
+        {
+          path: 'checkout',
+          element: <DashboardAppPage />,
+          children:
+            [
+              {
+                path: 'new/:id',
+                element: <ProductsPage />
+              }
+            ]
+        },
+        {
+          path: 'reservations', element: <UserPage />,
+          children:
+            [
+              { path: 'new/:id', element: <ProductsPage /> }
+            ]
+        },
+        {
+          path: 'orders', element: <BlogPage />
+        },
+        {
+          path: 'Account', element: <UserPage />
+        }
       ],
     },
     {
-      path: 'login',
+      path: 'auth/login',
       element: <LoginPage />,
     },
     {
-      path : 'auth/signup',
-      element : <SignUpPage />
+      path: 'auth/signup',
+      element: <SignUpPage />
+    },
+    {
+      path: 'products',
+      element: <ProductsPage />,
     },
     {
       element: <SimpleLayout />,
       children: [
-        { element: <Navigate to="/dashboard/app" />, index: true },
         { path: '404', element: <Page404 /> },
         { path: '*', element: <Navigate to="/404" /> },
       ],
