@@ -54,11 +54,11 @@ export default function Router() {
       ],
     },
     {
-      path: 'auth/login',
+      path: 'customer/login',
       element: <LoginPage />,
     },
     {
-      path: 'auth/signup',
+      path: 'customer/signup',
       element: <SignUpPage />
     },
     {
