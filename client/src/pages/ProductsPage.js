@@ -3,11 +3,11 @@ import { useState } from 'react';
 // @mui
 import { Container, Stack, Typography } from '@mui/material';
 // components
-import { ProductSort, ProductList, ProductCartWidget, ProductFilterSidebar } from '../sections/@dashboard/products';
+import { ProductSort, ProductList, ProductFilterSidebar } from '../sections/@dashboard/products';
 // mock
 // we should provide an array of product categories
 import PRODUCTS from '../_mock/products';
-import { PaginationComponent } from '../components/pagination/pagination';
+import ProductCartPopover from '../sections/@dashboard/products/ProductCartPopover';
 
 // ----------------------------------------------------------------------
 
@@ -69,7 +69,7 @@ export default function ProductsPage() {
         Ice cream
         </Typography>
         <ProductList products={PRODUCTS} />
-        <ProductCartWidget />
+        <ProductCartPopover />
       </Container>
     </>
   );
