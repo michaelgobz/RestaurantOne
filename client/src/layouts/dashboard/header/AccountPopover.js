@@ -31,8 +31,19 @@ const MENU_OPTIONS = [
     path: 'customer/reviews'
   },
 ];
+const AUTH_OPTIONS = [
+  {
+    label: 'Login',
+    path: 'auth/login'
+  },
+  {
+    label: 'Logout',
+    path: 'auth/logout'
+  }
+]
 
 const MENU_OPTIONS_AUTH = [
+
 ]
 
 // ----------------------------------------------------------------------
@@ -53,7 +64,7 @@ export default function AccountPopover() {
     setOpen(null);
   };
 
-  const HandleNavigate = (path) => {
+  const HandleNavigateAuth = () => {
     useEffect((path) => {
       navigator(path)
       handleClose()
@@ -61,13 +72,6 @@ export default function AccountPopover() {
 
   }
   const HandleAuth = () => {
-    useEffect(() => {
-      if (auth) {
-        navigator('auth/logout')
-      } else {
-        navigator('auth/login')
-      }
-    })
     handleClose()
   }
 
@@ -120,23 +124,47 @@ export default function AccountPopover() {
             {account.email}
           </Typography>
         </Box>
+        {
+          auth ?
+            <Divider sx={{ borderStyle: 'dashed' }} />
+            :
+            <Divider sx={{ borderStyle: 'dashed', borderColor: 'white' }} />
+        }
 
-        <Divider sx={{ borderStyle: 'dashed' }} />
 
         <Stack sx={{ p: 1 }}>
-          {
+          {auth ?
             MENU_OPTIONS.map((option) => (
-              <MenuItem key={option.label} onClick={HandleNavigate}>
+              <MenuItem key={option.label} onClick={HandleNavigateAuth}>
                 {option.label}
               </MenuItem>
-            ))}
+            )) :
+            MENU_OPTIONS_AUTH.map((option) => (
+              <MenuItem key={option.label} onClick={HandleNavigateAuth}>
+                {option.label}
+              </MenuItem>
+            ))
+
+          }
         </Stack>
 
-        <Divider sx={{ borderStyle: 'dashed' }} />
+        {
+          auth ?
+            <Divider sx={{ borderStyle: 'dashed' }} />
+            :
+            <Divider sx={{ borderStyle: 'dashed', borderColor: 'white' }} />
+        }
+        {
+          auth ?
+            <MenuItem key={AUTH_OPTIONS[1].path} onClick={HandleAuth} sx={{ m: 1 }} >
+              {AUTH_OPTIONS[1].label}
+            </MenuItem>
+            :
+            <MenuItem key={AUTH_OPTIONS[0].path} onClick={HandleAuth} sx={{ m: 1 }} >
+              {AUTH_OPTIONS[0].label}
+            </MenuItem>
 
-        <MenuItem onClick={HandleAuth} sx={{ m: 1 }} >
-          {auth ? 'Logout' : 'Login'}
-        </MenuItem>
+        }
       </Popover>
     </>
   );
