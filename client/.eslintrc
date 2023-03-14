@@ -14,7 +14,9 @@
     "react",
     "react-hooks",
     "prettier",
-    "typescript"
+    "typescript",
+    "jsx",
+    "flow"
   ],
   "parser": "@babel/eslint-parser",
   "parserOptions": {
