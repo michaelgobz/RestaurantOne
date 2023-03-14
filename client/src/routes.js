@@ -57,15 +57,15 @@ export default function Router() {
           path: 'customer/account',
           element: <UserPage />
         },
-        {
-          path: 'auth/login',
-          element: <LoginPage />
-        },
       ],
     },
     {
       path: 'auth/signup',
       element: <SignUpPage />
+    },
+    {
+      path: 'auth/login',
+      element: <LoginPage />
     },
     {
       element: <SimpleLayout />,

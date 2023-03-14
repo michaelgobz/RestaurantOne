@@ -13,7 +13,7 @@ const MENU_OPTIONS = [
   {
     label: 'Orders',
     icon: 'eva:order-list-fill',
-    path: 'orders'
+    path: 'customer/orders'
   },
   {
     label: 'Reservations',
@@ -50,7 +50,7 @@ const MENU_OPTIONS_AUTH = [
 
 export default function AccountPopover() {
 
-  const auth = false;
+  const auth = true;
 
   const navigator = useNavigate()
 
@@ -65,6 +65,7 @@ export default function AccountPopover() {
   };
 
   const HandleNavigateAuth = () => {
+    console.log('navigate')
     handleClose()
   }
   const HandleAuth = () => {
