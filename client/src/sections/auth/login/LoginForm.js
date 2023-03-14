@@ -14,7 +14,7 @@ export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
 
   const HandleClick = () => {
-    navigate('customer/products' , {replace : true});
+    navigate('customer/products');
   };
 
   return (
