@@ -61,18 +61,12 @@ export default function Router() {
       ],
     },
     {
-      path: 'auth',
-      element: <SimpleLayout/>,
-      children: [
-        {
-          path: 'auth/login',
-          element: <LoginPage />
-        },
-        {
-          path: 'auth/signup',
-          element: <SignUpPage />
-        }
-      ]
+      path: 'auth/login',
+      element: <LoginPage />
+    },
+    {
+      path: 'auth/signup',
+      element: <SignUpPage />
     },
     {
       element: <SimpleLayout />,

@@ -13,7 +13,7 @@ export default function LoginForm() {
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleClick = () => {
+  const HandleClick = () => {
     navigate('customer/products' , {replace : true});
   };
 
@@ -46,7 +46,7 @@ export default function LoginForm() {
         </Link>
       </Stack>
 
-      <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
+      <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={HandleClick}>
         Login
       </LoadingButton>
     </>

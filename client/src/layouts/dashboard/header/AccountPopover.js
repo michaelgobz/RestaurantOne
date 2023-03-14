@@ -50,7 +50,7 @@ const MENU_OPTIONS_AUTH = [
 
 export default function AccountPopover() {
 
-  const auth = true;
+  const auth = false;
 
   const navigator = useNavigate()
 
@@ -65,14 +65,16 @@ export default function AccountPopover() {
   };
 
   const HandleNavigateAuth = () => {
-    useEffect((path) => {
-      navigator(path)
-      handleClose()
-    })
-
+    handleClose()
   }
   const HandleAuth = () => {
-    handleClose()
+    if ( !auth ){
+      navigator('auth/login')
+      handleClose()
+    } else {
+      navigator('auth/logout')
+      handleClose()
+    }
   }
 
   return (

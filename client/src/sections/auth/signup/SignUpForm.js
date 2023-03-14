@@ -12,8 +12,8 @@ export default function SignUpForm() {
   const navigator = useNavigate()
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleClick = () => {
-    navigator('auth/login')
+  const HandleClick = () => {
+    navigator('login')
   };
 
   return (
@@ -62,7 +62,7 @@ export default function SignUpForm() {
         </Link>
       </Stack>
 
-      <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={handleClick}>
+      <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={HandleClick}>
         Sign Up
       </LoadingButton>
     </>
