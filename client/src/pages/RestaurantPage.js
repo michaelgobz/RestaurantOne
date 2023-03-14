@@ -39,6 +39,25 @@ export default function RestaurantsPage() {
           <BlogPostsSort options={SORT_OPTIONS} />
         </Stack>
 
+        <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
+          5 Star
+        </Typography>
+        <Grid container spacing={3}>
+          {POSTS.map((post, index) => (
+            <BlogPostCard key={post.id} post={post} index={index} />
+          ))}
+        </Grid>
+        <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
+          Kampala
+        </Typography>
+        <Grid container spacing={3}>
+          {POSTS.map((post, index) => (
+            <BlogPostCard key={post.id} post={post} index={index} />
+          ))}
+        </Grid>
+        <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
+          Lome'
+        </Typography>
         <Grid container spacing={3}>
           {POSTS.map((post, index) => (
             <BlogPostCard key={post.id} post={post} index={index} />

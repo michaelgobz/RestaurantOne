@@ -5,6 +5,7 @@ import { Container, Stack, Typography } from '@mui/material';
 // components
 import { ProductSort, ProductList, ProductCartWidget, ProductFilterSidebar } from '../sections/@dashboard/products';
 // mock
+// we should provide an array of product categories
 import PRODUCTS from '../_mock/products';
 import { PaginationComponent } from '../components/pagination/pagination';
 
@@ -24,7 +25,7 @@ export default function ProductsPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Products | Minimal UI </title>
+        <title> Products | Open Restaurant </title>
       </Helmet>
 
       <Container>
@@ -69,7 +70,6 @@ export default function ProductsPage() {
         </Typography>
         <ProductList products={PRODUCTS} />
         <ProductCartWidget />
-        <PaginationComponent  />
       </Container>
     </>
   );
