@@ -53,9 +53,16 @@ export default function AccountPopover() {
     setOpen(null);
   };
 
-  const HandleNavigation = (path) => {
+  const HandleNavigate = (path) => {
+
+  }
+  const HandleAuth = () => {
     useEffect(() => {
-      navigator(path)
+      if (auth) {
+        navigator('auth/logout')
+      } else {
+        navigator('auth/login')
+      }
     })
     handleClose()
   }
@@ -123,7 +130,7 @@ export default function AccountPopover() {
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem to={auth? '/auth/logout': 'auth/login'} onClick={handleClose} sx={{ m: 1 }} component={RouterLink}>
+        <MenuItem onClick={HandleAuth} sx={{ m: 1 }} >
           {auth ? 'Logout' : 'Login'}
         </MenuItem>
       </Popover>
