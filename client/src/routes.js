@@ -2,8 +2,8 @@ import { Navigate, useRoutes } from 'react-router-dom';
 // layouts
 import DefaultLayout from './layouts/dashboard';
 import SimpleLayout from './layouts/simple';
-//
-import BlogPage from './pages/BlogPage';
+// pages
+import BlogPage from './pages/RestaurantPage';
 import UserPage from './pages/UserPage';
 import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/signupPage';
@@ -16,19 +16,19 @@ import DashboardAppPage from './pages/DashboardAppPage';
 export default function Router() {
   const routes = useRoutes([
     {
-      path: '/customer',
+      path: '/',
       element: <DefaultLayout />,
       children: [
         {
-          element: <Navigate to="/customer/products" />,
+          element: <Navigate to="customer/products" />,
           index: true
         },
         {
-          path: 'products',
+          path: 'customer/products',
           element: <ProductsPage />
         },
         {
-          path: 'checkout',
+          path: 'customer/checkout',
           element: <DashboardAppPage />,
           children:
             [
@@ -39,17 +39,17 @@ export default function Router() {
             ]
         },
         {
-          path: 'reservations', element: <UserPage />,
+          path: 'customer/reservations', element: <BlogPage />,
           children:
             [
-              { path: 'new/:id', element: <ProductsPage /> }
+              { path: 'new/:id', element: <UserPage /> }
             ]
         },
         {
-          path: 'orders', element: <BlogPage />
+          path: 'customer/orders', element: <BlogPage />
         },
         {
-          path: 'Account', element: <UserPage />
+          path: 'customer/account', element: <UserPage />
         }
       ],
     },
@@ -62,19 +62,10 @@ export default function Router() {
       element: <SignUpPage />
     },
     {
-      path: 'products',
-      element: <ProductsPage />,
-    },
-    {
       element: <SimpleLayout />,
       children: [
         { path: '404', element: <Page404 /> },
-        { path: '*', element: <Navigate to="/404" /> },
       ],
-    },
-    {
-      path: '*',
-      element: <Navigate to="/404" replace />,
     },
   ]);
 

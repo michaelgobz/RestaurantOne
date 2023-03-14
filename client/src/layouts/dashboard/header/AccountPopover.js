@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router';
+import { RouterLink } from 'react-router-dom'
 // @mui
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover } from '@mui/material';
@@ -11,24 +13,36 @@ const MENU_OPTIONS = [
   {
     label: 'Orders',
     icon: 'eva:order-list-fill',
+    path: 'orders'
   },
   {
     label: 'Reservations',
     icon: 'eva:calendar-fill',
+    path: 'customer/reservations'
   },
   {
     label: 'Account',
     icon: 'eva:person-fill',
+    path: 'account'
   },
   {
     label: 'Reviews',
     icon: 'eva:review-fill',
+    path: 'customer/reviews'
   },
 ];
+
+const MENU_OPTIONS_AUTH = [
+]
 
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
+
+  const auth = false;
+
+  const navigator = useNavigate()
+
   const [open, setOpen] = useState(null);
 
   const handleOpen = (event) => {
@@ -38,6 +52,13 @@ export default function AccountPopover() {
   const handleClose = () => {
     setOpen(null);
   };
+
+  const HandleNavigation = (path) => {
+    useEffect(() => {
+      navigator(path)
+    })
+    handleClose()
+  }
 
   return (
     <>
@@ -92,17 +113,18 @@ export default function AccountPopover() {
         <Divider sx={{ borderStyle: 'dashed' }} />
 
         <Stack sx={{ p: 1 }}>
-          {MENU_OPTIONS.map((option) => (
-            <MenuItem key={option.label} onClick={handleClose}>
-              {option.label}
-            </MenuItem>
-          ))}
+          {
+            MENU_OPTIONS.map((option) => (
+              <MenuItem key={option.label} onClick={handleClose}>
+                {option.label}
+              </MenuItem>
+            ))}
         </Stack>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem onClick={handleClose} sx={{ m: 1 }}>
-          Logout
+        <MenuItem to={auth? '/auth/logout': 'auth/login'} onClick={handleClose} sx={{ m: 1 }} component={RouterLink}>
+          {auth ? 'Logout' : 'Login'}
         </MenuItem>
       </Popover>
     </>

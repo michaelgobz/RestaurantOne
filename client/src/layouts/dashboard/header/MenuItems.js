@@ -1,8 +1,10 @@
 import { useState } from 'react'
-import { redirect } from 'react-router';// import useState hook from react
+import { redirect, useNavigate } from 'react-router';// import useState hook from react
 import { Tabs, Tab } from '@mui/material'
 
 export function MenuItems() {
+
+    const navigator = useNavigate();
 
     const [value, setValue] = useState('one');
 
@@ -23,14 +25,15 @@ export function MenuItems() {
 
                     onFocus={() => {
                         setValue("one")
+                        navigator("customer/products")
                     }}
-                    label="Order" />
+                    label="New Order" />
                 <Tab value="two"
                     onFocus={() => {
                         setValue("two")
-                        redirect("/reservations")
+                        navigator("customer/reservations")
                     }}
-                    label="Reservation" />
+                    label="New Reservation" />
             </Tabs>
         </>
     );
