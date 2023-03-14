@@ -1,3 +1,3 @@
-export { default as BlogPostCard } from './BlogPostCard';
+export { default as RestaurantPostCard } from './RestaurantPostCard';
 export { default as RestaurantSearch } from './RestaurantSearch';
-export { default as BlogPostsSort } from './BlogPostsSort';
+export { default as RestaurantPostsSort } from './RestaurantPostsSort';
