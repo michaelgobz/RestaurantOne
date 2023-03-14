@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 // @mui
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import { Container, Typography, Divider, Stack, Button } from '@mui/material';
 // hooks
 import useResponsive from '../hooks/useResponsive';
@@ -45,8 +45,6 @@ const StyledContent = styled('div')(({ theme }) => ({
 export default function LoginPage() {
 
   const mdUp = useResponsive('up', 'md');
-  const theme = useTheme();
-  const PRIMARY_MAIN = theme.palette.primary.main;
 
   return (
     <>

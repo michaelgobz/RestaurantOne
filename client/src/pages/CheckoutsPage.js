@@ -54,14 +54,14 @@ export default function CartCheckout() {
                           <p className="fw-bold mb-0 me-5 pe-3">799$</p>
 
                           <div className="def-number-input number-input safari_only">
-                            <button className="minus"></button>
+                            <button className="minus"/>
                             <input
                               className="quantity fw-bold text-black"
                               min={0}
                               defaultValue={1}
                               type="number"
                             />
-                            <button className="plus"></button>
+                            <button className="plus"/>
                           </div>
                         </div>
                       </div>
@@ -92,14 +92,14 @@ export default function CartCheckout() {
                           <p className="fw-bold mb-0 me-5 pe-3">239$</p>
 
                           <div className="def-number-input number-input safari_only">
-                            <button className="minus"></button>
+                            <button className="minus"/>
                             <input
                               className="quantity fw-bold text-black"
                               min={0}
                               defaultValue={1}
                               type="number"
                             />
-                            <button className="plus"></button>
+                            <button className="plus"/>
                           </div>
                         </div>
                       </div>
@@ -130,14 +130,14 @@ export default function CartCheckout() {
                           <p className="fw-bold mb-0 me-5 pe-3">659$</p>
 
                           <div className="def-number-input number-input safari_only">
-                            <button className="minus"></button>
+                            <button className="minus"/>
                             <input
                               className="quantity fw-bold text-black"
                               min={0}
                               defaultValue={2}
                               type="number"
                             />
-                            <button className="plus"></button>
+                            <button className="plus"/>
                           </div>
                         </div>
                       </div>

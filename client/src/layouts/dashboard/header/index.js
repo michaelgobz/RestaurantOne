@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Tab, Tabs, Box, Stack, AppBar, Toolbar, IconButton } from '@mui/material';
+import { Box, Stack, AppBar, Toolbar, IconButton } from '@mui/material';
 // utils
 import { bgBlur } from '../../../utils/cssStyles';
 // components
@@ -11,8 +11,6 @@ import NotificationsPopover from './NotificationsPopover';
 import { MenuItems } from './MenuItems';
 
 // ----------------------------------------------------------------------
-
-const NAV_WIDTH = 280;
 
 const HEADER_MOBILE = 64;
 

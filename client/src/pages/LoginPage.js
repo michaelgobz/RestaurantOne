@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 // @mui
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import { Link, Container, Typography, Divider, Stack, Button } from '@mui/material';
 // hooks
 import useResponsive from '../hooks/useResponsive';
@@ -39,22 +39,17 @@ const StyledContent = styled('div')(({ theme }) => ({
   padding: theme.spacing(12, 0),
 }));
 
-const signup = '/auth/signup'
-
 
 // ----------------------------------------------------------------------
 
 export default function LoginPage() {
 
   const mdUp = useResponsive('up', 'md');
-  const theme = useTheme();
-  const url = window.location.host + signup;
-
 
   return (
     <>
       <Helmet>
-        <title> Login | RestaurantOne </title>
+        <title> Login | Open Restaurant </title>
       </Helmet>
 
       <StyledRoot>
@@ -75,7 +70,7 @@ export default function LoginPage() {
 
             <Typography variant="body2" sx={{ mb: 5 }}>
               Don’t have an account? {''}
-              <Link href={url} variant="subtitle2">Get started</Link>
+              <Link href='http://localhost:3000/auth/signup' variant="subtitle2">Get started</Link>
             </Typography>
 
             <Stack direction="row" spacing={2}>
