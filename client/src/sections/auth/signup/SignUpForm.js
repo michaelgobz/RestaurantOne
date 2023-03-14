@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router'
 // @mui
 import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
@@ -8,10 +9,11 @@ import Iconify from '../../../components/iconify';
 // ----------------------------------------------------------------------
 
 export default function SignUpForm() {
+  const navigator = useNavigate()
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClick = () => {
-    window.alert('Sign Up');
+    navigator('auth/login')
   };
 
   return (

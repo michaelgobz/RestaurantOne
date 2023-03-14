@@ -29,7 +29,7 @@ export default function ProductsPage() {
 
       <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Products
+          Heavy Lunch
         </Typography>
 
         <Stack direction="row" flexWrap="wrap-reverse" alignItems="center" justifyContent="flex-end" sx={{ mb: 5 }}>
@@ -43,6 +43,30 @@ export default function ProductsPage() {
           </Stack>
         </Stack>
 
+        <ProductList products={PRODUCTS} />
+        <Typography variant="h4" sx={{ mb: 5 , mt: 5}}>
+          Coco Tails
+        </Typography>
+        <ProductList products={PRODUCTS} />
+        <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
+        Take Away
+        </Typography>
+        <ProductList products={PRODUCTS} />
+        <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
+        Barques 
+        </Typography>
+        <ProductList products={PRODUCTS} />
+        <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
+        Burgers
+        </Typography>
+        <ProductList products={PRODUCTS} />
+        <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
+        Cakes
+        </Typography>
+        <ProductList products={PRODUCTS} />
+        <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
+        Ice cream
+        </Typography>
         <ProductList products={PRODUCTS} />
         <ProductCartWidget />
         <PaginationComponent  />

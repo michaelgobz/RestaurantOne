@@ -39,7 +39,7 @@ const MENU_OPTIONS_AUTH = [
 
 export default function AccountPopover() {
 
-  const auth = false;
+  const auth = true;
 
   const navigator = useNavigate()
 
@@ -54,6 +54,10 @@ export default function AccountPopover() {
   };
 
   const HandleNavigate = (path) => {
+    useEffect((path) => {
+      navigator(path)
+      handleClose()
+    })
 
   }
   const HandleAuth = () => {
@@ -122,7 +126,7 @@ export default function AccountPopover() {
         <Stack sx={{ p: 1 }}>
           {
             MENU_OPTIONS.map((option) => (
-              <MenuItem key={option.label} onClick={handleClose}>
+              <MenuItem key={option.label} onClick={HandleNavigate}>
                 {option.label}
               </MenuItem>
             ))}

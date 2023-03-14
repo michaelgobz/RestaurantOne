@@ -3,7 +3,7 @@ import { Navigate, useRoutes } from 'react-router-dom';
 import DefaultLayout from './layouts/dashboard';
 import SimpleLayout from './layouts/simple';
 // pages
-import BlogPage from './pages/RestaurantPage';
+import RestaurantsPage from './pages/RestaurantPage';
 import UserPage from './pages/UserPage';
 import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/signupPage';
@@ -39,27 +39,40 @@ export default function Router() {
             ]
         },
         {
-          path: 'customer/reservations', element: <BlogPage />,
+          path: 'customer/reservations',
+          element: <RestaurantsPage />,
           children:
             [
-              { path: 'new/:id', element: <UserPage /> }
+              {
+                path: 'new/:id',
+                element: <UserPage />
+              }
             ]
         },
         {
-          path: 'customer/orders', element: <BlogPage />
+          path: 'customer/orders',
+          element: <UserPage />
         },
         {
-          path: 'customer/account', element: <UserPage />
-        }
+          path: 'customer/account',
+          element: <UserPage />
+        },
+
       ],
     },
     {
-      path: 'customer/login',
-      element: <LoginPage />,
-    },
-    {
-      path: 'customer/signup',
-      element: <SignUpPage />
+      path: 'auth',
+      element: <SimpleLayout/>,
+      children: [
+        {
+          path: 'auth/login',
+          element: <LoginPage />
+        },
+        {
+          path: 'auth/signup',
+          element: <SignUpPage />
+        }
+      ]
     },
     {
       element: <SimpleLayout />,

@@ -54,7 +54,7 @@ export default function LoginPage() {
   return (
     <>
       <Helmet>
-        <title> Login | RestaurantOne </title>
+        <title> Login | Open Restaurant </title>
       </Helmet>
 
       <StyledRoot>
@@ -75,7 +75,7 @@ export default function LoginPage() {
 
             <Typography variant="body2" sx={{ mb: 5 }}>
               Don’t have an account? {''}
-              <Link href={url} variant="subtitle2">Get started</Link>
+              <Link href='http://localhost:3000/customer/signup' variant="subtitle2">Get started</Link>
             </Typography>
 
             <Stack direction="row" spacing={2}>
