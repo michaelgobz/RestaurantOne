@@ -8,7 +8,8 @@ from sqlalchemy.orm import relationship
 from ..core.base import Base
 
 
-class User(Base):
+class User(Base.Model):
     """User model"""
-    __tablename__ = "users"
+    id = Base.Column(Integer, primary_key=True)
+    
     

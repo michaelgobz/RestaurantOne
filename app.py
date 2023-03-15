@@ -1,8 +1,14 @@
 """application entry point"""
 from flask import Flask
+from flask_migrate import Migrate
+from .models.db import Db
 
 # Initializing flask app
 app = Flask(__name__)
+
+# Initializing database and migrations
+database = Db.get_engine()
+migrate = Migrate(app, database)
 
 
 # Route for seeing a data
