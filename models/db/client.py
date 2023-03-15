@@ -4,15 +4,15 @@ from flask_migrate import Migrate
 
 class DBClient:
     """postgresql db client"""
-    def __init__(self, host, port, user, password, db, app):
+
+    def __init__(self, host, port, user, password, db ):
         self.__engine = SQLAlchemy()
-        self.__connection_string = self._get_connection_string(host, 
-                                                               port, user, password, db)
-        app.config['SQLALCHEMY_DATABASE_URI'] = self.__connection_string
-        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-        self.__engine.init_app(app)
-        self.__migrate = Migrate(app, self.__engine)
-        
+        self.host = host
+        self.port = port
+        self.user = user
+        self.password = password
+        self.db = db
+        self.__migrate
 
     def get_engine(self):
         """get engine instance tied to flask app"""
@@ -30,4 +30,11 @@ class DBClient:
         """get connection string"""
         return f"postgresql://{user}:{password}@{host}:{port}/{db}"
     
-    
+    def initialize_app(self, app=None):
+        """initialize app"""
+        app.config['SQLALCHEMY_DATABASE_URI'] = \
+            self._get_connection_string(self.host, self.port, self.user,
+                                        self.password, self.db)
+        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+        self.__engine.init_app(app)
+        self.__migrate = Migrate(app, self.__engine)
