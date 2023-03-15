@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { Grid, Button, Container, Stack, Typography } from '@mui/material';
 // components
 import Iconify from '../components/iconify';
-import { RestaurantPostCard, RestaurantPostsSort, RestaurantSearch } from '../sections/@dashboard/blog';
+import { RestaurantPostCard, RestaurantPostsSort, RestaurantSearch } from '../sections/@default/reservation';
 // mock
 import POSTS from '../_mock/blog';
 

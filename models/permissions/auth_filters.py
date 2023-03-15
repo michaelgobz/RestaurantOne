@@ -4,15 +4,18 @@ from .enums import BasePermissionEnum
 
 
 def is_user(context):
+    """check for the user from context which is the request for now"""
     user = context.user
     return user and user.is_active
 
 
 def is_operator_user(context):
+    """check for the operator from the context which is the request for now """
     return is_user(context) and context.user.is_operator
 
 
 class AuthorizationFilters(BasePermissionEnum):
+    """Define the auth filters"""
     # Grants access to any authenticated staff user.
     AUTHENTICATED_RESTAURANT_OWNER = "authorization_filters.authenticated_operator_user"
 
@@ -32,4 +35,5 @@ AUTHORIZATION_FILTER_MAP = {
 
 
 def resolve_authorization_filter_fn(perm):
+    """resolve the auth filter per request"""
     return AUTHORIZATION_FILTER_MAP.get(perm)

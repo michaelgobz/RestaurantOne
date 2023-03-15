@@ -15,6 +15,7 @@ from .enums import (
     CheckoutPermissions,
     MenuPermissions,
     OrderPermissions,
+    ReservationPermissions,
     PaymentPermissions,
     ProductPermissions,
     ProductTypePermissions,
@@ -28,10 +29,11 @@ __all__ = [
     "PERMISSIONS_ENUMS",
     "is_operator_user",
     "is_user",
-    "AccountPermissions"
+    "AccountPermissions",
     "CheckoutPermissions",
     "MenuPermissions",
     "OrderPermissions",
+    "ReservationPermissions",
     "PaymentPermissions",
     "ProductPermissions",
     "ProductTypePermissions",
@@ -43,6 +45,14 @@ __all__ = [
 
 
 def get_user_from_context(context):
+    """_summary_
+
+    Args:
+        context (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     # order is important
     # user if None then is passed as anonymous
     # more users could be returned
@@ -91,6 +101,7 @@ def one_of_permissions_or_auth_filter_required(context, permissions):
 def permission_required(
     requestor: object, perms: Collection[BasePermissionEnum]
 ) -> bool:
+    """ """
     # get the instance of User
     User = {}  # just a mock
     if isinstance(requestor, User):
@@ -105,6 +116,7 @@ def permission_required(
 def has_one_of_permissions(
     requestor: object, permissions: Collection[BasePermissionEnum]
 ) -> bool:
+    """ """
     if not permissions:
         return True
     for perm in permissions:
@@ -116,5 +128,6 @@ def has_one_of_permissions(
 def message_one_of_permissions_required(
     permissions: Collection[BasePermissionEnum],
 ) -> str:
+    """ """
     permission_msg = ", ".join([p.name for p in permissions])
     return f"\n\nRequires one of the following permissions: {permission_msg}."
