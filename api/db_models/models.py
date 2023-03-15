@@ -20,7 +20,7 @@ class Address(db.Model):
     country_area = db.Column(db.String(50), nullable=False)
     user_id:Mapped[int] = mapped_column(db.Integer, 
                                     db.ForeignKey('user.id'), nullable=False)
-    user:Mapped['User'] = db.relationship("Address",back_populates="addresses")
+    user: Mapped['User'] = db.relationship("User", back_populates="addresses")
     
 
 class User(db.Model):
@@ -34,7 +34,7 @@ class User(db.Model):
                           default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow)
-    addresses: Mapped[List['Address']] = db.relationship("User",
+    addresses: Mapped[List['Address']] = db.relationship("Address",
                                                          back_populates="user",
                                                        cascade="all, delete-orphan")
     
@@ -101,7 +101,7 @@ class InvoiceItem(db.Model):
     """InvoiceItem model"""
     id = db.Column(db.Integer, primary_key=True)
     
-class information(db.Model):
+class Information(db.Model):
     """information model"""
     id = db.Column(db.Integer, primary_key=True)
     
