@@ -1,6 +1,6 @@
 """application entry point"""
 from flask import Flask
-from models.db import DBClient
+from .models.db import DBClient
 
 
 # Initializing flask app
