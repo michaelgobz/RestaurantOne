@@ -1,5 +1,6 @@
 from client import RedisClient
+from app import app
 
-redis_client = RedisClient(host='localhost', port=6379, db=0, password='')
+redis_client = RedisClient(app=app)
 
 __all__ = ['redis_client']
