@@ -12,7 +12,7 @@ class DBClient:
         self.user = user
         self.password = password
         self.db = db
-        self.__migrate
+        self.__migrate = None
 
     def get_engine(self):
         """get engine instance tied to flask app"""

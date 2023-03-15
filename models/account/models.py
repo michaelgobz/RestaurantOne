@@ -1,7 +1,9 @@
 """Account models."""
+from typing import List
 from datetime import datetime
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
+from ..core.base import declarative_base as db
 
 
 class Address(db.Model):
@@ -18,7 +20,7 @@ class Address(db.Model):
     country_area = db.Column(db.String(50), nullable=False)
     user_id:Mapped[int] = mapped_column(db.Integer, 
                                     db.ForeignKey('user.id'), nullable=False)
-    user:Mapped['User'] = db.relationship("User", backref="addresses")
+    user:Mapped['User'] = db.relationship(back_populates="addresses")
 
 class User(db.Model):
     """User model"""
@@ -28,8 +30,9 @@ class User(db.Model):
     last_name = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False,
-                          default=datetime.utcnow, editable=False)
+                          default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, nullable=False,
-                           default=datetime.utcnow, editable=True)
-    addresses: Mapped[List['Address']] = db.relationship("Address", backref="user",
+                           default=datetime.utcnow)
+    addresses: Mapped[List['Address']] = db.relationship(
+                                                         back_populates="user",
                                                        cascade="all, delete-orphan")
