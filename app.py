@@ -1,6 +1,6 @@
 """application entry point"""
 from flask import Flask
-from .models.db import DBClient
+from models.db import DBClient
 
 
 # Initializing flask app
@@ -8,8 +8,8 @@ app = Flask(__name__)
 
 # Initializing database configurations
 
-Db = DBClient(host='localhost', port=5233,
-              user='postgres', password='postgres', db='postgres', app=app)
+Db = DBClient(host='localhost', port=5432,
+              user='RestaurantAdmin', password='RestaurantAdmin', db='OpenRestaurant', app=app)
 migrate = Db.get_migrate()
 database = Db.get_engine()
 

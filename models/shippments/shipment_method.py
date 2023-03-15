@@ -4,16 +4,9 @@ from typing import Optional
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
-from ..core.base import Base
+from ..core.base import declarative_base as db
 
-class ShipmentMethod(Base):
+class ShipmentMethod(db.Model):
     """Shipment method model"""
-    __tablename__ = "shipment_methods"
+    id = db.Column(Integer, primary_key=True)
     
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String(255), nullable=False)
-    description = Column(Text, nullable=True)
-    price = Column(Integer, nullable=False)
-    created_at = Column(DateTime, nullable=False)
-    updated_at = Column(DateTime, nullable=False)
-    deleted_at = Column(DateTime, nullable=True)

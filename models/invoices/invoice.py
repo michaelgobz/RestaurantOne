@@ -4,9 +4,9 @@ from typing import Optional
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
-from ..core.base import Base
+from ..core.base import declarative_base as db
 
 
-class Invoice(Base):
+class Invoice(db.Model):
     """ Invoice model"""
-    __tablename__ = "invoices"
+    id = db.Column(Integer, primary_key=True)

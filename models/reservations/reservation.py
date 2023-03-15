@@ -4,8 +4,8 @@ from typing import Optional
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
-from ..core.base import Base
+from ..core.base import declarative_base as db
 
-class Reservation(Base):
+class Reservation(db.Model):
     """Reservation model"""
-    __tablename__ = "reservations"
+    id = db.Column(Integer, primary_key=True)
