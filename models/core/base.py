@@ -1,11 +1,10 @@
 """base model for all objects"""
-
 from ..db import Db
 
-class Base(Db):
-    """Base model class"""
-    pass
+declarative_base = Db.get_engine()
 
-class BaseObject:
+
+
+class BaseObject(declarative_base.Model):
     """Base model for all objects"""
     pass

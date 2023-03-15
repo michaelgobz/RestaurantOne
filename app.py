@@ -1,14 +1,17 @@
 """application entry point"""
 from flask import Flask
-from flask_migrate import Migrate
-from .models.db import Db
+from models.db import DBClient
+
 
 # Initializing flask app
 app = Flask(__name__)
 
-# Initializing database and migrations
+# Initializing database configurations
+
+Db = DBClient(host='localhost', port=5233,
+              user='postgres', password='postgres', db='postgres', app=app)
+migrate = Db.get_migrate()
 database = Db.get_engine()
-migrate = Migrate(app, database)
 
 
 # Route for seeing a data

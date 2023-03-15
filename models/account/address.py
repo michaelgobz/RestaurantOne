@@ -6,9 +6,9 @@ from typing import Optional
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
-from ..core.base import Base
+from ..core.base import declarative_base as db
 
 
-class Address(Base):
+class Address(db.Model):
     """"address model object"""
-    __tablename__ = "addresses"
+    id = db.Column(Integer, primary_key=True)

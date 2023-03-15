@@ -5,11 +5,11 @@ from typing import Optional
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import relationship
-from ..core.base import Base
+from ..core.base import declarative_base as db
 
 
-class User(Base.Model):
+class User(db.Model):
     """User model"""
-    id = Base.Column(Integer, primary_key=True)
+    id = db.Column(Integer, primary_key=True)
     
     
