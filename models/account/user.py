@@ -19,5 +19,5 @@ class User(db.Model):
                           default=datetime.utcnow, editable=False)
     updated_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow, editable=True)
-    addresses: Mapped[List[Address]] = db.relationship("Address", backref="user",
+    addresses: Mapped[List['Address']] = db.relationship("Address", backref="user",
                                                        cascade="all, delete-orphan")

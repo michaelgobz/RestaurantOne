@@ -1,6 +1,8 @@
-
 """ address model"""
+from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import mapped_column
 from ..core.base import declarative_base as db
+from .user import User
 
 
 
@@ -17,4 +19,6 @@ class Address(db.Model):
     city_area = db.Column(db.String(50), nullable=False)
     country = db.Column(db.String(50), nullable=False)
     country_area = db.Column(db.String(50), nullable=False)
-    user_id:Mapped[] = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id:Mapped[int] = mapped_column(db.Integer, 
+                                    db.ForeignKey('user.id'), nullable=False)
+    user:Mapped['User'] = db.relationship("User", backref="addresses")
