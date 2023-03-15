@@ -2,6 +2,9 @@
 from flask import Flask
 # models
 from models.account import Address, User
+from models.core.base import Db as db
+
+
 
 
 # Initializing flask app
@@ -12,6 +15,9 @@ app = Flask(__name__)
 # models
 user = User()
 address = Address()
+
+#initializing database with flask app
+db.initialize_app(app)
 
 
 

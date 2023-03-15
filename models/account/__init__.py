@@ -1,3 +1,3 @@
-from .models import User, Address
+from .models import User, Address, db
 
-__all__ = ['User', 'Address']
+__all__ = ['User', 'Address', 'db']
