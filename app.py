@@ -1,5 +1,5 @@
 """application entry point"""
-from flask import Flask, request, jsonify
+from flask import Flask
 
 # Initializing flask app
 app = Flask(__name__)
