@@ -46,7 +46,7 @@
 "[javascript]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
 },
-"editor.fontSize": 18,
+"editor.fontSize": 14,
 "files.autoSave": "afterDelay"
    
 
