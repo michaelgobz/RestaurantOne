@@ -1,5 +1,8 @@
+
 """ address model"""
 from ..core.base import declarative_base as db
+
+
 
 
 class Address(db.Model):
@@ -14,3 +17,4 @@ class Address(db.Model):
     city_area = db.Column(db.String(50), nullable=False)
     country = db.Column(db.String(50), nullable=False)
     country_area = db.Column(db.String(50), nullable=False)
+    user_id:Mapped[] = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)

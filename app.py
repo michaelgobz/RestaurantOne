@@ -1,6 +1,8 @@
 """application entry point"""
 from flask import Flask
 from models.db import DBClient
+# models
+from models.account import Address, User
 
 
 # Initializing flask app
@@ -11,6 +13,12 @@ app = Flask(__name__)
 Db = DBClient(host='localhost', port=5432,
               user='RestaurantAdmin', password='RestaurantAdmin',
               db='OpenRestaurant', app=app)
+
+# models
+
+user = User()
+address = Address()
+
 
 
 # Route for seeing a data

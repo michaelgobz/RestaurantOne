@@ -3,7 +3,7 @@ from typing import List
 from datetime import datetime
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.orm import Mapped
-from address import Address
+from .address import Address
 
 from ..core.base import declarative_base as db
 
