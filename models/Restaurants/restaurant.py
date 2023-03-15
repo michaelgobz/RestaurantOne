@@ -7,6 +7,6 @@ from sqlalchemy.orm import relationship
 from ..object.base import Base
 
 
-class Transaction(Base):
-    """Transaction model"""
-    __tablename__ = "transactions"
+class Restaurant(Base):
+    """Restaurant model"""
+    __tablename__ = "restaurants"
