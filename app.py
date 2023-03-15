@@ -1,6 +1,5 @@
 """application entry point"""
 from flask import Flask
-from models.db import DBClient
 # models
 from models.account import Address, User
 
@@ -9,10 +8,6 @@ from models.account import Address, User
 app = Flask(__name__)
 
 # Initializing database configurations
-
-Db = DBClient(host='localhost', port=5432,
-              user='RestaurantAdmin', password='RestaurantAdmin',
-              db='OpenRestaurant')
 
 # models
 user = User()

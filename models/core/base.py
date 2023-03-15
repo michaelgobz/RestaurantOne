@@ -1,6 +1,10 @@
 """base model for all objects"""
 
-from app import Db
+from ..db import DBClient
+
+Db = DBClient(host='localhost', port=5432,
+              user='RestaurantAdmin', password='RestaurantAdmin',
+              db='OpenRestaurant')
 
 declarative_base = Db.get_engine()
 
