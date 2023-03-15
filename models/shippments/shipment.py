@@ -7,6 +7,6 @@ from sqlalchemy.orm import relationship
 from ..core.base import declarative_base as db
 
 
-class shipment(db.Model):
+class Shipment(db.Model):
     """Shipment model"""
     id = db.Column(Integer, primary_key=True)
