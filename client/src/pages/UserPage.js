@@ -149,7 +149,7 @@ export default function UserPage() {
   return (
     <>
       <Helmet>
-        <title> User | Minimal UI </title>
+        <title> Reservation | Open Restaurant </title>
       </Helmet>
 
       <Container>

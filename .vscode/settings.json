@@ -16,6 +16,7 @@
         "simplebar",
         "sqlalchemy",
         "TTFB",
+        "USERLIST",
         "venv",
         "webstack"
     ],
