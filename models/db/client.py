@@ -9,7 +9,7 @@ class DBClient:
         self.__connection_string = self._get_connection_string(host, 
                                                                port, user, password, db)
         app.config['SQLALCHEMY_DATABASE_URI'] = self.__connection_string
-        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+        app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
         self.__engine.init_app(app)
         self.__migrate = Migrate(app, self.__engine)
         
