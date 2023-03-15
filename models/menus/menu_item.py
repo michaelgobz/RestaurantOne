@@ -1,19 +1,22 @@
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Text
+from models.db.db import DB
+from ..db.models import MenuItems
+from sqlalchemy.orm.exc import NoResultFound
 
-Base = declarative_base()
+class MenuItem:
+    """Menu items class to interact with the MenuItems database
+    """
 
-class MenuItem(Base):
-#   Representation of a menu item
+    def __init__(self):
+        self._db = DB()
 
-    __tablename__ = 'menu_items'
+    def register_menu_item(self, name: str, **kwargs) -> MenuItems:
+        """Register a menu item in the DB"""
+        try:
+            menu_item = self._db.find_menu_items_by(name)
+        except NoResultFound:
+            menu_item = self._db.add_menu_item(name, **kwargs)
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String(50), nullable=False)
-    description = Column(Text, nullable=False)
-    category = Column(String(50), nullable=True)
-    price = Column(Integer, nullable=False, default=0)
-    foods = Column(String(50), nullable=False)
-    toppings = Column(String(50), nullable=True)
-    serving_model = Column(String(50), nullable=True)
-    tax_associated = Column(Integer, nullable=True)
+            return menu_item
+
+        else:
+            raise ValueError(f'menu item {name} already exists')

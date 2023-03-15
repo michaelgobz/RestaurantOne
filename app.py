@@ -1,9 +1,10 @@
 """application entry point
     """
 
-import os
-from flask import Flask, request, jsonify
+from os import getenv
+from flask import Flask
 from dotenv import load_dotenv
+from api.routes import views
 
 load_dotenv()
   
@@ -11,29 +12,10 @@ load_dotenv()
 app = Flask(__name__)
 
 # Secret Key
-app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-  
-# Route for seeing a data
-@app.route('/')
-def initial():
-    """initial route
-    welcome route
+app.config['SECRET_KEY'] = getenv('SECRET_KEY')
 
-    Returns:
-        _object_: welcome parameters
-    """
-
-    return {
-        "message": "welcome to the Our Platform",
-        "company": "RestaurantOne",
-        "location": "Kampala",
-        "year": 2023,
-        "month": "March",
-        "Country": "Uganda",
-        "Project": "Alx-webstack project",
-        "supervisor": "Alx-SE Mentors",
-    }
-
+# Registering the routes
+app.register_blueprint(views)
 
 # Running app
 if __name__ == '__main__':

@@ -1,17 +1,22 @@
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, ForeignKey
+from models.db.db import DB
+from ..db.models import Menus
+from sqlalchemy.orm.exc import NoResultFound
 
-Base = declarative_base()
+class Menu:
+    """menu class to interact with the menus database
+    """
 
-class Menu(Base):
-#    Representation of a menu
+    def __init__(self):
+        self._db = DB()
 
-    __tablename__ = 'menus'
+    def register_menu(self, name: str, **kwargs) -> Menus:
+        """Register a menu in the DB"""
+        try:
+            menu = self._db.find_menu_by(name)
+        except NoResultFound:
+            menu = self._db.add_menu(name, **kwargs)
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String(50), unique=True, nullable=False)
-    description = Column(Text, nullable=False)
-    category = Column(String(50))
-    items = Column(String(50))
-    restaurant_id = Column(Integer, ForeignKey('restaurant.id'), nullable=False)
-    owner_restaurant_name = Column(String(50), nullable=True)
+            return menu
+
+        else:
+            raise ValueError(f'menu {name} already exists')

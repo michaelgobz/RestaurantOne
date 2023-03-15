@@ -1,7 +1,7 @@
 """ Authentication module """
 import bcrypt
-from db.db import DB
-from account.user import User
+from ..db.db import DB
+from ..db.models import User
 from sqlalchemy.orm.exc import NoResultFound
 from uuid import uuid4
 from typing import Union
@@ -30,7 +30,7 @@ class Auth:
     def __init__(self):
         self._db = DB()
 
-    def register_user(self, email: str, password: str) -> User:
+    def register_user(self, email: str, password: str, **kwargs) -> User:
         """ Register a user in the db
         Returns a User object
         """
@@ -38,7 +38,7 @@ class Auth:
             user = self._db.find_user_by(email=email)
         except NoResultFound:
             hashed_password = _hash_password(password)
-            user = self._db.add_user(email, hashed_password)
+            user = self._db.add_user(email, hashed_password, **kwargs)
 
             return user
 

@@ -1,24 +1,22 @@
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Text, Boolean, DateTime
+from models.db.db import DB
+from ..db.models import Products
+from sqlalchemy.orm.exc import NoResultFound
 
-Base = declarative_base()
+class Product:
+    """Product class to interact with the Products database
+    """
 
-class Product(Base):
-# Representation of a product
+    def __init__(self):
+        self._db = DB()
 
-    __tablename__ = 'products'
+    def register_product(self, short_name: str, **kwargs) -> Products:
+        """Register a product in the DB"""
+        try:
+            product = self._db.find_product_by(short_name)
+        except NoResultFound:
+            product = self._db.add_product(short_name, **kwargs)
 
-    id = Column(Integer, primary_key=True)
-    short_name = Column(String(50), nullable=False)
-    long_name = Column(String(50), nullable=True)
-    description = Column(Text, nullable=False)
-    menu_category = Column(String(50), nullable=True)
-    menu_item = Column(String(50), nullable=True)
-    owner = Column(String(50), nullable=True)
-    price = Column(Integer, nullable=False, default=0)
-    varients = Column(String(50), nullable=True)
-    is_available = Column(Boolean, nullable=False)
-    is_deliverable = Column(Boolean, nullable=False)
-    duration_of_preparation = Column(DateTime)
-    max_quantity = Column(Integer, nullable=False, default=0)
-    location = Column(String(50), nullable=True)
+            return product
+
+        else:
+            raise ValueError(f'Product {short_name} already exists')

@@ -1,13 +1,13 @@
 """DB module
 """
-import os
+from os import getenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
 
-from account.user import Base, User
+from .models import Base, User, Restaurants, Menus, MenuItems, Products, Reservations, Orders
 
 
 class DB:
@@ -17,7 +17,7 @@ class DB:
     def __init__(self) -> None:
         """Initialize a new DB instance
         """
-        self._engine = create_engine(os.getenv('DATABASE_URI'), echo=False)
+        self._engine = create_engine('sqlite:///resto.db', echo=False)
         Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
         self.__session = None
@@ -27,15 +27,16 @@ class DB:
         """Memoized session object
         """
         if self.__session is None:
-            DBSession = sessionmaker(bind=self._engine)
-            self.__session = DBSession()
+            db_session = sessionmaker(bind=self._engine)
+            self.__session = db_session()
         return self.__session
-
-    def add_user(self, email: str, hashed_password: str) -> User:
+    
+    def add_user(self, email: str, hashed_password: str, **kwargs) -> User:
         """ Saves the user to the database and
         Returns a User object
         """
-        new_user = User(email=email, hashed_password=hashed_password)
+        new_user = User(email=email, hashed_password=hashed_password, **kwargs)
+        
         self._session.add(new_user)
         self._session.commit()
 
@@ -81,3 +82,190 @@ class DB:
             setattr(user, key, value)
 
         self._session.commit()
+
+
+        #### RESTAURANT ####
+
+    def add_restaurant(self, **kwargs):
+        """Saves the restaurant to the database
+        """
+        restaurant = Restaurants(**kwargs)
+
+        self._session.add(restaurant)
+        self._session.commit()
+
+    def find_restaurant_by(self, **kwargs) -> Restaurants:
+        """ Returns the first row found in the Restaurants table
+        as filtered by the methods input arguments
+        """
+        if not kwargs:
+            raise InvalidRequestError
+
+        column_keys = Restaurants.__table__.columns.keys()
+
+        for key in kwargs.keys():
+            if key not in column_keys:
+                raise InvalidRequestError
+
+        restaurant = self._session.query(Restaurants).filter_by(**kwargs).first()
+
+        if restaurant is None:
+            raise NoResultFound
+
+        return restaurant
+    
+
+    #### Product ####
+
+    def add_product(self, **kwargs):
+        """Saves the products to the database
+        """
+        product = Products(**kwargs)
+
+        self.__session.add(product)
+        self.__session.commit()
+
+    def find_product_by(self, **kwargs) -> Products:
+        """ Returns the first row found in the Products table
+        as filtered by the methods input arguments
+        """
+        if not kwargs:
+            raise InvalidRequestError
+
+        column_keys = Products.__table__.columns.keys()
+
+        for key in kwargs.keys():
+            if key not in column_keys:
+                raise InvalidRequestError
+
+        product = self._session.query(Products).filter_by(**kwargs).first()
+
+        if product is None:
+            raise NoResultFound
+
+        return product
+    
+
+    #### Menu ####
+
+    def add_menu(self, **kwargs):
+        """Saves the menu to the database
+        """
+        menu = Menus(**kwargs)
+
+        self.__session.add(menu)
+        self.__session.commit()
+
+    def find_menu_by(self, **kwargs) -> Menus:
+        """ Returns the first row found in the Menus table
+        as filtered by the methods input arguments
+        """
+        if not kwargs:
+            raise InvalidRequestError
+
+        column_keys = Menus.__table__.columns.keys()
+
+        for key in kwargs.keys():
+            if key not in column_keys:
+                raise InvalidRequestError
+
+        menu = self._session.query(Menus).filter_by(**kwargs).first()
+
+        if menu is None:
+            raise NoResultFound
+
+        return menu
+
+
+    #### Menu item ####
+
+    def add_menu_item(self, **kwargs):
+        """Saves the menu items to the database
+        """
+        menu_item = MenuItems(**kwargs)
+
+        self.__session.add(menu_item)
+        self.__session.commit()
+
+    def find_menu_item_by(self, **kwargs) -> MenuItems:
+        """ Returns the first row found in the MenuItems table
+        as filtered by the methods input arguments
+        """
+        if not kwargs:
+            raise InvalidRequestError
+
+        column_keys = MenuItems.__table__.columns.keys()
+
+        for key in kwargs.keys():
+            if key not in column_keys:
+                raise InvalidRequestError
+
+        menu_items = self._session.query(MenuItems).filter_by(**kwargs).first()
+
+        if menu_items is None:
+            raise NoResultFound
+
+        return menu_items
+
+
+
+        #### Order ####
+
+    def add_order(self, **kwargs):
+        """Saves the menu to the database
+        """
+        order = Orders(**kwargs)
+
+        self.__session.add(order)
+        self.__session.commit()
+
+    def find_order_by(self, **kwargs) -> Orders:
+        """ Returns the first row found in the Orders table
+        as filtered by the methods input arguments
+        """
+        if not kwargs:
+            raise InvalidRequestError
+
+        column_keys = Orders.__table__.columns.keys()
+
+        for key in kwargs.keys():
+            if key not in column_keys:
+                raise InvalidRequestError
+
+        order = self._session.query(Orders).filter_by(**kwargs).first()
+
+        if order is None:
+            raise NoResultFound
+
+        return order
+
+
+    #### Reservation ####
+
+    def add_reservation(self, **kwargs):
+        """Saves the menu to the database
+        """
+        reservation = Reservations(**kwargs)
+
+        self.__session.add(reservation)
+        self.__session.commit()
+
+    def find_reservation_by(self, **kwargs) -> Reservations:
+        """ Returns the first row found in the Reservations table
+        as filtered by the methods input arguments
+        """
+        if not kwargs:
+            raise InvalidRequestError
+
+        column_keys = Reservations.__table__.columns.keys()
+
+        for key in kwargs.keys():
+            if key not in column_keys:
+                raise InvalidRequestError
+
+        reservation = self._session.query(Reservations).filter_by(**kwargs).first()
+
+        if reservation is None:
+            raise NoResultFound
+
+        return reservation

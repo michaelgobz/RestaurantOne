@@ -1,18 +1,15 @@
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Text, ForeignKey
+from models.db.db import DB
+from ..db.models import Orders
 
-Base = declarative_base()
+class Order:
+    """Menu items class to interact with the menus database
+    """
 
-class Order(Base):
-#    Representation of an order
+    def __init__(self):
+        self._db = DB()
 
-    __tablename__ = 'orders'
+    def register_order(self, items: list, **kwargs) -> Orders:
+        """Register a menu item in the DB"""
+        order = self._db.add_order(items, **kwargs)
 
-    id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
-    items = Column(String(50), nullable=False)
-    total_cart_price = Column(Integer, nullable=False, default=0)
-    address = Column(Text, nullable=False)
-    shipment_method = Column(String(50), nullable=False)
-    payment_method = Column(String(50), nullable=False)
-    restaurant_id = Column(Integer, ForeignKey('restaurant.id'), nullable=False)
+        return order

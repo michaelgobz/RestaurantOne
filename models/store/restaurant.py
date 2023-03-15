@@ -1,27 +1,22 @@
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, Text, Boolean
-from sqlalchemy.orm import relationship
+from models.db.db import DB
+from ..db.models import Restaurants
+from sqlalchemy.orm.exc import NoResultFound
 
-Base = declarative_base()
+class Restaurant:
+    """Restaurant class to interact with the restaurants database
+    """
 
-class Restaurant(Base):
-# Representation of a restaurant
+    def __init__(self):
+        self._db = DB()
 
-    __tablename__ = 'restaurants'
+    def register_restaurant(self, name: str, **kwargs) -> Restaurants:
+        """Register a restaurant in the DB"""
+        try:
+            restaurant = self._db.find_restaurant_by(name)
+        except NoResultFound:
+            restaurant = self._db.add_restaurant(name, **kwargs)
 
-    id = Column(Integer, primary_key=True)
-    name = Column(String(50), nullable=False)
-    description = Column(Text, nullable=False)
-    location = Column(String(50), nullable=True)
-    mission_statement = Column(String(50), nullable=True)
-    is_operational = Column(Boolean, nullable=True)
-    order_fulfilling = Column(Boolean, nullable=True)
-    menus = relationship('Menu', backref='restaurant', lazy=True)
-    products = Column(String)
-    orders = relationship('Order', backref='restaurant', lazy=True)
-    payment_methods = Column(String)
-    reservations = relationship('Reservation', backref='restaurant', lazy=True)
-    customers = Column(Integer, nullable=False, default=0)
-    shipments = relationship('Shipment', backref='restaurant', lazy=True)
-    offers = Column(String(50))
-    suppliers = Column(String(50))
+            return restaurant
+
+        else:
+            raise ValueError(f'Restaurant {name} already exists')
