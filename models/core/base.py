@@ -1,7 +1,8 @@
 """base model for all objects"""
-from sqlalchemy.orm import DeclarativeBase
 
-class Base(DeclarativeBase):
+from ..db import Db
+
+class Base(Db):
     """Base model class"""
     pass
 

@@ -4,7 +4,7 @@ from app import app
 
 class DBClient:
     """postgresql db client"""
-    def __init__(self, host, port, user, password, db, echo=False):
+    def __init__(self, host, port, user, password, db):
         self.__engine = SQLAlchemy()
         self.__connection_string = self._get_connection_string(host, 
                                                                port, user, password, db)
