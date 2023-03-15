@@ -3,7 +3,7 @@ import { useState } from 'react';
 // @mui
 import { Container, Stack, Typography } from '@mui/material';
 // components
-import { ProductSort, ProductList, ProductCartWidget, ProductFilterSidebar } from '../sections/@dashboard/products';
+import { ProductSort, ProductList, ProductCartWidget, ProductFilterSidebar } from '../sections/@default/products';
 // mock
 import PRODUCTS from '../_mock/products';
 

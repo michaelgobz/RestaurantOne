@@ -6,16 +6,28 @@
         "firstname",
         "flowtype",
         "Goboola",
+        "hdel",
+        "hexists",
+        "hget",
+        "hgetall",
+        "hlen",
+        "hset",
         "iconify",
         "lastname",
         "nocheck",
         "noopener",
         "noreferrer",
         "Reataurant",
+        "sadd",
+        "scard",
         "setdata",
         "simplebar",
+        "sismember",
+        "smembers",
         "sqlalchemy",
+        "srem",
         "TTFB",
+        "USERLIST",
         "venv",
         "webstack"
     ],
@@ -33,7 +45,9 @@
 ],
 "[javascript]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
-}
+},
+"editor.fontSize": 14,
+"files.autoSave": "afterDelay"
    
 
 }
