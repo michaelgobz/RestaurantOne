@@ -1,6 +1,13 @@
 # RestaurantOne
 Restaurant management application developed using Flask, react and Postgresql
 
+## status
+[![CodeQL](https://github.com/michaelgobz/RestaurantOne/actions/workflows/codeql.yml/badge.svg)](https://github.com/michaelgobz/RestaurantOne/actions/workflows/codeql.yml)
+
+[![.github/workflows/azure-webapps-node.yml](https://github.com/michaelgobz/RestaurantOne/actions/workflows/azure-webapps-node.yml/badge.svg)](https://github.com/michaelgobz/RestaurantOne/actions/workflows/azure-webapps-node.yml)
+
+
+
 ## Installation
 The project uses a monorepo structure where the ui and the backend are hosted on the same repository.<br />
 For starters, there are 2 directories to watch out for the root that houses the backend and ```ui``` directory that house the ui components that are built on [react](https://reactjs.org). <br />

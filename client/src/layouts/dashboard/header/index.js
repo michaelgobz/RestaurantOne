@@ -5,16 +5,12 @@ import { Box, Stack, AppBar, Toolbar, IconButton } from '@mui/material';
 // utils
 import { bgBlur } from '../../../utils/cssStyles';
 // components
-import Iconify from '../../../components/iconify';
-//
 import Searchbar from './Searchbar';
 import AccountPopover from './AccountPopover';
-import LanguagePopover from './LanguagePopover';
 import NotificationsPopover from './NotificationsPopover';
+import { MenuItems } from './MenuItems';
 
 // ----------------------------------------------------------------------
-
-const NAV_WIDTH = 280;
 
 const HEADER_MOBILE = 64;
 
@@ -24,7 +20,7 @@ const StyledRoot = styled(AppBar)(({ theme }) => ({
   ...bgBlur({ color: theme.palette.background.default }),
   boxShadow: 'none',
   [theme.breakpoints.up('lg')]: {
-    width: `calc(100% - ${NAV_WIDTH + 1}px)`,
+    width: '100%',
   },
 }));
 
@@ -43,6 +39,7 @@ Header.propTypes = {
 };
 
 export default function Header({ onOpenNav }) {
+
   return (
     <StyledRoot>
       <StyledToolbar>
@@ -53,11 +50,9 @@ export default function Header({ onOpenNav }) {
             color: 'text.primary',
             display: { lg: 'none' },
           }}
-        >
-          <Iconify icon="eva:menu-2-fill" />
-        </IconButton>
-
-        <Searchbar />
+        />
+    
+        <MenuItems/>
         <Box sx={{ flexGrow: 1 }} />
 
         <Stack
@@ -68,7 +63,7 @@ export default function Header({ onOpenNav }) {
             sm: 1,
           }}
         >
-          <LanguagePopover />
+          <Searchbar />
           <NotificationsPopover />
           <AccountPopover />
         </Stack>

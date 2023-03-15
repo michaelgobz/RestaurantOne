@@ -1,50 +1,77 @@
 import { Navigate, useRoutes } from 'react-router-dom';
 // layouts
-import DashboardLayout from './layouts/dashboard';
+import DefaultLayout from './layouts/dashboard';
 import SimpleLayout from './layouts/simple';
-//
-import BlogPage from './pages/BlogPage';
+// pages
+import RestaurantsPage from './pages/RestaurantPage';
 import UserPage from './pages/UserPage';
 import LoginPage from './pages/LoginPage';
-import SignUpPage from './pages/SignUpPage';
+import SignUpPage from './pages/signupPage';
 import Page404 from './pages/Page404';
 import ProductsPage from './pages/ProductsPage';
-import DashboardAppPage from './pages/DashboardAppPage';
+import CartCheckout from './pages/CheckoutsPage'
 
 // ----------------------------------------------------------------------
 
 export default function Router() {
   const routes = useRoutes([
     {
-      path: '/dashboard',
-      element: <DashboardLayout />,
+      path: '/',
+      element: <DefaultLayout />,
       children: [
-        { element: <Navigate to="/dashboard/app" />, index: true },
-        { path: 'app', element: <DashboardAppPage /> },
-        { path: 'user', element: <UserPage /> },
-        { path: 'products', element: <ProductsPage /> },
-        { path: 'blog', element: <BlogPage /> },
+        {
+          element: <Navigate to="customer/products" />,
+          index: true
+        },
+        {
+          path: 'customer/products',
+          element: <ProductsPage />
+        },
+        {
+          path: 'customer/checkout',
+          element: <CartCheckout />,
+          children:
+            [
+              {
+                path: 'new/:id',
+                element: <ProductsPage />
+              }
+            ]
+        },
+        {
+          path: 'customer/reservations',
+          element: <RestaurantsPage />,
+          children:
+            [
+              {
+                path: 'new/:id',
+                element: <UserPage />
+              }
+            ]
+        },
+        {
+          path: 'customer/orders',
+          element: <UserPage />
+        },
+        {
+          path: 'customer/account',
+          element: <UserPage />
+        },
       ],
     },
     {
-      path: 'login',
-      element: <LoginPage />,
+      path: 'auth/signup',
+      element: <SignUpPage />
     },
     {
-      path : 'auth/signup',
-      element : <SignUpPage />
+      path: 'auth/login',
+      element: <LoginPage />
     },
     {
       element: <SimpleLayout />,
       children: [
-        { element: <Navigate to="/dashboard/app" />, index: true },
         { path: '404', element: <Page404 /> },
-        { path: '*', element: <Navigate to="/404" /> },
       ],
-    },
-    {
-      path: '*',
-      element: <Navigate to="/404" replace />,
     },
   ]);
 
