@@ -1,8 +1,8 @@
 """application entry point"""
 from flask import Flask
 # models
-from models.account import Address, User
-from models.core.base import Db as db
+from api.db_models import Address, User
+from api.core.base import Db as db
 
 
 
