@@ -7,5 +7,5 @@ This document capture the changes to any components in the project
 ### 11/03/2023
  - added the cli for the data 
  - permissions model and protocol defined [permissions](./models/permissions/)
- - 
+ - models
  
