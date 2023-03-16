@@ -3,8 +3,8 @@
 from ..db import DBClient
 
 Db = DBClient(host='localhost', port=5432,
-              user='postgres', password='postgres',
-              db='postgres')
+              user='RestaurantAdmin', password='RestaurantAdmin',
+              db='OpenRestaurant')
 
 declarative_base = Db.get_engine()
 

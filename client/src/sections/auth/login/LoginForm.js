@@ -14,9 +14,17 @@ export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
 
   const HandleClick = () => {
-    navigate('customer/products');
-  };
+    fetch('http://localhost:5000/', { method: 'GET', mode: 'no-cors' }
+    ).then((response) => {
+      if (response.status === 200) {
+        response.json().then((data) => { console.log(data); });
+        navigate('/', { replace: true });
+      }
+    }).catch((err) => {
+      console.error(err);
+    });
 
+  };
   return (
     <>
       <Stack spacing={3}>
