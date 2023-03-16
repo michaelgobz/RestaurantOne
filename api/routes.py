@@ -132,7 +132,7 @@ class ResetPasswordForm(Form):
     email = StringField('Email', [validators.InputRequired(), validators.Email()])
 
 
-@views.route('/reset_password', methods=['POST'], strict_slashes=False)
+@views.route('auth/reset_password', methods=['POST'], strict_slashes=False)
 def get_reset_password_token() -> str:
     """ Generates a token and responds with 200
     """
@@ -172,7 +172,7 @@ def get_reset_password_token() -> str:
 #     return True
 
 
-@views.route('/reset_password', methods=['PUT'], strict_slashes=False)
+@views.route('auth/reset_password/new', methods=['PUT'], strict_slashes=False)
 def update_password() -> str:
     """ Updates password
     """
@@ -188,7 +188,8 @@ def update_password() -> str:
     except ValueError:
         abort(403)
 
-    return jsonify({"email": email, "message": "Password updated"})
+    return jsonify({"email": email,
+                    "message": "Password updated can now login with new password"})
 
 
 #### RESTAURANT ####
