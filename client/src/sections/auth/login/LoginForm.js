@@ -13,17 +13,14 @@ export default function LoginForm() {
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const HandleClick = () => {
-    fetch('http://localhost:5000/', { method: 'GET', mode: 'no-cors' }
-    ).then((response) => {
-      if (response.status === 200) {
-        response.json().then((data) => { console.log(data); });
-        navigate('/', { replace: true });
-      }
-    }).catch((err) => {
-      console.error(err);
-    });
-
+  const HandleClick = () => { 
+    console.log('clicked');
+    let data;
+    const url = 'http://localhost:5000/';
+    fetch(url, { method: 'GET', mode: 'cors' })
+      .then((response) => {
+        console.log(response);
+      })
   };
   return (
     <>
