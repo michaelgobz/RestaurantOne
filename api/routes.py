@@ -1,6 +1,5 @@
 from flask import request, jsonify, make_response, abort, redirect, Blueprint
 from wtforms import Form, StringField, PasswordField, validators
-import email_validator
 
 
 
@@ -325,4 +324,5 @@ def new_reservation():
     except ValueError:
         return make_response(jsonify({"message": "reservation already registered"}), 400)
 
-    return jsonify({"reservation": reservation.name, "message": f"reservation {reservation.name} created"})
+    return jsonify({"reservation": reservation.name, 
+                    "message": f"reservation {reservation.name} created"})
