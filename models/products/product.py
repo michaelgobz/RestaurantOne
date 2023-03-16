@@ -9,12 +9,12 @@ class Product:
     def __init__(self):
         self._db = DB()
 
-    def register_product(self, short_name: str, **kwargs) -> Products:
+    def register_product(self, short_name: str, *args) -> Products:
         """Register a product in the DB"""
         try:
             product = self._db.find_product_by(short_name)
         except NoResultFound:
-            product = self._db.add_product(short_name, **kwargs)
+            product = self._db.add_product(short_name, *args)
 
             return product
 

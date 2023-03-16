@@ -21,8 +21,8 @@ class User(Base):
    role = Column(String(80), nullable=False)
    permissions = Column(String, nullable=False)
    avatar = Column(String(20), nullable=False, default='default.jpg')
-   orders = relationship('Order', backref='user', lazy=True)
-   reservations = relationship('Reservation', backref='user')
+   orders = relationship('Orders', backref='user', lazy=True)
+   reservations = relationship('Reservations', backref='user')
    payment_methods = Column(String, nullable=True)
    reviews = Column(String(1000), nullable=True)
 
@@ -44,13 +44,13 @@ class Restaurants(Base):
     mission_statement = Column(String(50), nullable=True)
     is_operational = Column(Boolean, nullable=True)
     order_fulfilling = Column(Boolean, nullable=True)
-    menus = relationship('Menu', backref='restaurant', lazy=True)
+    menus = relationship('Menus', backref='restaurant', lazy=True)
     products = Column(String)
-    orders = relationship('Order', backref='restaurant', lazy=True)
+    orders = relationship('Orders', backref='restaurant', lazy=True)
     payment_methods = Column(String)
-    reservations = relationship('Reservation', backref='restaurant', lazy=True)
+    reservations = relationship('Reservations', backref='restaurant', lazy=True)
     customers = Column(Integer, nullable=False, default=0)
-    shipments = relationship('Shipment', backref='restaurant', lazy=True)
+    shipments = relationship('Shipments', backref='restaurant', lazy=True)
     offers = Column(String(50))
     suppliers = Column(String(50))
 
@@ -94,7 +94,7 @@ class Menus(Base):
     description = Column(Text, nullable=False)
     category = Column(String(50))
     items = Column(String(50))
-    restaurant_id = Column(Integer, ForeignKey('restaurant.id'), nullable=False)
+    restaurant_id = Column(Integer, ForeignKey('restaurants.id'), nullable=False)
     owner_restaurant_name = Column(String(50), nullable=True)
 
     def __repr__(self):
@@ -128,13 +128,13 @@ class Orders(Base):
     __tablename__ = 'orders'
 
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
     items = Column(String(50), nullable=False)
     total_cart_price = Column(Integer, nullable=False, default=0)
     address = Column(Text, nullable=False)
     shipment_method = Column(String(50), nullable=False)
     payment_method = Column(String(50), nullable=False)
-    restaurant_id = Column(Integer, ForeignKey('restaurant.id'), nullable=False)
+    restaurant_id = Column(Integer, ForeignKey('restaurants.id'), nullable=False)
 
     def __repr__(self):
         return '<Order %r>' % self.id
@@ -159,8 +159,8 @@ class Reservations(Base):
     price = Column(Integer, nullable=False, default=0)
     tax = Column(Integer, nullable=True)
     menu_item = Column(String(50), nullable=True)
-    restaurant_id = Column(Integer, ForeignKey('restaurant.id'), nullable=False)
-    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
+    restaurant_id = Column(Integer, ForeignKey('restaurants.id'), nullable=False)
+    user_id = Column(Integer, ForeignKey('users.id'), nullable=False)
 
     def __repr__(self):
         return '<Reservation %r>' % self.name
@@ -179,7 +179,7 @@ class Shipment(Base):
     operator = Column(String(50))
     method = Column(String(50))
     means = Column(String(50))
-    restaurant_id = Column(Integer, ForeignKey('restaurant.id'), nullable=False)
+    restaurant_id = Column(Integer, ForeignKey('restaurants.id'), nullable=False)
 
     def __repr__(self):
         return '<Shipment %r>' % self.name

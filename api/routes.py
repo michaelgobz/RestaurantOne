@@ -1,6 +1,4 @@
 from flask import request, jsonify, make_response, abort, redirect, Blueprint
-from flask_login import login_required, current_user
-from flask_wtf import FlaskForm
 from wtforms import Form, StringField, PasswordField, validators
 import email_validator
 
@@ -47,35 +45,36 @@ def initial():
         "supervisor": "Alx-SE Mentors",
     }
 
-class SignupForm(FlaskForm):
-    email = StringField('Email')
-    password = PasswordField('Password')
+# class SignupForm(FlaskForm):
+#     email = StringField('Email')
+#     password = PasswordField('Password')
 
 @views.route('/auth/signup', methods=['GET', 'POST'], strict_slashes=False)
 def signup():
     """Creates user
     """
-    form = SignupForm(request.form)
+    # form = SignupForm(request.form)
 
-    if not form.validate():
-        return make_response(jsonify({"errors": form.errors}), 400)
+    # if not form.validate():
+    #     return make_response(jsonify({"errors": form.errors}), 400)
     
     email = request.form['email']
     password = request.form['password']
-    first_name = request.form['first_name']
-    last_name = request.form['last_name']
+    firstname = request.form['firstname']
+    lastname = request.form['lastname']
     phone_number = request.form['phone_number']
     country = request.form['country']
     location = request.form['location']
     address = request.form['address']
 
     try:
-        user = AUTH.register_user(email, password, first_name, last_name,
+        user = AUTH.register_user(email, password, firstname, lastname,
                                   phone_number, country, location, address)
     except ValueError:
         return make_response(jsonify({"message": "email already registered"}), 400)
 
     return jsonify({"email": user.email, "message": f"User {user.first_name} {user.last_name} created"})
+    # return redirect('/auth/login')
 
 
 @views.route('/auth/login', methods=['GET', 'POST'], strict_slashes=False)
@@ -158,20 +157,20 @@ def get_reset_password_token() -> str:
         abort(400)
 
 
-def validate_update_password_input(email, reset_token, new_pwd):
-    # Check if all required parameters are provided
-    if not email or not reset_token or not new_pwd:
-        return False
+# def validate_update_password_input(email, reset_token, new_pwd):
+#     # Check if all required parameters are provided
+#     if not email or not reset_token or not new_pwd:
+#         return False
 
-    # Check if reset token is valid for the provided email
-    if not AUTH.is_valid_reset_token(email, reset_token):
-        return False
+#     # Check if reset token is valid for the provided email
+#     if not AUTH.is_valid_reset_token(email, reset_token):
+#         return False
 
-    # Check if the new password is strong enough
-    if not is_strong_password(new_pwd):
-        return False
+#     # Check if the new password is strong enough
+#     if not is_strong_password(new_pwd):
+#         return False
 
-    return True
+#     return True
 
 
 @views.route('/reset_password', methods=['PUT'], strict_slashes=False)

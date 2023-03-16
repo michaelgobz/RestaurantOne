@@ -9,12 +9,12 @@ class Restaurant:
     def __init__(self):
         self._db = DB()
 
-    def register_restaurant(self, name: str, **kwargs) -> Restaurants:
+    def register_restaurant(self, name: str, *args) -> Restaurants:
         """Register a restaurant in the DB"""
         try:
             restaurant = self._db.find_restaurant_by(name)
         except NoResultFound:
-            restaurant = self._db.add_restaurant(name, **kwargs)
+            restaurant = self._db.add_restaurant(name, *args)
 
             return restaurant
 

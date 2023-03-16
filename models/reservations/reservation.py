@@ -8,8 +8,8 @@ class Reservation:
     def __init__(self):
         self._db = DB()
 
-    def register_reservation(self, **kwargs) -> Reservations:
+    def register_reservation(self, *args) -> Reservations:
         """Register a reservation in the DB"""
-        reservation = self._db.add_reservation(**kwargs)
+        reservation = self._db.add_reservation(*args)
 
         return reservation

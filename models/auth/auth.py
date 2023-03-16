@@ -62,7 +62,7 @@ class Auth:
 
         return False
 
-    def create_session(self, email: str) -> str:
+    def create_session(self, email: str) -> Union[str, None]:
         """ Returns a session id
         """
         try:

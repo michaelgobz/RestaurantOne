@@ -8,8 +8,8 @@ class Order:
     def __init__(self):
         self._db = DB()
 
-    def register_order(self, items: list, **kwargs) -> Orders:
+    def register_order(self, items: list, *args) -> Orders:
         """Register a menu item in the DB"""
-        order = self._db.add_order(items, **kwargs)
+        order = self._db.add_order(items, *args)
 
         return order
