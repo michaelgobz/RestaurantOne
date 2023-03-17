@@ -1,10 +1,10 @@
+from app import db
 from datetime import datetime
 from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
-from sqlalchemy.orm import declarative_base, relationship
+from sqlalchemy.orm import relationship
 
-Base = declarative_base()
 
-class Address(Base):
+class Address(db.Model):
     """"address model object"""
     id = Column(Integer, primary_key=True)
     first_name = Column(String(50), nullable=False)
@@ -19,7 +19,7 @@ class Address(Base):
     user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
     user = relationship("User", back_populates="addresses")
 
-class User(Base):
+class User(db.Model):
     """User model"""
     id = Column(Integer, primary_key=True)
     email = Column(String(50), nullable=False)
@@ -34,84 +34,84 @@ class User(Base):
                               back_populates="user",
                               cascade="all, delete-orphan")
     
-class MenuItem(Base):
+class MenuItem(db.Model):
     """menu item model"""
     id = Column(Integer, primary_key=True)
 
-class Menu(Base):
+class Menu(db.Model):
     """menu model"""
     id = Column(Integer, primary_key=True)
 
-class OrderItem(Base):
+class OrderItem(db.Model):
     """OrderItem model"""
     id = Column(Integer, primary_key=True)
     
-class Order(Base):
+class Order(db.Model):
     """Order model"""
     id = Column(Integer, primary_key=True)
     
-class PaymentMethod(Base):
+class PaymentMethod(db.Model):
     """PaymentMethod model"""
     id = Column(Integer, primary_key=True)
     
-class Payment(Base):
+class Payment(db.Model):
     """Payment model"""
     id = Column(Integer, primary_key=True)
     
-class TransactionItem(Base):
+class TransactionItem(db.Model):
     """TransactionItem model"""
     id = Column(Integer, primary_key=True)
     
 
-class Transaction(Base):
+class Transaction(db.Model):
     """Transaction model"""
     id = Column(Integer, primary_key=True)
     
-class ReservationItem(Base):
+class ReservationItem(db.Model):
     """Reservation Item model"""
     id = Column(Integer, primary_key=True)
     
-class Reservation(Base):
+class Reservation(db.Model):
     """Reservation model"""
     id = Column(Integer, primary_key=True)
     
-class Restaurant(Base):
+class Restaurant(db.Model):
     """Restaurant model"""
     id = Column(Integer, primary_key=True)
     
-class ShipmentMethod(Base):
+class ShipmentMethod(db.Model):
     """Shipment method model"""
     id = Column(Integer, primary_key=True)
     
 
-class Shipment(Base):
+class Shipment(db.Model):
     """Shipment model"""
     id = Column(Integer, primary_key=True)
     
 
-class Invoice(Base):
+class Invoice(db.Model):
     """ Invoice model"""
     id = Column(Integer, primary_key=True)
     
-class InvoiceItem(Base):
+class InvoiceItem(db.Model):
     """InvoiceItem model"""
     id = Column(Integer, primary_key=True)
     
-class Information(Base):
+class Information(db.Model):
     """information model"""
     id = Column(Integer, primary_key=True)
     
-class Review(Base):
+class Review(db.Model):
     """Review model"""
     id = Column(Integer, primary_key=True)
     
-class ReviewItem(Base):
+class ReviewItem(db.Model):
     id = Column(Integer, primary_key=True)
 
-class Event(Base):
+class Event(db.Model):
     """Event model"""
     id = Column(Integer, primary_key=True)
     
-class EventItem(Base):
+class EventItem(db.Model):
     """EventItem model"""
     id = Column(Integer, primary_key=True)
