@@ -4693,6 +4693,11 @@ eslint-plugin-testing-library@^5.0.1:
   dependencies:
     "@typescript-eslint/utils" "^5.43.0"
 
+eslint-plugin-ts@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-ts/-/eslint-plugin-ts-1.0.0.tgz#f82108e92ddc0de578274c0e701032c21a31b663"
+  integrity sha512-HB4e16w9lSEf1aewlY4RKn/Os/7tmVph9aLYnyECqyOD//Qs7HcviS3+f3v5Isf6rVM7CHVhWcu018RM70nCPg==
+
 eslint-plugin-typescript@^0.14.0:
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/eslint-plugin-typescript/-/eslint-plugin-typescript-0.14.0.tgz#068549c3f4c7f3f85d88d398c29fa96bf500884c"

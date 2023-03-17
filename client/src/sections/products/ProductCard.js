@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import {Box, Card, Link, Typography, Stack, Rating, Button} from '@mui/material';
 import { styled } from '@mui/material/styles';
 // utils
-import { fCurrency } from '../../../utils/formatNumber';
+import { fCurrency } from '../../utils/formatNumber';
 // components
-import Label from '../../../components/label';
-import { ColorPreview } from '../../../components/color-utils';
-import Iconify from '../../../components/iconify';
+import Label from '../../components/label';
+import { ColorPreview } from '../../components/color-utils';
+import Iconify from '../../components/iconify';
 
 // ----------------------------------------------------------------------
 

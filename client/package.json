@@ -64,6 +64,7 @@
     "eslint-plugin-typescript": "^0.14.0",
     "eslint-plugin-jsx": "^0.1.0",
     "eslint-plugin-flow": "^2.29.0",
+    "eslint-plugin-ts": "^1.0.0",
     "prettier": "^2.8.4"
   },
   "scripts": {

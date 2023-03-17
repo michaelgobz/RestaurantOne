@@ -9,7 +9,7 @@ import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/signupPage';
 import Page404 from './pages/Page404';
 import ProductsPage from './pages/ProductsPage';
-import CartCheckout from './pages/CheckoutsPage'
+import Checkout from './sections/checkouts/Checkout'
 
 // ----------------------------------------------------------------------
 
@@ -29,7 +29,7 @@ export default function Router() {
         },
         {
           path: 'customer/checkout',
-          element: <CartCheckout />,
+          element: <Checkout />,
           children:
             [
               {
