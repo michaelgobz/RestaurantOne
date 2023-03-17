@@ -25,12 +25,12 @@ export default function ProductsPage() {
   return (
     <>
       <Helmet>
-        <title> Products | Open Restaurant </title>
+        <title> Your Cravings | Open Restaurant </title>
       </Helmet>
 
       <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Heavy Lunch
+          Your Cravings Solved
         </Typography>
 
         <Stack direction="row" flexWrap="wrap-reverse" alignItems="center" justifyContent="flex-end" sx={{ mb: 5 }}>

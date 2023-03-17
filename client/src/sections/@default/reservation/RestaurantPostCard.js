@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 // @mui
 import { alpha, styled } from '@mui/material/styles';
-import { Box, Link, Card, Grid, Avatar, Typography, CardContent } from '@mui/material';
+import {Box, Link, Card, Grid, Avatar, Typography, CardContent, Rating, Button , Stack} from '@mui/material';
 // utils
 import { fDate } from '../../../utils/formatTime';
 import { fShortenNumber } from '../../../utils/formatNumber';
@@ -167,6 +167,14 @@ export default function RestaurantPostCard({ post, index }) {
               </Box>
             ))}
           </StyledInfo>
+
+<Stack direction="row" alignItems="center" justifyContent="space-between" mb={2} mt={2}>
+         <Rating name="disabled" value={3} disabled  sx={{ mb: 2, mt: 2 }} />
+            <Button variant="contained"
+            sx={{ mb: 2, mt: 2 }}>
+                Reserve
+          </Button>
+</Stack>
         </CardContent>
       </Card>
     </Grid>
