@@ -18,3 +18,11 @@ This document capture the changes to any components in the project
  - added the product pages 
  - reserveation mock up pages 
  - project reorganisation 
+
+ ### 16/03/2022
+ - added a module to interact with the database for the user authentication
+ - created routes for signup and login
+ - added a session module in order to manage sessions
+
+  ### 17/03/2022
+ - updated the models to comply with the newest version of SQLAlchemy
