@@ -27,3 +27,8 @@ This document capture the changes to any components in the project
   ### 17/03/2022
  - updated the models to comply with the newest version of SQLAlchemy
  - updated routes for authentication and session
+ - added routes for address (CRUD)
+ - added routes for restaurant (C)
+ - added routes for menu (C)
+ - added routes for menu item (C)
+ - added routes for order (C)
