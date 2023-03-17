@@ -1,121 +1,118 @@
-"""Account models."""
 from typing import List
 from datetime import datetime
-from sqlalchemy.orm import Mapped
-from sqlalchemy.orm import mapped_column
-from ..core.base import declarative_base as db
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime
+from sqlalchemy.orm import declarative_base, relationship
 
+Base = declarative_base()
 
-class Address(db.Model):
+class Address(Base):
     """"address model object"""
-    id = db.Column(db.Integer, primary_key=True)
-    first_name = db.Column(db.String(50), nullable=False)
-    last_name = db.Column(db.String(50), nullable=False)
-    address_one = db.Column(db.String(50), nullable=False)
-    address_two = db.Column(db.String(50), nullable=False)
-    phone_number = db.Column(db.String(50), nullable=False)
-    city = db.Column(db.String(50), nullable=False)
-    city_area = db.Column(db.String(50), nullable=False)
-    country = db.Column(db.String(50), nullable=False)
-    country_area = db.Column(db.String(50), nullable=False)
-    user_id:Mapped[int] = mapped_column(db.Integer, 
-                                    db.ForeignKey('user.id'), nullable=False)
-    user: Mapped['User'] = db.relationship("User", back_populates="addresses")
-    
+    id = Column(Integer, primary_key=True)
+    first_name = Column(String(50), nullable=False)
+    last_name = Column(String(50), nullable=False)
+    address_one = Column(String(50), nullable=False)
+    address_two = Column(String(50), nullable=False)
+    phone_number = Column(String(50), nullable=False)
+    city = Column(String(50), nullable=False)
+    city_area = Column(String(50), nullable=False)
+    country = Column(String(50), nullable=False)
+    country_area = Column(String(50), nullable=False)
+    user_id = Column(Integer, ForeignKey('user.id'), nullable=False)
+    user = relationship("User", back_populates="addresses")
 
-class User(db.Model):
+class User(Base):
     """User model"""
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(50), nullable=False)
-    first_name = db.Column(db.String(50), nullable=False)
-    last_name = db.Column(db.String(50), nullable=False)
-    password = db.Column(db.String(255), nullable=False)
-    created_at = db.Column(db.DateTime, nullable=False,
+    id = Column(Integer, primary_key=True)
+    email = Column(String(50), nullable=False)
+    first_name = Column(String(50), nullable=False)
+    last_name = Column(String(50), nullable=False)
+    password = Column(String(255), nullable=False)
+    created_at = Column(DateTime, nullable=False,
                           default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, nullable=False,
+    updated_at = Column(DateTime, nullable=False,
                            default=datetime.utcnow)
-    addresses: Mapped[List['Address']] = db.relationship("Address",
-                                                         back_populates="user",
-                                                       cascade="all, delete-orphan")
+    addresses = relationship("Address",
+                              back_populates="user",
+                              cascade="all, delete-orphan")
     
-class MenuItem(db.Model):
+class MenuItem(Base):
     """menu item model"""
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
 
-class Menu(db.Model):
+class Menu(Base):
     """menu model"""
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
 
-class OrderItem(db.Model):
+class OrderItem(Base):
     """OrderItem model"""
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     
-class Order(db.Model):
+class Order(Base):
     """Order model"""
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     
-class PaymentMethod(db.Model):
+class PaymentMethod(Base):
     """PaymentMethod model"""
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     
-class Payment(db.Model):
+class Payment(Base):
     """Payment model"""
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     
-class TransactionItem(db.Model):
+class TransactionItem(Base):
     """TransactionItem model"""
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     
 
-class Transaction(db.Model):
+class Transaction(Base):
     """Transaction model"""
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     
-class ReservationItem(db.Model):
+class ReservationItem(Base):
     """Reservation Item model"""
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     
-class Reservation(db.Model):
+class Reservation(Base):
     """Reservation model"""
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     
-class Restaurant(db.Model):
+class Restaurant(Base):
     """Restaurant model"""
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     
-class ShipmentMethod(db.Model):
+class ShipmentMethod(Base):
     """Shipment method model"""
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     
 
-class Shipment(db.Model):
+class Shipment(Base):
     """Shipment model"""
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     
 
-class Invoice(db.Model):
+class Invoice(Base):
     """ Invoice model"""
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     
-class InvoiceItem(db.Model):
+class InvoiceItem(Base):
     """InvoiceItem model"""
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     
-class Information(db.Model):
+class Information(Base):
     """information model"""
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     
-class Review(db.Model):
+class Review(Base):
     """Review model"""
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     
-class ReviewItem(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+class ReviewItem(Base):
+    id = Column(Integer, primary_key=True)
 
-class Event(db.Model):
+class Event(Base):
     """Event model"""
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     
-class EventItem(db.Model):
+class EventItem(Base):
     """EventItem model"""
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
