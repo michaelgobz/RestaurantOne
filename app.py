@@ -8,6 +8,8 @@ Restaurant, ShipmentMethod, Shipment, Invoice, InvoiceItem, Event, EventItem,\
 Information
 from api.core.base import Db as db
 
+from api.routes import views
+
 
 
 
@@ -42,30 +44,8 @@ information = Information()
 #initializing database with flask app
 db.initialize_app(app)
 
-
-
-
-# Route for seeing a data
-@app.route('/')
-def initial():
-    """initial route
-    welcome route
-
-    Returns:
-        _object_: welcome parameters
-    """
-
-    return {
-        "message": "welcome to the Our Platform",
-        "company": "RestaurantOne",
-        "location": "Kampala",
-        "year": 2023,
-        "month": "March",
-        "Country": "Uganda",
-        "Project": "Alx-webstack project",
-        "supervisor": "Alx-SE Mentors",
-    }
-
+# Route registration
+app.register_blueprint(views)
 
 # Running app
 if __name__ == '__main__':
