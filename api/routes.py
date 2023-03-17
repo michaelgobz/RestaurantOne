@@ -1,10 +1,10 @@
 from flask import Blueprint, request, session, jsonify, render_template, redirect, url_for
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.exc import IntegrityError
 import bcrypt
 from datetime import datetime
 
-from app import db
-
+from app import app, db
 # models
 from api.db_models import Address, User, MenuItem, Menu, OrderItem, Order, \
 PaymentMethod,\
@@ -12,18 +12,16 @@ Payment, TransactionItem, Transaction, ReservationItem, Reservation, \
 Restaurant, ShipmentMethod, Shipment, Invoice, InvoiceItem, Event, EventItem,\
 Information
 
-views = Blueprint('views', __name__, url_prefix='/')
-
-@views.route('/')
+@app.route('/')
 def home():
     return render_template('home.html')
 
 # Authentication
 
-@views.route('auth/signup', methods=['GET', 'POST'], strict_slashes=False)
+@app.route('/auth/signup', methods=['GET', 'POST'], strict_slashes=False)
 def signup():
-    if request.method == 'GET':
-        return render_template('signup.html')
+    # if request.method == 'GET':
+    #     return render_template('signup.html')
 
     # get user info from request
     email = request.json.get('email')
@@ -52,7 +50,7 @@ def signup():
         return jsonify({'error': 'Email already registered'})
     
 
-@views.route('auth/login', methods=['GET', 'POST'], strict_slashes=False)
+@app.route('/auth/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
         return render_template('login.html')
@@ -70,7 +68,7 @@ def login():
     else:
         return jsonify({'error': 'Incorrect email or password'})
 
-@views.route('/auth/logout', methods=['POST'], strict_slashes=False)
+@app.route('/auth/logout', methods=['POST'], strict_slashes=False)
 def logout():
     session.pop('user_id', None)
     return redirect(url_for('login'))
