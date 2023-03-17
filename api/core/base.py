@@ -2,7 +2,7 @@
 
 from ..db import DBClient
 
-Db = DBClient(host='localhost', port=5432,
+Db = DBClient(host='34.165.84.79', port=5432,
               user='RestaurantAdmin', password='RestaurantAdmin',
               db='OpenRestaurant')
 
