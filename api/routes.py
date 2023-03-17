@@ -1,6 +1,5 @@
 from flask import Blueprint, request, make_response, jsonify, render_template, redirect, url_for, abort
 
-from .db_models.models import User
 from .auth.auth import Auth
 from .sessions.sessions import Session
 from .forms import SignupForm, LoginForm
