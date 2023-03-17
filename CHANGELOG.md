@@ -26,3 +26,4 @@ This document capture the changes to any components in the project
 
   ### 17/03/2022
  - updated the models to comply with the newest version of SQLAlchemy
+ - updated routes for authentication and session
