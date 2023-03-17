@@ -17,9 +17,7 @@ class Auth:
         pass
 
     def register_user(self, email: str, password: str, **kwargs) -> User:
-        """ Register a user in the db
-        Returns a User object
-        """
+        # Register a user in the db     
         try:
             user = User.query.filter_by(email=email).first()
             if user is None:
@@ -37,9 +35,9 @@ class Auth:
         
 
     def valid_login(self, email: str, password: str) -> bool:
-        """Returns True if email exists and password checked
-        with bcrypt.checkpw and False otherwise
-        """
+        # Returns True if email exists and password checked
+        # with bcrypt.checkpw and False otherwise
+        
         try:
             user = User.query.filter_by(email=email)
             if user is None:
