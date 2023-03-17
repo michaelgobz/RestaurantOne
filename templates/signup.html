@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head> <title>Sign up </title>
+    </head> 
+
+    <body>
+        <form id='signup' action='/signup' method='POST'>
+            <fieldset>
+                <div>
+                    {{ form.email.label }}
+                    {{ form.email }}
+                </div>
+                <div>
+                    {{ form.first_name.label }}
+                    {{ form.first_name }}
+                </div>
+                <div>
+                    {{ form.last_name.label }}
+                    {{ form.last_name }}
+                </div>
+                <div>
+                    {{ form.password.label }}
+                    {{ form.password }}
+                </div>
+            </fieldset>
+
+            <div>
+                {{ form.form }}
+            </div>
+        </form>
+    </body>
+</html>
