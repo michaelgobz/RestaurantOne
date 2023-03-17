@@ -1,48 +1,16 @@
 """application entry point"""
 from flask import Flask
-# models
-from api.db_models import Address, User, MenuItem, Menu, OrderItem, Order, \
-PaymentMethod,\
-Payment, TransactionItem, Transaction, ReservationItem, Reservation, \
-Restaurant, ShipmentMethod, Shipment, Invoice, InvoiceItem, Event, EventItem,\
-Information
-from api.core.base import Db as db
+from flask_sqlalchemy import SQLAlchemy
 
 from api.routes import views
 
-
-
-
 # Initializing flask app
 app = Flask(__name__)
+app.secret_key = '8445a9af69bccd13de1a10de1de88158'
 
-# Initializing database configurations
-
-# models
-user = User()
-address = Address()
-menu_item =MenuItem()
-menu = Menu()
-order_item = OrderItem()
-order = Order()
-payment_method = PaymentMethod()
-payment = Payment()
-transaction_item = TransactionItem()
-transaction = Transaction()
-reservation_item = ReservationItem()
-reservation = Reservation()
-restaurant = Restaurant()
-shipment_method = ShipmentMethod()
-shipment = Shipment()
-invoice = Invoice()
-invoice_item = InvoiceItem()
-event = Event()
-event_item = EventItem()
-information = Information()
-
-
-#initializing database with flask app
-db.initialize_app(app)
+# Initializing database with flask app
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost/restaurantOne'
+db = SQLAlchemy(app)
 
 # Route registration
 app.register_blueprint(views)
