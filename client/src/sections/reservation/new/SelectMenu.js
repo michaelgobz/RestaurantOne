@@ -5,11 +5,11 @@ import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 
-export default function ContactDetails() {
+export default function SelectMenu() {
   return (
     <>
       <Typography variant="h6" gutterBottom>
-        Shipping address
+        Choose Menu
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6}>

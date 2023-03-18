@@ -10,10 +10,13 @@ import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import { createTheme } from '@mui/material/styles';
+import FindTable from './FindTable';
+import SelectMenu from './SelectMenu';
 import ContactDetails from './ContactDetails';
 import PaymentForm from './PaymentForm';
 import Review from './Review';
-import ThemeProvider from '../../theme'
+import ThemeProvider from '../../../theme'
+
 
 
 function Copyright() {
@@ -29,15 +32,19 @@ function Copyright() {
   );
 }
 
-const steps = ['Shipping address', 'Payment details', 'Review your order'];
+const steps = ['Choose a Table','Add your details','Choose a Menu','Payment details', 'Review'];
 
 function getStepContent(step) {
   switch (step) {
     case 0:
-      return <ContactDetails />;
+      return <FindTable />;
     case 1:
-      return <PaymentForm />;
+      return <ContactDetails />;
     case 2:
+      return <SelectMenu />;
+    case 3:
+      return <PaymentForm />;
+    case 4:
       return <Review />;
     default:
       throw new Error('Unknown step');
@@ -68,7 +75,7 @@ export default function NewReservation() {
       <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
           <Typography component="h1" variant="h4" align="center">
-            Checkout
+            Reserve
           </Typography>
           <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
             {steps.map((label) => (

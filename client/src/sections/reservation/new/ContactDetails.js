@@ -9,7 +9,7 @@ export default function ContactDetails() {
   return (
     <>
       <Typography variant="h6" gutterBottom>
-        Shipping address
+        Tell us about your crew
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6}>

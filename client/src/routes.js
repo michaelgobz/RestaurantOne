@@ -10,6 +10,7 @@ import SignUpPage from './pages/signupPage';
 import Page404 from './pages/Page404';
 import ProductsPage from './pages/ProductsPage';
 import Checkout from './sections/checkouts/Checkout'
+import NewReservation from './sections/reservation/new/NewReservation';
 
 // ----------------------------------------------------------------------
 
@@ -44,8 +45,8 @@ export default function Router() {
           children:
             [
               {
-                path: 'new/:id',
-                element: <UserPage />
+                path: 'new',
+                element: <NewReservation />
               }
             ]
         },

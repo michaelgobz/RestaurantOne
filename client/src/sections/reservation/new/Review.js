@@ -42,7 +42,7 @@ export default function Review() {
   return (
     <>
       <Typography variant="h6" gutterBottom>
-        Order summary
+        Reservation summary
       </Typography>
       <List disablePadding>
         {products.map((product) => (
