@@ -27,7 +27,7 @@ import Label from '../components/label';
 import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
 // sections
-import { UserListHead, UserListToolbar } from '../sections/@dashboard/user';
+import { UserListHead, UserListToolbar } from '../sections/@default/user';
 // mock
 import USERLIST from '../_mock/user';
 
@@ -149,7 +149,7 @@ export default function UserPage() {
   return (
     <>
       <Helmet>
-        <title> User | Minimal UI </title>
+        <title> Reservation | Open Restaurant </title>
       </Helmet>
 
       <Container>

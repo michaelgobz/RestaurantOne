@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head> <title>Login </title>
+    </head> 
+
+    <body>
+        <form id='login' action='/login' method='POST'>
+            <fieldset>
+                <div>
+                    {{ form.email.label }}
+                    {{ form.email }}
+                </div>
+                <div>
+                    {{ form.password.label }}
+                    {{ form.password }}
+                </div>
+            </fieldset>
+
+            <div>
+                {{ form.form }}
+            </div>
+        </form>
+    </body>
+</html>

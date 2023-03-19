@@ -1,21 +1,20 @@
-"""application entry point
-    """
-
-from os import getenv
+"""application entry point"""
 from flask import Flask
-from dotenv import load_dotenv
-from api.routes import views
+from flask_sqlalchemy import SQLAlchemy
 
-load_dotenv()
-  
 # Initializing flask app
 app = Flask(__name__)
+app.secret_key = '8445a9af69bccd13de1a10de1de88158'
 
-# Secret Key
-app.config['SECRET_KEY'] = getenv('SECRET_KEY')
+# Initializing database with flask app
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost/restaurantOne'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Registering the routes
-app.register_blueprint(views)
+
+db = SQLAlchemy(app)
+
+# Route registration
+from api.routes import *
 
 # Running app
 if __name__ == '__main__':
