@@ -17,7 +17,7 @@ Information
 
 # use blueprint
 
-api = Blueprint('api', __name__)
+api = Blueprint('api', url_prefix='/api/v1')
 
 # initial route
 
