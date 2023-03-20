@@ -1,71 +1,20 @@
 """application entry point"""
 from flask import Flask
-# models
-from api.db_models import Address, User, MenuItem, Menu, OrderItem, Order, \
-PaymentMethod,\
-Payment, TransactionItem, Transaction, ReservationItem, Reservation, \
-Restaurant, ShipmentMethod, Shipment, Invoice, InvoiceItem, Event, EventItem,\
-Information
-from api.core.base import Db as db
-
-
-
+from flask_sqlalchemy import SQLAlchemy
 
 # Initializing flask app
 app = Flask(__name__)
+app.secret_key = '8445a9af69bccd13de1a10de1de88158'
 
-# Initializing database configurations
-
-# models
-user = User()
-address = Address()
-menu_item =MenuItem()
-menu = Menu()
-order_item = OrderItem()
-order = Order()
-payment_method = PaymentMethod()
-payment = Payment()
-transaction_item = TransactionItem()
-transaction = Transaction()
-reservation_item = ReservationItem()
-reservation = Reservation()
-restaurant = Restaurant()
-shipment_method = ShipmentMethod()
-shipment = Shipment()
-invoice = Invoice()
-invoice_item = InvoiceItem()
-event = Event()
-event_item = EventItem()
-information = Information()
+# Initializing database with flask app
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost/restaurantOne'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
-#initializing database with flask app
-db.initialize_app(app)
+db = SQLAlchemy(app)
 
-
-
-
-# Route for seeing a data
-@app.route('/')
-def initial():
-    """initial route
-    welcome route
-
-    Returns:
-        _object_: welcome parameters
-    """
-
-    return {
-        "message": "welcome to the Our Platform",
-        "company": "RestaurantOne",
-        "location": "Kampala",
-        "year": 2023,
-        "month": "March",
-        "Country": "Uganda",
-        "Project": "Alx-webstack project",
-        "supervisor": "Alx-SE Mentors",
-    }
-
+# Route registration
+from api.routes import *
 
 # Running app
 if __name__ == '__main__':
