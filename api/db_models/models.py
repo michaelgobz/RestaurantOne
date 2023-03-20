@@ -5,6 +5,7 @@ from typing import List
 from datetime import datetime
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Boolean, Text
 from sqlalchemy.orm import relationship
+from api.core.base import declarative_base as db
 
 class Address(db.Model):
     """"address model object"""
@@ -138,7 +139,8 @@ class Reservation(db.Model):
     updated_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow,
                            onupdate=datetime.utcnow)
-    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'), nullable=False)
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'),
+                              nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     
 class Restaurant(db.Model):
