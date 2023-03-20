@@ -1,7 +1,18 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Alert, Snackbar } from '@mui/material';
 
-export default function SnackBar({ open, setOpen, message }) {
+
+
+SnackBar.prototypes = {
+    message: PropTypes.string.isRequired,
+    severity: PropTypes.string.isRequired,
+};
+
+export default function SnackBar({ message, severity }) {
+
+    const [open, setOpen] = React.useState(false);
+
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -20,11 +31,10 @@ export default function SnackBar({ open, setOpen, message }) {
                 open={open}
                 autoHideDuration={6000}
                 onClose={handleClose}
-                message={message}
 
             />
-            <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                This is a success message!
+            <Alert onClose={handleClose} severity={severity} sx={{ width: '100%' }}>
+                {message}
             </Alert>
         </>
     );
