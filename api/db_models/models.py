@@ -1,13 +1,14 @@
+
 """data models that the api uses"""
 from email.policy import default
 from typing import List
 from datetime import datetime
-from sqlalchemy.orm import Mapped
-from sqlalchemy.orm import mapped_column
-from ..core.base import declarative_base as db
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Boolean, Text
+from sqlalchemy.orm import relationship
 
 class Address(db.Model):
     """"address model object"""
+
     id = db.Column(db.Integer, primary_key=True)
     address_one = db.Column(db.String(50), nullable=False)
     address_two = db.Column(db.String(50), nullable=False)
@@ -19,19 +20,22 @@ class Address(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     user = db.relationship("User", backref="addresses")
 
+
 class User(db.Model):
     """User model"""
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(50), nullable=False)
-    first_name = db.Column(db.String(50), nullable=False)
-    last_name = db.Column(db.String(50), nullable=False)
-    password = db.Column(db.String(255), nullable=False)
-    created_at = db.Column(db.DateTime, nullable=False,
+    id = Column(Integer, primary_key=True)
+    email = Column(String(50), nullable=False)
+    first_name = Column(String(50), nullable=False)
+    last_name = Column(String(50), nullable=False)
+    password = Column(String(255), nullable=False)
+    created_at = Column(DateTime, nullable=False,
                           default=datetime.utcnow)
+
     updated_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow,
                            onupdate=datetime.utcnow)
     addresses =db.relationship("Address",
+
                               backref="user",
                               cascade="all, delete-orphan")
     
@@ -56,6 +60,7 @@ class MenuItem(db.Model):
 
 class Menu(db.Model):
     """menu model"""
+
     menu_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True, nullable=False)
     description = db.Column(db.Text, nullable=False)
@@ -95,24 +100,24 @@ class Order(db.Model):
 
 class PaymentMethod(db.Model):
     """PaymentMethod model"""
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     
 class Payment(db.Model):
     """Payment model"""
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     
 class TransactionItem(db.Model):
     """TransactionItem model"""
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     
 
 class Transaction(db.Model):
     """Transaction model"""
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     
 class ReservationItem(db.Model):
     """Reservation Item model"""
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     
 class Reservation(db.Model):
     """Reservation model"""
@@ -157,44 +162,48 @@ class Restaurant(db.Model):
     created_at = db.Column(db.DateTime, nullable=False,
                           default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, nullable=False,
+
                            default=datetime.utcnow,
                            onupdate=datetime.utcnow)
     
 class ShipmentMethod(db.Model):
     """Shipment method model"""
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     
 
 class Shipment(db.Model):
     """Shipment model"""
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     
 
 class Invoice(db.Model):
     """ Invoice model"""
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     
 class InvoiceItem(db.Model):
     """InvoiceItem model"""
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     
 class Information(db.Model):
     """information model"""
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     
 class Review(db.Model):
     """Review model"""
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     
 class ReviewItem(db.Model):
+
     """ReviewItem model"""
     id = db.Column(db.Integer, primary_key=True)
 
 class Event(db.Model):
     """Event model"""
-    id = db.Column(db.Integer, primary_key=True)
+    id = Column(Integer, primary_key=True)
     
 class EventItem(db.Model):
     """EventItem model"""
+
     id = db.Column(db.Integer, primary_key=True)
     event = db.Column(db.String(50), default="", nullable=True)
+

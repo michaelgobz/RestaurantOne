@@ -1,5 +1,6 @@
 """application entry point"""
 from flask import Flask
+
 # models
 from api.db_models import Address, User, MenuItem, Menu, OrderItem, Order, \
     PaymentMethod, \
@@ -8,9 +9,13 @@ from api.db_models import Address, User, MenuItem, Menu, OrderItem, Order, \
     Information
 from api.core.base import Db as db
 from api.routes import api
+from flask_sqlalchemy import SQLAlchemy
+
 
 # Initializing flask app
 app = Flask(__name__)
+app.secret_key = '8445a9af69bccd13de1a10de1de88158'
+
 
 # Initializing database configurations
 
