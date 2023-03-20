@@ -16,7 +16,8 @@
     "prettier",
     "typescript",
     "jsx",
-    "flow"
+    "flow",
+    "ts"
   ],
   "parser": "@babel/eslint-parser",
   "parserOptions": {

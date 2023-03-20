@@ -2,8 +2,7 @@ import { Helmet } from 'react-helmet-async';
 // @mui
 import { Grid, Button, Container, Stack, Typography } from '@mui/material';
 // components
-import Iconify from '../components/iconify';
-import { RestaurantPostCard, RestaurantPostsSort, RestaurantSearch } from '../sections/@default/reservation';
+import { RestaurantPostCard, RestaurantPostsSort, RestaurantSearch ,ReservationCard } from '../sections/reservation';
 // mock
 import POSTS from '../_mock/blog';
 
@@ -21,17 +20,14 @@ export default function RestaurantsPage() {
   return (
     <>
       <Helmet>
-        <title> Restaurants | Open Restaurants </title>
+        <title> Find a spot | Open Restaurants </title>
       </Helmet>
 
       <Container>
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
-            Restaurants
+           Find your Table for any Treat
           </Typography>
-          <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-            New Reservation
-          </Button>
         </Stack>
 
         <Stack mb={5} direction="row" alignItems="center" justifyContent="space-between">
@@ -40,7 +36,7 @@ export default function RestaurantsPage() {
         </Stack>
 
         <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
-          5 Star
+          Top Cuisines near Legos
         </Typography>
         <Grid container spacing={3}>
           {POSTS.map((post, index) => (
@@ -48,7 +44,7 @@ export default function RestaurantsPage() {
           ))}
         </Grid>
         <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
-          Kampala
+          Experiences Trending near kigali
         </Typography>
         <Grid container spacing={3}>
           {POSTS.map((post, index) => (
@@ -56,7 +52,7 @@ export default function RestaurantsPage() {
           ))}
         </Grid>
         <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
-          Lome'
+          Popular Restaurants Lome'
         </Typography>
         <Grid container spacing={3}>
           {POSTS.map((post, index) => (

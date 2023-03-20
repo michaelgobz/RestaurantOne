@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types';
 // @mui
-import { Box, Card, Link, Typography, Stack } from '@mui/material';
+import {Box, Card, Link, Typography, Stack, Rating, Button} from '@mui/material';
 import { styled } from '@mui/material/styles';
 // utils
-import { fCurrency } from '../../../utils/formatNumber';
+import { fCurrency } from '../../utils/formatNumber';
 // components
-import Label from '../../../components/label';
-import { ColorPreview } from '../../../components/color-utils';
+import Label from '../../components/label';
+import { ColorPreview } from '../../components/color-utils';
+import Iconify from '../../components/iconify';
 
 // ----------------------------------------------------------------------
 
@@ -55,7 +56,7 @@ export default function ShopProductCard({ product }) {
           </Typography>
         </Link>
 
-        <Stack direction="row" alignItems="center" justifyContent="space-between">
+        <Stack direction="column" alignItems="center" justifyContent="space-between">
           <ColorPreview colors={colors} />
           <Typography variant="subtitle1">
             <Typography
@@ -71,6 +72,13 @@ export default function ShopProductCard({ product }) {
             &nbsp;
             {fCurrency(price)}
           </Typography>
+          <Stack direction="column" alignItems="center" justifyContent="space-between" mb={0.2} mt={0.2}>
+            <Rating varient="small" value={2} disabled  sx={{ mb: 2, mt: 2 }} />
+            <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}
+            sx={{ mb: 0.1, mt: 0.1 }}>
+                cart
+          </Button>
+          </Stack>
         </Stack>
       </Stack>
     </Card>

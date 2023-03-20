@@ -37,7 +37,7 @@ const AUTH_OPTIONS = [
   },
   {
     label: 'Logout',
-    path: 'auth/logout'
+    path: 'auth/login'
   }
 ]
 
@@ -72,7 +72,7 @@ export default function AccountPopover() {
       navigator('auth/login')
       handleClose()
     } else {
-      navigator('auth/logout')
+      navigator('auth/login')
       handleClose()
     }
   }

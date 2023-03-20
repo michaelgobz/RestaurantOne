@@ -8,6 +8,7 @@ import { bgBlur } from '../../../utils/cssStyles';
 import Searchbar from './Searchbar';
 import AccountPopover from './AccountPopover';
 import NotificationsPopover from './NotificationsPopover';
+import ProductCartPopover from '../../../sections/products/ProductCartPopover';
 import { MenuItems } from './MenuItems';
 
 // ----------------------------------------------------------------------
@@ -64,7 +65,7 @@ export default function Header({ onOpenNav }) {
           }}
         >
           <Searchbar />
-          <NotificationsPopover />
+          <ProductCartPopover />
           <AccountPopover />
         </Stack>
       </StyledToolbar>

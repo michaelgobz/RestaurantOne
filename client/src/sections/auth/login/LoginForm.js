@@ -10,13 +10,18 @@ import Iconify from '../../../components/iconify';
 
 export default function LoginForm() {
   const navigate = useNavigate();
+  const url = 'http://localhost:5000/';
+  let data;
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const HandleClick = () => {
-    navigate('customer/products');
+  const HandleClick = () => { 
+    console.log('clicked');
+    fetch(url, { method: 'GET', mode: 'cors' })
+      .then((response) => {
+        console.log(response);
+      })
   };
-
   return (
     <>
       <Stack spacing={3}>
