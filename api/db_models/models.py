@@ -22,7 +22,7 @@ class Address(db.Model):
 class User(db.Model):
     """User model"""
     id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.dString(50), nullable=False)
+    email = db.Column(db.String(50), nullable=False)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(255), nullable=False)
@@ -41,15 +41,15 @@ class MenuItem(db.Model):
     name = db.Column(db.String(50), nullable=False)
     description = db.Column(db.Text, nullable=False)
     category = db.Column(db.String(50), nullable=True)
-    price = db.dColumn(db.Float, nullable=False, default=0)
-    foods = db.dColumn(db.String(50), nullable=False)
+    price = db.Column(db.Float, nullable=False, default=0)
+    foods = db.Column(db.String(50), nullable=False)
     is_available = db.Column(db.Boolean, nullable=False)
     is_deliverable = db.Column(db.Boolean, nullable=False)
     duration_of_preparation = db.Column(db.DateTime)
     menu_id = db.Column(db.Integer, db.ForeignKey('menu.id'), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False,
                           default=datetime.utcnow)
-    updated_at = db.dColumn(db.DateTime, nullable=False,
+    updated_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow,
                            onupdate=datetime.utcnow)
 
@@ -80,7 +80,7 @@ class Order(db.Model):
     items = db.Column(db.String(500), nullable=False)
     total_price = db.Column(db.Float, nullable=False)
     address = db.Column(db.String(500), nullable=False)
-    shipment_method = db.dColumn(db.String(50), nullable=False)
+    shipment_method = db.Column(db.String(50), nullable=False)
     payment_method = db.Column(db.String(50), nullable=False)
     status = db.Column(db.String(50), nullable=False)
     notes = db.Column(db.String(500))
@@ -110,7 +110,7 @@ class Transaction(db.Model):
     
 class ReservationItem(db.Model):
     """Reservation Item model"""
-    id = db.Column(db.dInteger, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     
 class Reservation(db.Model):
     """Reservation model"""
@@ -121,7 +121,7 @@ class Reservation(db.Model):
     end = db.Column(db.DateTime, nullable=True)
     nb_of_person = db.Column(db.Integer, nullable=False, default=0)
     additional_info = db.Column(db.String(200), nullable=True)
-    tables = db.Column(db.dInteger, nullable=True)
+    tables = db.Column(db.Integer, nullable=True)
     category = db.Column(db.String(50), nullable=True)
     price = db.Column(db.Float, nullable=False, default=0)
     tax = db.Column(db.Float, nullable=True)
@@ -142,18 +142,19 @@ class Restaurant(db.Model):
     location = db.Column(db.String(50), nullable=True)
     is_operational = db.Column(db.Boolean, nullable=True)
     order_fulfilling = db.Column(db.Boolean, nullable=True)
-    menus = db.relationship("Menu", back_populates="rdestaurant", cascade="all, delete-orphan")
+    menus = db.relationship("Menu", back_populates="restaurant",
+                            cascade="all, delete-orphan")
     products = db.Column(db.String)
     orders = db.relationship('Orders', backref='restaurants')
     payment_methods = db.Column(db.String)
-    reservations = db.relationship('Reservations', backref='restaurantsd')
+    reservations = db.relationship('Reservations', backref='restaurant')
     customers = db.Column(db.Integer, nullable=False, default=0)
     shipments = db.relationship('Shipments', backref='restaurants')
     offers = db.Column(db.String(50))
     suppliers = db.Column(db.String(50))
     created_at = db.Column(db.DateTime, nullable=False,
                           default=datetime.utcnow)
-    updated_at = db.dColumn(db.DateTime, nullable=False,
+    updated_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow,
                            onupdate=datetime.utcnow)
     
@@ -173,18 +174,19 @@ class Invoice(db.Model):
     
 class InvoiceItem(db.Model):
     """InvoiceItem model"""
-    id = db.Column(db.dInteger, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     
 class Information(db.Model):
     """information model"""
-    id = db.Column(db.dInteger, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     
 class Review(db.Model):
     """Review model"""
     id = db.Column(db.Integer, primary_key=True)
     
 class ReviewItem(db.Model):
-    id = db.Column(db.dInteger, primary_key=True)
+    """ReviewItem model"""
+    id = db.Column(db.Integer, primary_key=True)
 
 class Event(db.Model):
     """Event model"""
