@@ -6,13 +6,11 @@ from sqlalchemy.exc import IntegrityError
 import json
 import bcrypt
 from datetime import datetime
-from app import db 
+from app import db
 # models
-from api.db_models import Address, User, MenuItem, Menu, OrderItem, Order, \
-PaymentMethod,\
-Payment, TransactionItem, Transaction, ReservationItem, Reservation, \
-Restaurant, ShipmentMethod, Shipment, Invoice, InvoiceItem, Event, EventItem,\
-Information
+from api.db_models import Address, User, MenuItem, Menu, Order, \
+    Reservation, \
+    Restaurant, Shipment
 
 
 # use blueprint
