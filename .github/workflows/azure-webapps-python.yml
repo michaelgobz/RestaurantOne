@@ -20,8 +20,8 @@
 name: "Deploy the Flask Api"
 
 env:
-  AZURE_WEBAPP_NAME: RestaurantOneApi  # set this to the name of your Azure Web App
-  PYTHON_VERSION: '3.8'              # set this to the Python version to use
+  AZURE_WEBAPP_NAME: restaurant-one-api  # set this to the name of your Azure Web App
+  PYTHON_VERSION: '3.9'              # set this to the Python version to use
 
 on:
   push:
@@ -83,4 +83,4 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE_API }}
