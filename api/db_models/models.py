@@ -3,6 +3,7 @@
 from email.policy import default
 from typing import List
 from datetime import datetime
+from api.core.base import declarative_base as db
 
 
 
@@ -31,7 +32,7 @@ class User(db.Model):
 
 class Address(db.Model):
     """Addresses database model"""
-    __tablename__ = 'addresses
+    __tablename__ = 'addresses'
 
     id = db.Column(db.Integer, primary_key=True)
     address_one = db.Column(db.String(50), nullable=False)
@@ -188,7 +189,7 @@ class Transaction(db.Model):
     
 class ReservationItem(db.Model):
     """Reservation Item model"""
-    id = Column(Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     
 class Reservation(db.Model):
     """Reservation model"""
