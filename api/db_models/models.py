@@ -3,89 +3,128 @@
 from email.policy import default
 from typing import List
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Boolean, Text
-from sqlalchemy.orm import relationship
-from api.core.base import declarative_base as db
 
-class Address(db.Model):
-    """"address model object"""
-
-    id = db.Column(db.Integer, primary_key=True)
-    address_one = db.Column(db.String(50), nullable=False)
-    address_two = db.Column(db.String(50), nullable=False)
-    phone_number = db.Column(db.String(50), nullable=False)
-    city = db.Column(db.String(50), nullable=False)
-    city_area = db.Column(db.String(50), nullable=False)
-    country = db.Column(db.String(50), nullable=False)
-    country_area = db.Column(db.String(50), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    user = db.relationship("User", backref="addresses")
 
 
 class User(db.Model):
-    """User model"""
-    id = Column(Integer, primary_key=True)
-    email = Column(String(50), nullable=False)
-    first_name = Column(String(50), nullable=False)
-    last_name = Column(String(50), nullable=False)
-    password = Column(String(255), nullable=False)
-    created_at = Column(DateTime, nullable=False,
+    """Users database model"""
+    __tablename__ = 'users'
+
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(50), nullable=False)
+    first_name = db.Column(db.String(50), nullable=False)
+    last_name = db.Column(db.String(50), nullable=False)
+    password = db.Column(db.String(255), nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False,
+                            default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, nullable=False,
+                            default=datetime.utcnow,
+                            onupdate=datetime.utcnow)
+    orders = db.relationship("Order", backref="user")
+    reservations = db.relationship('Reservation', backref='user')
+    
+    # Define many-to-many relationship with Address model
+    addresses = db.relationship("Address", 
+                                 secondary="users_addresses", 
+                                 back_populates="users")
+
+
+class Address(db.Model):
+    """Addresses database model"""
+    __tablename__ = 'addresses
+
+    id = db.Column(db.Integer, primary_key=True)
+    address_one = db.Column(db.String(50), nullable=False)
+    address_two = db.Column(db.String(50), nullable=True)
+    phone_number = db.Column(db.String(50), nullable=False)
+    city = db.Column(db.String(50), nullable=False)
+    city_area = db.Column(db.String(50), nullable=True)
+    country = db.Column(db.String(50), nullable=False)
+    country_area = db.Column(db.String(50), nullable=True)
+    
+    # Define many-to-many relationship with User model
+    users = db.relationship("User", 
+                             secondary="users_addresses", 
+                             back_populates="addresses")
+    
+class UserAddress(db.Model):
+    """Association table for many-to-many relationship"""
+    __tablename__ = 'users_addresses'
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    address_id = db.Column(db.Integer, db.ForeignKey('addresses.id'))
+
+class Restaurant(db.Model):
+    """Restaurants database model"""
+    __tablename__ = 'restaurants'
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    description = db.Column(db.String(1024), nullable=False)
+    location = db.Column(db.String(50), nullable=True)
+    is_operational = db.Column(db.Boolean, nullable=True)
+    order_fulfilling = db.Column(db.Boolean, nullable=True)
+    products = db.Column(db.String)
+    payment_methods = db.Column(db.String)
+    customers = db.Column(db.Integer, nullable=False, default=0)
+    offers = db.Column(db.String(50))
+    suppliers = db.Column(db.String(50))
+    created_at = db.Column(db.DateTime, nullable=False,
                           default=datetime.utcnow)
 
     updated_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow,
                            onupdate=datetime.utcnow)
-    addresses =db.relationship("Address",
+    menus = db.relationship("Menu",
+                            backref="restaurant",
+                            cascade="all, delete-orphan")
+    shipments = db.relationship('Shipment', backref='restaurant')
+    orders = db.relationship('Order', backref='restaurant')
+    reservations = db.relationship('Reservation', backref='restaurant')
+    
+class Menu(db.Model):
+    """menus database model"""
+    __tablename__ = 'menus'
 
-                              backref="user",
-                              cascade="all, delete-orphan")
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True, nullable=False)
+    description = db.Column(db.String(1024), nullable=False)
+    category = db.Column(db.String(50))
+    created_at = db.Column(db.DateTime, nullable=False,
+                          default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, nullable=False,
+                           default=datetime.utcnow,
+                           onupdate=datetime.utcnow)
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'), nullable=False)
+    items = db.relationship('MenuItem', backref='menu', cascade="all, delete-orphan")
     
 class MenuItem(db.Model):
-    """menu item model"""
+    """menu items database model"""
+    __tablename__ = 'menu_items'
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
-    description = db.Column(db.Text, nullable=False)
+    description = db.Column(db.String(1024), nullable=False)
     category = db.Column(db.String(50), nullable=True)
     price = db.Column(db.Float, nullable=False, default=0)
     foods = db.Column(db.String(50), nullable=False)
     is_available = db.Column(db.Boolean, nullable=False)
     is_deliverable = db.Column(db.Boolean, nullable=False)
     duration_of_preparation = db.Column(db.DateTime)
-    menu_id = db.Column(db.Integer, db.ForeignKey(
-        'menu.menu_id'), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False,
                           default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow,
                            onupdate=datetime.utcnow)
-
-class Menu(db.Model):
-    """menu model"""
-
-    menu_id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), unique=True, nullable=False)
-    description = db.Column(db.Text, nullable=False)
-    category = db.Column(db.String(50))
-    items = db.relationship('MenuItem', backref='menu', lazy=True)
-    created_at = db.Column(db.DateTime, nullable=False,
-                          default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, nullable=False,
-                           default=datetime.utcnow,
-                           onupdate=datetime.utcnow)
-    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'),
-                              nullable=False)
-    restaurant = db.relationship('Restaurant', back_populates='menus')
-
-class OrderItem(db.Model):
-    """OrderItem model"""
-    id = db.Column(db.Integer, primary_key=True)
+    menu_id = db.Column(db.Integer, db.ForeignKey('menus.id'), nullable=False)
 
 class Order(db.Model):
-    """order model"""
+    """orders database model"""
+    __tablename__ = 'orders'
+
     id = db.Column(db.Integer, primary_key=True)
-    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    items = db.Column(db.String(500), nullable=False)
+    menu = db.Column(db.String(500), nullable=False)
     total_price = db.Column(db.Float, nullable=False)
     address = db.Column(db.String(500), nullable=False)
     shipment_method = db.Column(db.String(50), nullable=False)
@@ -93,28 +132,59 @@ class Order(db.Model):
     status = db.Column(db.String(50), nullable=False)
     notes = db.Column(db.String(500))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow,
-                        onupdate=datetime.utcnow)
+    updated_at = db.Column(db.DateTime,
+                           default=datetime.utcnow,
+                           onupdate=datetime.utcnow)
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    restaurant = db.relationship('Restaurant', backref='orders', lazy=True)
-    user = db.relationship('User', backref='orders', lazy=True)
+class OrderItem(db.Model):
+    """OrderItem model"""
+    id = db.Column(db.Integer, primary_key=True)
+class Reservation(db.Model):
+    """Reservations database model"""
+    __tablename__ = 'reservations'
+
+    id = db.Column(db.Integer, primary_key=True)
+    description = db.Column(db.String(200), nullable=True)
+    duration = db.Column(db.DateTime, nullable=True)
+    start = db.Column(db.DateTime, nullable=True)
+    end = db.Column(db.DateTime, nullable=True)
+    nb_of_person = db.Column(db.Integer, nullable=False, default=0)
+    additional_info = db.Column(db.String(200), nullable=True)
+    tables = db.Column(db.Integer, nullable=True)
+    category = db.Column(db.String(50), nullable=True)
+    price = db.Column(db.Float, nullable=False, default=0)
+    tax = db.Column(db.Float, nullable=True)
+    menu = db.Column(db.String(50), nullable=True)
+    created_at = db.Column(db.DateTime, nullable=False,
+                          default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, nullable=False,
+                           default=datetime.utcnow,
+                           onupdate=datetime.utcnow)
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
+class ReservationItem(db.Model):
+    """Reservation Item model"""
+    id = db.Column(db.Integer, primary_key=True)
 
 class PaymentMethod(db.Model):
     """PaymentMethod model"""
-    id = Column(Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     
 class Payment(db.Model):
     """Payment model"""
-    id = Column(Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     
 class TransactionItem(db.Model):
     """TransactionItem model"""
-    id = Column(Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     
 
 class Transaction(db.Model):
     """Transaction model"""
-    id = Column(Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     
 class ReservationItem(db.Model):
     """Reservation Item model"""
@@ -170,38 +240,40 @@ class Restaurant(db.Model):
     
 class ShipmentMethod(db.Model):
     """Shipment method model"""
-    id = Column(Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     
 
 class Shipment(db.Model):
     """Shipment model"""
-    id = Column(Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'))
     
 
 class Invoice(db.Model):
     """ Invoice model"""
-    id = Column(Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     
 class InvoiceItem(db.Model):
     """InvoiceItem model"""
-    id = Column(Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     
 class Information(db.Model):
     """information model"""
-    id = Column(Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     
 class Review(db.Model):
     """Review model"""
-    id = Column(Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     
 class ReviewItem(db.Model):
+
 
     """ReviewItem model"""
     id = db.Column(db.Integer, primary_key=True)
 
 class Event(db.Model):
     """Event model"""
-    id = Column(Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     
 class EventItem(db.Model):
     """EventItem model"""
