@@ -155,7 +155,8 @@ def add_address(user_id):
                           city=data.get('city'),
                           city_area=data.get('city_area'),
                           country=data.get('country'),
-                          country_area=data.get('country_area'))
+                          country_area=data.get('country_area')
+                          )
     
     db.get_session().add(new_address)
     db.get_session().commit()
