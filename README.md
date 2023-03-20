@@ -6,6 +6,8 @@ Restaurant management application developed using Flask, react and Postgresql
 
 [![.github/workflows/DeployToAzure.yml](https://github.com/michaelgobz/RestaurantOne/actions/workflows/DeployToAzure.yml/badge.svg)](https://github.com/michaelgobz/RestaurantOne/actions/workflows/DeployToAzure.yml)
 
+[![Deploy the Flask Api](https://github.com/michaelgobz/RestaurantOne/actions/workflows/azure-webapps-python.yml/badge.svg)](https://github.com/michaelgobz/RestaurantOne/actions/workflows/azure-webapps-python.yml)
+
 
 
 ## Installation
