@@ -20,7 +20,7 @@ export default function LoginForm() {
     password: '',
   });
 
-
+  console.log(data)
   const [showPassword, setShowPassword] = useState(false);
 
   const requestOptions = {
