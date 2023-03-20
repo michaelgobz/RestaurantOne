@@ -2,9 +2,7 @@
 Restaurant management application developed using Flask, react and Postgresql
 
 ## status
-[![CodeQL](https://github.com/michaelgobz/RestaurantOne/actions/workflows/codeql.yml/badge.svg)](https://github.com/michaelgobz/RestaurantOne/actions/workflows/codeql.yml)
-
-[![.github/workflows/DeployToAzure.yml](https://github.com/michaelgobz/RestaurantOne/actions/workflows/DeployToAzure.yml/badge.svg)](https://github.com/michaelgobz/RestaurantOne/actions/workflows/DeployToAzure.yml)
+[![CodeQL](https://github.com/michaelgobz/RestaurantOne/actions/workflows/codeql.yml/badge.svg)](https://github.com/michaelgobz/RestaurantOne/actions/workflows/codeql.yml)   [![Pylint](https://github.com/michaelgobz/RestaurantOne/actions/workflows/pylint.yml/badge.svg)](https://github.com/michaelgobz/RestaurantOne/actions/workflows/pylint.yml)   [![.github/workflows/DeployToAzure.yml](https://github.com/michaelgobz/RestaurantOne/actions/workflows/DeployToAzure.yml/badge.svg)](https://github.com/michaelgobz/RestaurantOne/actions/workflows/DeployToAzure.yml)   [![Deploy the Flask Api](https://github.com/michaelgobz/RestaurantOne/actions/workflows/azure-webapps-python.yml/badge.svg)](https://github.com/michaelgobz/RestaurantOne/actions/workflows/azure-webapps-python.yml)
 
 
 

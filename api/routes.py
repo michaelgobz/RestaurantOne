@@ -6,18 +6,16 @@ from sqlalchemy.exc import IntegrityError
 import json
 import bcrypt
 from datetime import datetime
-from app import db 
+from app import db
 # models
-from api.db_models import Address, User, MenuItem, Menu, OrderItem, Order, \
-PaymentMethod,\
-Payment, TransactionItem, Transaction, ReservationItem, Reservation, \
-Restaurant, ShipmentMethod, Shipment, Invoice, InvoiceItem, Event, EventItem,\
-Information
+from api.db_models import Address, User, MenuItem, Menu, Order, \
+    Reservation, \
+    Restaurant, Shipment
 
 
-# use blueprint
+# use blueprint to create a new routes
+api = Blueprint('api', __name__, url_prefix='/api/v1/')
 
-api = Blueprint('api', __name__)
 
 # initial route
 
@@ -105,6 +103,14 @@ def profile(user_id):
 @login_required
 @api.route('/me/account/<int:user_id>/update_profile', methods=['PUT'], strict_slashes=False)
 def update_profile(user_id):
+    """Update user profile
+
+    Args:
+        user_id (UUID): user id
+
+    Returns:
+        _type_: JSON
+    """
     # get the user profile information from the DB
     profile = db.get_session().query(User).get_or_404(user_id)
     if profile.user != current_user:

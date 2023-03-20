@@ -9,27 +9,49 @@ import Iconify from '../../../components/iconify';
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
-  const navigate = useNavigate();
-  const url = 'http://localhost:5000/';
-  let data;
 
+  const url = 'http://localhost:5000/api/v1/auth/login';
+
+  // get data from the form
+  const [email] = useState('');
+  const [password] = useState('');
+  const [data, setData] = useState({
+    email: '',
+    password: '',
+  });
+
+  console.log(data)
   const [showPassword, setShowPassword] = useState(false);
 
-  const HandleClick = () => { 
+  const requestOptions = {
+    method: 'POST',
+    mode: 'cors',
+    body: JSON.stringify(data),
+    headers: { 'Content-Type': 'application/json' },
+  };
+
+  const HandleSubmit = () => { 
     console.log('clicked');
-    fetch(url, { method: 'GET', mode: 'cors' })
+    fetch(url, requestOptions)
       .then((response) => {
         console.log(response);
       })
   };
+
+  const HandleChange = (e) => {
+    setData({ ...data, [e.target.name]: e.target.value });
+  };
+
   return (
     <>
       <Stack spacing={3}>
-        <TextField name="email" label="Email address" />
+        <TextField name="email" value={email} onChange={HandleChange} label="Email address" />
 
         <TextField
           name="password"
           label="Password"
+          value={password}
+          onChange={HandleChange}
           type={showPassword ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
@@ -51,7 +73,7 @@ export default function LoginForm() {
         </Link>
       </Stack>
 
-      <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={HandleClick}>
+      <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={HandleSubmit}>
         Login
       </LoadingButton>
     </>

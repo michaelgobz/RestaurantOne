@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 // @mui
 import { alpha } from '@mui/material/styles';
 import { Box, Divider, Typography, Stack, MenuItem, Avatar, IconButton, Popover } from '@mui/material';
 // mocks_
+import SnackBar from '../../../sections/snackbar/SnackBar';
 import account from '../../../_mock/account';
 
 // ----------------------------------------------------------------------
@@ -45,6 +46,26 @@ const MENU_OPTIONS_AUTH = [
 
 ]
 
+const SNACK_BAR_OPTIONS = [
+  {
+    label: 'Login Successful',
+    severity: 'success'
+  },
+  {
+    label: 'Logout Successful',
+    severity: 'success'
+  },
+  {
+    label: 'Login Failed',
+    severity: 'error'
+  },
+  {
+    label: 'Logout Failed',
+    severity: 'error'
+  }
+
+]
+
 // ----------------------------------------------------------------------
 
 export default function AccountPopover() {
@@ -53,7 +74,8 @@ export default function AccountPopover() {
 
   const navigator = useNavigate()
 
-  const [open, setOpen] = useState(null);
+  const [open, setOpen,] = useState(null);
+  const [showComponent, setShowComponent] = useState(false)
 
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
@@ -67,14 +89,22 @@ export default function AccountPopover() {
     console.log('navigate')
     handleClose()
   }
+
+  const ShowSnackBar = () => {
+    setShowComponent(true)
+    console.log('show snackbar')
+  }
   const HandleAuth = () => {
+
     if ( !auth ){
       navigator('auth/login')
       handleClose()
+
     } else {
       navigator('auth/login')
       handleClose()
     }
+
   }
 
   return (
@@ -158,12 +188,15 @@ export default function AccountPopover() {
         }
         {
           auth ?
-            <MenuItem key={AUTH_OPTIONS[1].path} onClick={HandleAuth} sx={{ m: 1 }} >
+            <MenuItem key={AUTH_OPTIONS[1].path} onClick={() => { HandleAuth(); ShowSnackBar(); }} sx={{ m: 1 }} >
               {AUTH_OPTIONS[1].label}
+              {showComponent ? <SnackBar message={SNACK_BAR_OPTIONS[1].label} severity={SNACK_BAR_OPTIONS[1].severity} /> : null}
             </MenuItem>
             :
-            <MenuItem key={AUTH_OPTIONS[0].path} onClick={HandleAuth} sx={{ m: 1 }} >
+            <MenuItem key={AUTH_OPTIONS[0].path} onClick={() => { HandleAuth(); ShowSnackBar(); }} sx={{ m: 1 }} >
               {AUTH_OPTIONS[0].label}
+              {showComponent ? <SnackBar message={SNACK_BAR_OPTIONS[0].label} severity={SNACK_BAR_OPTIONS[0].severity} /> : null}
+
             </MenuItem>
 
         }

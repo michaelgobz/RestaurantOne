@@ -1,15 +1,11 @@
 """application entry point"""
+
 from flask import Flask
+from flask_cors import CORS
 
 # models
-from api.db_models import Address, User, MenuItem, Menu, OrderItem, Order, \
-    PaymentMethod, \
-    Payment, TransactionItem, Transaction, ReservationItem, Reservation, \
-    Restaurant, ShipmentMethod, Shipment, Invoice, InvoiceItem, Event, EventItem, \
-    Information
 from api.core.base import Db as db
 from api.routes import api
-from flask_sqlalchemy import SQLAlchemy
 
 
 # Initializing flask app
@@ -17,7 +13,8 @@ app = Flask(__name__)
 app.secret_key = '8445a9af69bccd13de1a10de1de88158'
 
 
-# Initializing database configurations
+# Initializing CORS for cross origin requests
+CORS(app, resources={r'/*': {'origins': '*'}}, supports_credentials=True)
 
 # models
 

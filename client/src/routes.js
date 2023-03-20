@@ -42,14 +42,13 @@ export default function Router() {
         {
           path: 'customer/reservations',
           element: <RestaurantsPage />,
-          children:
-            [
-              {
-                path: 'new',
-                element: <NewReservation />
-              }
-            ]
         },
+        {
+          path: "/customer/reservations/new",
+          element: <NewReservation />
+        }
+        ,
+
         {
           path: 'customer/orders',
           element: <UserPage />
