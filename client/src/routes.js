@@ -9,7 +9,8 @@ import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/signupPage';
 import Page404 from './pages/Page404';
 import ProductsPage from './pages/ProductsPage';
-import CartCheckout from './pages/CheckoutsPage'
+import Checkout from './sections/checkouts/Checkout'
+import NewReservation from './sections/reservation/new/NewReservation';
 
 // ----------------------------------------------------------------------
 
@@ -29,7 +30,7 @@ export default function Router() {
         },
         {
           path: 'customer/checkout',
-          element: <CartCheckout />,
+          element: <Checkout />,
           children:
             [
               {
@@ -41,14 +42,13 @@ export default function Router() {
         {
           path: 'customer/reservations',
           element: <RestaurantsPage />,
-          children:
-            [
-              {
-                path: 'new/:id',
-                element: <UserPage />
-              }
-            ]
         },
+        {
+          path: "/customer/reservations/new",
+          element: <NewReservation />
+        }
+        ,
+
         {
           path: 'customer/orders',
           element: <UserPage />

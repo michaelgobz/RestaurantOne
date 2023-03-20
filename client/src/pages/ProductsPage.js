@@ -3,11 +3,11 @@ import { useState } from 'react';
 // @mui
 import { Container, Stack, Typography } from '@mui/material';
 // components
-import { ProductSort, ProductList, ProductFilterSidebar } from '../sections/@default/products';
+import { ProductSort, ProductList, ProductFilterSidebar } from '../sections/products';
 // mock
 // we should provide an array of product categories
 import PRODUCTS from '../_mock/products';
-import ProductCartPopover from '../sections/@default/products/ProductCartPopover';
+import ProductCartPopover from '../sections/products/ProductCartPopover';
 
 // ----------------------------------------------------------------------
 
@@ -25,12 +25,12 @@ export default function ProductsPage() {
   return (
     <>
       <Helmet>
-        <title> Products | Open Restaurant </title>
+        <title> Your Cravings | Open Restaurant </title>
       </Helmet>
 
       <Container>
         <Typography variant="h4" sx={{ mb: 5 }}>
-          Heavy Lunch
+          Your Cravings Solved
         </Typography>
 
         <Stack direction="row" flexWrap="wrap-reverse" alignItems="center" justifyContent="flex-end" sx={{ mb: 5 }}>

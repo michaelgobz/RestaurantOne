@@ -2,9 +2,9 @@
 
 from ..db import DBClient
 
-Db = DBClient(host='localhost', port=5432,
-              user='postgres', password='postgres',
-              db='postgres')
+Db = DBClient(host='34.165.84.79', port=5432,
+              user='RestaurantAdmin', password='RestaurantAdmin',
+              db='OpenRestaurant')
 
 declarative_base = Db.get_engine()
 

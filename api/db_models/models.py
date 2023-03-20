@@ -1,5 +1,9 @@
-from app import db
+
+"""data models that the api uses"""
+from email.policy import default
+from typing import List
 from datetime import datetime
+
 
 
 class User(db.Model):
@@ -27,7 +31,7 @@ class User(db.Model):
 
 class Address(db.Model):
     """Addresses database model"""
-    __tablename__ = 'addresses'
+    __tablename__ = 'addresses
 
     id = db.Column(db.Integer, primary_key=True)
     address_one = db.Column(db.String(50), nullable=False)
@@ -68,6 +72,7 @@ class Restaurant(db.Model):
     suppliers = db.Column(db.String(50))
     created_at = db.Column(db.DateTime, nullable=False,
                           default=datetime.utcnow)
+
     updated_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow,
                            onupdate=datetime.utcnow)
@@ -136,7 +141,6 @@ class Order(db.Model):
 class OrderItem(db.Model):
     """OrderItem model"""
     id = db.Column(db.Integer, primary_key=True)
-
 class Reservation(db.Model):
     """Reservations database model"""
     __tablename__ = 'reservations'
@@ -182,6 +186,58 @@ class Transaction(db.Model):
     """Transaction model"""
     id = db.Column(db.Integer, primary_key=True)
     
+class ReservationItem(db.Model):
+    """Reservation Item model"""
+    id = Column(Integer, primary_key=True)
+    
+class Reservation(db.Model):
+    """Reservation model"""
+    id = db.Column(db.Integer, primary_key=True)
+    description = db.Column(db.String(200), nullable=True)
+    duration = db.Column(db.DateTime, nullable=True)
+    start = db.Column(db.DateTime, nullable=True)
+    end = db.Column(db.DateTime, nullable=True)
+    nb_of_person = db.Column(db.Integer, nullable=False, default=0)
+    additional_info = db.Column(db.String(200), nullable=True)
+    tables = db.Column(db.Integer, nullable=True)
+    category = db.Column(db.String(50), nullable=True)
+    price = db.Column(db.Float, nullable=False, default=0)
+    tax = db.Column(db.Float, nullable=True)
+    menu_item = db.Column(db.String(50), nullable=True)
+    created_at = db.Column(db.DateTime, nullable=False,
+                          default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, nullable=False,
+                           default=datetime.utcnow,
+                           onupdate=datetime.utcnow)
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'),
+                              nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    
+class Restaurant(db.Model):
+    """Restaurant model"""
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    description = db.Column(db.Text, nullable=False)
+    location = db.Column(db.String(50), nullable=True)
+    is_operational = db.Column(db.Boolean, nullable=True)
+    order_fulfilling = db.Column(db.Boolean, nullable=True)
+    menus = db.relationship("Menu", back_populates="restaurant",
+                            cascade="all, delete-orphan")
+    products = db.Column(db.String)
+    orders = db.relationship('Orders', backref='restaurants')
+    payment_methods = db.Column(db.String)
+    reservations = db.relationship('Reservations', backref='restaurant')
+    customers = db.Column(db.Integer, nullable=False, default=0)
+    shipments = db.relationship('Shipments', backref='restaurants')
+    offers = db.Column(db.String(50))
+    suppliers = db.Column(db.String(50))
+    created_at = db.Column(db.DateTime, nullable=False,
+                          default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, nullable=False,
+
+                           default=datetime.utcnow,
+                           onupdate=datetime.utcnow)
+    
 class ShipmentMethod(db.Model):
     """Shipment method model"""
     id = db.Column(db.Integer, primary_key=True)
@@ -210,6 +266,9 @@ class Review(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     
 class ReviewItem(db.Model):
+
+
+    """ReviewItem model"""
     id = db.Column(db.Integer, primary_key=True)
 
 class Event(db.Model):
@@ -218,4 +277,7 @@ class Event(db.Model):
     
 class EventItem(db.Model):
     """EventItem model"""
+
     id = db.Column(db.Integer, primary_key=True)
+    event = db.Column(db.String(50), default="", nullable=True)
+
