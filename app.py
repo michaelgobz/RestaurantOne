@@ -1,13 +1,18 @@
 """application entry point"""
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from os import getenv
+from dotenv import load_dotenv
+
+# load environment variables from .env file
+load_dotenv()
 
 # Initializing flask app
 app = Flask(__name__)
-app.secret_key = '8445a9af69bccd13de1a10de1de88158'
+app.secret_key = getenv('SECRET_KEY')
 
 # Initializing database with flask app
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost/restaurantOne'
+app.config['SQLALCHEMY_DATABASE_URI'] = getenv('DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
