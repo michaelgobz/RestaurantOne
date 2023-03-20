@@ -1,8 +1,10 @@
 {
     "cSpell.words": [
         "apexcharts",
+        "backref",
         "Bahena",
         "bgcolor",
+        "clickaway",
         "firstname",
         "flowtype",
         "Goboola",
@@ -17,6 +19,7 @@
         "nocheck",
         "noopener",
         "noreferrer",
+        "onupdate",
         "Reataurant",
         "sadd",
         "scard",
@@ -46,7 +49,7 @@
 "[javascript]": {
     "editor.defaultFormatter": "vscode.typescript-language-features"
 },
-"editor.fontSize": 14,
+"editor.fontSize": 18,
 "files.autoSave": "afterDelay"
    
 

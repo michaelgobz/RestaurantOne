@@ -1,26 +1,39 @@
-from flask import request, session, jsonify, render_template, redirect, url_for, abort
+
+from re import A
+from flask import request, session, jsonify, Blueprint, redirect, url_for, abort
 from flask_login import current_user, login_required
 from sqlalchemy.exc import IntegrityError
 import json
 import bcrypt
 from datetime import datetime
-
-from app import app, db
+from app import db
 # models
-from api.db_models import Address, User, MenuItem, Menu, OrderItem, Order, \
-PaymentMethod,\
-Payment, TransactionItem, Transaction, ReservationItem, Reservation, \
-Restaurant, ShipmentMethod, Shipment, Invoice, InvoiceItem, Event, EventItem,\
-Information
+from api.db_models import Address, User, MenuItem, Menu, Order, \
+    Reservation, \
+    Restaurant, Shipment
 
-@app.route('/')
+
+# use blueprint to create a new routes
+api = Blueprint('api', __name__, url_prefix='/api/v1/')
+
+
+# initial route
+
+@api.route('/')
 def home():
-    return render_template('home.html')
-
-
+    return jsonify({
+        "message": "welcome to the Our Platform",
+        "company": "RestaurantOne",
+        "location": "Kampala",
+        "year": 2023,
+        "month": "March",
+        "Country": "Uganda",
+        "Project": "Alx-webstack project",
+        "supervisor": "Alx-SE Mentors",
+        })
 # ------------------------------------- AUTHENTICATION ------------------------------------- #
 
-@app.route('/auth/signup', methods=['GET', 'POST'], strict_slashes=False)
+@api.route('/auth/signup', methods=['GET', 'POST'], strict_slashes=False)
 def signup():
     # get user info from request
     data = request.get_json()
@@ -39,22 +52,23 @@ def signup():
     
     # try to add user to database
     try:
-        db.session.add(new_user)
-        db.session.commit()
+        db.get_session().add(new_user)
+        db.get_session().commit()
         return redirect(url_for('login'))
     except IntegrityError:
-        db.session.rollback()
+        db.get_session().rollback()
         return jsonify({'error': 'Email already registered'})
     
 
-@app.route('/auth/login', methods=['GET', 'POST'])
+@api.route('/auth/login', methods=['GET', 'POST'])
 def login():
     # get user info from request
     email = request.json.get('email')
     password = request.json.get('password')
 
     # query the user email and password
-    user = db.session.query(User).filter_by(email=email).first()
+
+    user = db.get_session().query(User).filter_by(email=email).first()
 
     if user and bcrypt.checkpw(password, user.password.encode('utf-8')):
         session['user_id'] = user.id
@@ -62,7 +76,8 @@ def login():
     else:
         return jsonify({'error': 'Incorrect email or password'})
 
-@app.route('/auth/logout', methods=['POST'], strict_slashes=False)
+
+@api.route('/auth/logout', methods=['POST'], strict_slashes=False)
 def logout():
     # deletes the user session
     session.pop('user_id', None)
@@ -71,10 +86,10 @@ def logout():
 # ------------------------------------- USER PROFILE ------------------------------------- #
 
 @login_required
-@app.route('/me/account/profile/<int: user_id>', methods=['GET'], strict_slashes=False)
+@api.route('/me/account/profile/<int:user_id>', methods=['GET'], strict_slashes=False)
 def profile(user_id):
     # get the user profile information form DB
-    profile = db.session.query(User).get_or_404(user_id)
+    profile = db.get_session().query(User).get_or_404(user_id)
     if profile.user != current_user:
         abort(403)
 
@@ -86,10 +101,18 @@ def profile(user_id):
         "addresses": profile.addresses})
 
 @login_required
-@app.route('/me/account/<int: user_id>/update_profile', methods=['PUT'], strict_slashes=False)
+@api.route('/me/account/<int:user_id>/update_profile', methods=['PUT'], strict_slashes=False)
 def update_profile(user_id):
+    """Update user profile
+
+    Args:
+        user_id (UUID): user id
+
+    Returns:
+        _type_: JSON
+    """
     # get the user profile information from the DB
-    profile = db.session.query(User).get_or_404(user_id)
+    profile = db.get_session().query(User).get_or_404(user_id)
     if profile.user != current_user:
         abort(403)
 
@@ -108,17 +131,18 @@ def update_profile(user_id):
     profile.updated_at=datetime.utcnow()
 
     # Commit changes to DB
-    db.session.commit()
+    db.get_session().commit()
+
     return jsonify({'Profile updated successfully'})
 
 
 # ------------------------------------- ADDRESS ------------------------------------- #
 
 @login_required
-@app.route('/account/<int: user_id>/address/new', methods=['POST'], strict_slashes=False)
+@api.route('/account/<int:user_id>/address/new', methods=['POST'], strict_slashes=False)
 def add_address(user_id):
     # get the user address from the DB
-    address = db.session.query(Address).get_or_404(user_id)
+    address = db.get_session().query(Address).get_or_404(user_id)
     if address.user != current_user:
         abort(403)
 
@@ -133,15 +157,15 @@ def add_address(user_id):
                           country=data.get('country'),
                           country_area=data.get('country_area'))
     
-    db.session.add(new_address)
-    db.session.commit()
+    db.get_session().add(new_address)
+    db.get_session().commit()
     return jsonify({'Address added successfully'})
 
 @login_required
-@app.route('/account/<int: user_id>/address/', methods=['GET'])
+@api.route('/account/<int:user_id>/address/', methods=['GET'])
 def address(user_id):
     # get the user address from the DB
-    address = db.session.query(Address).get_or_404(user_id)
+    address = db.get_session().query(Address).get_or_404(user_id)
     if address.user != current_user:
         abort(403)
 
@@ -156,10 +180,10 @@ def address(user_id):
         "country_area": address.country_area})
 
 @login_required
-@app.route('/account/<int: user_id>/address/update', methods=['GET', 'POST'])
+@api.route('/account/<int:user_id>/address/update', methods=['GET', 'POST'])
 def update_address(user_id):
     # get the user address informations from the DB
-    address = db.session.query(Address).get_or_404(user_id)
+    address = db.get_session().query(Address).get_or_404(user_id)
     if address.user != current_user:
         abort(403)
     
@@ -182,20 +206,20 @@ def update_address(user_id):
         address.country_area = data['country_area']
     
     # Commit changes to DB
-    db.session.commit()
+    db.get_session.commit()
     return jsonify({'Address updated successfully'})
 
 @login_required
-@app.route('/account/<int: user_id>/address/delete', methods=['POST'])
+@api.route('/account/<int:user_id>/address/delete', methods=['POST'])
 def delete_address(user_id):
     # get the user address informations from the DB
-    address = db.session.query(Address).get_or_404(user_id)
+    address = db.get_session().query(Address).get_or_404(user_id)
     if address.user != current_user:
         abort(403)
 
     # delete the address data in the db
-    db.session.delete(address)
-    db.session.commit()
+    db.get_session().delete(address)
+    db.get_session().commit()
     return redirect(url_for('address'))
 
 
@@ -204,7 +228,7 @@ def delete_address(user_id):
 
 # Create restaurant
 @login_required
-@app.route('/account/<int: user_id>/restaurant', methods=['POST'])
+@api.route('/account/<int:user_id>/restaurant', methods=['POST'])
 def add_restaurant(user_id):
     # check if user is restaurant owner
     if current_user.role != 'restaurant_owner':
@@ -243,8 +267,8 @@ def add_restaurant(user_id):
     )
 
     # Add the new restaurant object to the session and commit the changes
-    db.session.add(restaurant)
-    db.session.commit()
+    db.get_session().add(restaurant)
+    db.get_session().commit()
 
     # Return a JSON response with the ID of the newly created restaurant
     return jsonify({'message': 'Restaurant created successfully', 'id': restaurant.id})
@@ -252,18 +276,18 @@ def add_restaurant(user_id):
 
 # Read restaurant for the owner
 @login_required
-@app.route('/dashboard/restaurant/<int:restaurant_id>', methods=['GET'])
+@api.route('/dashboard/restaurant/<int:restaurant_id>', methods=['GET'])
 def restaurant(restaurant_id):
     # get the restaurant from the DB
-    restaurant = db.session.query(Restaurant).get_or_404(restaurant_id)
+    restaurant = db.get_session().query(Restaurant).get_or_404(restaurant_id)
 
     # check whether the user is owner or simple user
     if current_user.role == 'restaurant_owner':
         # get all the information for the restaurant
-        reservations = db.session.query(Reservation).filter(Reservation.restaurant_id == restaurant_id).all()
-        menus = db.session.query(Menu).filter(Menu.restaurant_id == restaurant_id).all()
-        orders = db.session.query(Order).filter(Order.restaurant_id == restaurant_id).all()
-        shipments = db.session.query(Shipment).filter(Shipment.restaurant_id == restaurant_id).all()
+        reservations = db.get_session().query(Reservation).filter(Reservation.restaurant_id == restaurant_id).all()
+        menus = db.get_session().query(Menu).filter(Menu.restaurant_id == restaurant_id).all()
+        orders = db.get_session().query(Order).filter(Order.restaurant_id == restaurant_id).all()
+        shipments = db.get_session().query(Shipment).filter(Shipment.restaurant_id == restaurant_id).all()
 
         return jsonify({
             "id": restaurant.id,
@@ -302,13 +326,14 @@ def restaurant(restaurant_id):
 
 # Update restaurant
 @login_required
-@app.route('/account/<int: user_id>/restaurant/<int: restaurant_id>/update', methods=['PUT'])
+@api.route('/account/<int:user_id>/restaurant/<int:restaurant_id>/update', methods=['PUT'])
 def update_restaurant(restaurant_id):
     # check if user is restaurant owner
     if current_user.role != 'restaurant_owner':
         abort(403)
     # get the restaurant from the DB
-    restaurant = db.session.query(Restaurant).get_or_404(restaurant_id)
+
+    restaurant = db.get_session().query(Restaurant).get_or_404(restaurant_id)
 
     # Update restaurant 
     data = request.get_json()
@@ -333,21 +358,21 @@ def update_restaurant(restaurant_id):
     restaurant.updated_at = datetime.utcnow()
 
     # Commit the updated data to the database
-    db.session.commit()
+    db.get_session().commit()
     return jsonify({'message': 'Restaurant updated successfully'}), 200
 
 @login_required
-@app.route('/dashboard/restaurant/<int: restaurant_id>/delete', methods=['DELETE'])
+@api.route('/dashboard/restaurant/<int:restaurant_id>/delete', methods=['DELETE'])
 def delete_restaurant(restaurant_id):
     # check if user is restaurant owner
     if current_user.role != 'restaurant_owner':
         abort(403)
     # get the restaurant from the DB
-    restaurant = db.session.query(Restaurant).get_or_404(restaurant_id)
+    restaurant = db.get_session().query(Restaurant).get_or_404(restaurant_id)
 
     # delete the restaurant from the DB
-    db.session.delete(restaurant)
-    db.session.commit()
+    db.get_session().delete(restaurant)
+    db.get_session().commit()
 
     return jsonify({'message': 'Restaurant deleted successfully'}), 200
 
@@ -356,7 +381,8 @@ def delete_restaurant(restaurant_id):
 
 # Create menu item
 @login_required
-@app.route('/account/<int: user_id>/menu_item/new', methods=['POST'], strict_slashes=False)
+@api.route('/account/<int:user_id>/menu_item/new', methods=['POST'], strict_slashes=False)
+
 def add_menu_item():
     # check if user is restaurant owner
     if current_user.role != 'restaurant_owner':
@@ -378,18 +404,18 @@ def add_menu_item():
     )
     
     # Add the new menu object to the session and commit the changes
-    db.session.add(menu_item)
-    db.session.commit()
+    db.get_session().add(menu_item)
+    db.get_session().commit()
 
     # Return a JSON response
     return jsonify({'Menu item created successfully'})
 
 # Read menu item
 @login_required
-@app.route('/dashboard/menu_item/<int: item_id>', methods=['GET'])
+@api.route('/dashboard/menu_item/<int:item_id>', methods=['GET'])
 def menu_item(item_id):
     # get the menu_item from the DB
-    menu_item = db.session.query(MenuItem).get_or_404(item_id)
+    menu_item = db.get_session().query(MenuItem).get_or_404(item_id)
 
     # Return them to the user
     return jsonify({
@@ -405,13 +431,15 @@ def menu_item(item_id):
 
 # Update menu item
 @login_required
-@app.route('/account/<int: user_id>/dashboard/menu_item/<int: id>/update', methods=['PUT'])
+@api.route('/account/<int:user_id>/dashboard/menu_item/<int:id>/update', methods=['PUT'])
+
 def update_menu_item(id: int):
     # check if user is restaurant owner
     if current_user.role != 'restaurant_owner':
         abort(403)
     # get the menu_item informations from the DB
-    menu_item = db.session.query(MenuItem).get_or_404(id)
+    menu_item = db.get_session().query(MenuItem).get_or_404(id)
+
     
     # get the menu_item info from the user and update them in the db
     data = request.get_json()
@@ -437,18 +465,18 @@ def update_menu_item(id: int):
     menu_item.updated_at = datetime.utcnow()
     
     # Commit the changes to DB
-    db.session.commit()
+    db.get_session().commit()
     return jsonify({'Menu item updated successfully'}), 200
 
 # Delete menu item
 @login_required
-@app.route('/account/<int: user_id>/dashboard/menu_item/<int: item_id>/delete', methods=['DELETE'])
+@api.route('/account/<int:user_id>/dashboard/menu_item/<int:item_id>/delete', methods=['DELETE'])
 def delete_menu_item(item_id):
-    menu_item = db.session.query(MenuItem).get_or_404(item_id)
+    menu_item = db.get_session().query(MenuItem).get_or_404(item_id)
 
     # delete the menu item
-    db.session.delete(menu_item)
-    db.session.commit()
+    db.get_session().delete(menu_item)
+    db.get_session().commit()
     
     return jsonify({'message': 'Menu item deleted successfully'}), 200
 
@@ -457,7 +485,7 @@ def delete_menu_item(item_id):
 
 # Create Menu
 @login_required
-@app.route('account/<int: user_id>/menu/new', methods=['POST'], strict_slashes=False)
+@api.route('/account/<int:user_id>/menu/new', methods=['POST'], strict_slashes=False)
 def add_menu():
     # check if user is restaurant owner
     if current_user.role != 'restaurant_owner':
@@ -467,7 +495,7 @@ def add_menu():
     
     # Retrieve the restaurant by id
     restaurant_id = data.get('restaurant_id')
-    restaurant = db.session.query(Restaurant).get_or_404(restaurant_id)
+    restaurant = db.get_session().query(Restaurant).get_or_404(restaurant_id)
     
     # Create a new menu object
     menu = Menu(
@@ -479,9 +507,10 @@ def add_menu():
         restaurant=restaurant
     )
 
-    # Add the new menu object to the session and commit the changes
-    db.session.add(menu)
-    db.session.commit()
+    # Add the new menu object to the session and commit
+    db.get_session().add(menu)
+    db.get_session().commit()
+
 
     # Return a JSON response
     return jsonify({'message': 'Menu created successfully'})
@@ -489,10 +518,9 @@ def add_menu():
 # Read Menu 
 
 @login_required
-@app.route('/dashboard/menu/<int: menu_id>')
+@api.route('/dashboard/menu/<int:menu_id>')
 def menu(menu_id):
-    menu = db.session.query(Menu).get_or_404(menu_id)
-
+    menu = db.get_session().query(Menu).get_or_404(menu_id)
     menu_items = [{'id': item.id, 'name': item.name, 'description': item.description, 'price': item.price} for item in menu.items]
 
     return jsonify({
@@ -507,13 +535,13 @@ def menu(menu_id):
 # Update menu
 
 @login_required
-@app.route('/account/<int: user_id>/dashboard/menu/<int:menu_id>/update', methods=['PUT'])
+@api.route('/account/<int:user_id>/dashboard/menu/<int:menu_id>/update', methods=['PUT'])
 def update_menu(menu_id):
     # check if user is restaurant owner
     if current_user.role != 'restaurant_owner':
         abort(403)
     # Get the menu to update
-    menu = db.session.query(Menu).get_or_404(menu_id)
+    menu = db.get_session().query(Menu).get_or_404(menu_id)
 
     # Get updated menu info from request
     data = request.get_json()
@@ -529,8 +557,9 @@ def update_menu(menu_id):
         menu.items = data['items']
 
     # Commit changes to DB
-    db.session.add(menu)
-    db.session.commit()
+
+    db.get_session().add(menu)
+    db.get_session().commit()
 
     # Return a JSON response
     return jsonify({'message': 'Menu updated successfully'}), 200
@@ -538,13 +567,13 @@ def update_menu(menu_id):
 # Delete Menu
 
 @login_required
-@app.route('/account/<int: user_id>/menu/<int:menu_id>/delete', methods=['DELETE'])
+@api.route('/account/<int:user_id>/menu/<int:menu_id>/delete', methods=['DELETE'])
 def delete_menu(menu_id):
-    menu = db.session.query(Menu).get_or_404(menu_id)
+    menu = db.get_session().query(Menu).get_or_404(menu_id)
     
     # delete the menu
-    db.session.delete(menu)
-    db.session.commit()
+    db.get_session().delete(menu)
+    db.get_session().commit()
     
     return jsonify({'message': 'Menu deleted successfully'})
 
@@ -553,11 +582,12 @@ def delete_menu(menu_id):
 
 
 @login_required
-@app.route('/restaurant/<int:restaurant_id>/orders', methods=['POST'])
+
+@api.route('/restaurant/<int:restaurant_id>/orders', methods=['POST'])
 # @roles_required('customer')
 def add_order(restaurant_id):
     # Get the restaurant from the DB
-    db.session.query(Restaurant).get_or_404(restaurant_id)
+    db.get_session().query(Restaurant).get_or_404(restaurant_id)
 
     # Parse the data from the request
     data = request.get_json()
@@ -578,18 +608,19 @@ def add_order(restaurant_id):
     )
 
     # Add the order to the DB
-    db.session.add(order)
-    db.session.commit()
+    db.get_session().add(order)
+    db.get_session().commit()
+
 
     # Return a success message to the user
     return jsonify({'message': 'Order added successfully!'}), 201
 
 # Read order
 @login_required
-@app.route('/restaurant/<int:restaurant_id>/orders/<int:order_id>', methods=['GET'])
+@api.route('/restaurant/<int:restaurant_id>/orders/<int:order_id>', methods=['GET'])
 def order(restaurant_id, order_id):
     # Get the order from the DB
-    order = db.session.query(Order).filter(Order.restaurant_id == restaurant_id, Order.id == order_id).first()
+    order = db.get_session().query(Order).filter(Order.restaurant_id == restaurant_id, Order.id == order_id).first()
 
     if not order:
         return jsonify({'error': 'Order not found'}), 404
@@ -612,11 +643,12 @@ def order(restaurant_id, order_id):
 
 # Update order
 @login_required
-@app.route('/restaurant/<int:restaurant_id>/orders/<int:order_id>', methods=['PUT'])
+
+@api.route('/restaurant/<int:restaurant_id>/orders/<int:order_id>', methods=['PUT'])
 def update_order(restaurant_id, order_id):
     # Get the restaurant and order from the DB
-    db.session.query(Restaurant).get_or_404(restaurant_id)
-    order = db.session.query(Order).get_or_404(order_id)
+    db.get_session().query(Restaurant).get_or_404(restaurant_id)
+    order = db.get_session().query(Order).get_or_404(order_id)
 
     # Parse the data from the request
     data = request.get_json()
@@ -639,25 +671,27 @@ def update_order(restaurant_id, order_id):
     order.updated_at = datetime.utcnow()
 
     # Commit the changes to the DB
-    db.session.commit()
+    db.get_session().commit()
+
 
     # Return a success message to the user
     return jsonify({'message': 'Order updated successfully!'}), 200
 
 # Delete order
 @login_required
-@app.route('/restaurant/<int:restaurant_id>/orders/<int:order_id>', methods=['DELETE'])
+@api.route('/restaurant/<int:restaurant_id>/orders/<int:order_id>', methods=['DELETE'])
 def delete_order(restaurant_id, order_id):
     # Get the order from the DB
-    order = db.session.query(Order).filter(Order.restaurant_id == restaurant_id, Order.id == order_id).first()
+    order = db.get_session().query(Order).filter(Order.restaurant_id == restaurant_id, Order.id == order_id).first()
 
     if not order:
         # If the order doesn't exist, return a 404 error
         return jsonify({'error': 'Order not found'}), 404
 
     # Remove the order from the DB
-    db.session.delete(order)
-    db.session.commit()
+
+    db.get_session().delete(order)
+    db.get_session().commit()
 
     # Return a success message to the user
     return jsonify({'message': 'Order deleted successfully!'})
@@ -668,11 +702,12 @@ def delete_order(restaurant_id, order_id):
 
 
 @login_required
-@app.route('/restaurant/<int:restaurant_id>/reservations', methods=['POST'])
+@api.route('/restaurant/<int:restaurant_id>/reservations', methods=['POST'])
 # @roles_required('customer')
 def add_reservation(restaurant_id):
     # Get the restaurant from the DB
-    db.session.query(Restaurant).get_or_404(restaurant_id)
+    db.get_session().query(Restaurant).get_or_404(restaurant_id)
+
 
     # Parse the data from the request
     data = request.get_json()
@@ -696,15 +731,16 @@ def add_reservation(restaurant_id):
     )
 
     # Add the reservation to the DB
-    db.session.add(reservation)
-    db.session.commit()
+    db.get_session().add(reservation)
+    db.get_session().commit()
 
     # Return a success message to the user
     return jsonify({'message': 'Reservation added successfully!'}), 201
 
 # Read reservation
 @login_required
-@app.route('/restaurant/<int:restaurant_id>/reservations/<int:reservation_id>', methods=['GET'])
+@api.route('/restaurant/<int:restaurant_id>/reservations/<int:reservation_id>', methods=['GET'])
+
 def reservation(restaurant_id, reservation_id):
     # Get the reservation from the DB
     reservation = db.session.query(Reservation).filter(reservation.restaurant_id == restaurant_id, reservation.id == reservation_id).first()
@@ -733,12 +769,11 @@ def reservation(restaurant_id, reservation_id):
 
 # Update reservation
 @login_required
-@app.route('/restaurant/<int:restaurant_id>/reservations/<int:reservation_id>', methods=['PUT'])
+@api.route('/restaurant/<int:restaurant_id>/reservations/<int:reservation_id>', methods=['PUT'])
 def update_reservation(restaurant_id, reservation_id):
     # Get the restaurant and reservation from the DB
-    db.session.query(Restaurant).get_or_404(restaurant_id)
-    reservation = db.session.query(reservation).get_or_404(reservation_id)
-
+    db.get_session().query(Restaurant).get_or_404(restaurant_id)
+    reservation = db.get_session().query(reservation).get_or_404(reservation_id)
     # Parse the data from the request
     data = request.get_json()
 
@@ -769,25 +804,27 @@ def update_reservation(restaurant_id, reservation_id):
     reservation.updated_at = datetime.utcnow()
 
     # Commit the changes to the DB
-    db.session.commit()
+    db.get_session().commit()
+
 
     # Return a success message to the user
     return jsonify({'message': 'Reservation updated successfully!'}), 200
 
 # Delete reservation
 @login_required
-@app.route('/restaurant/<int:restaurant_id>/reservations/<int:reservation_id>', methods=['DELETE'])
+@api.route('/restaurant/<int:restaurant_id>/reservations/<int:reservation_id>', methods=['DELETE'])
 def delete_reservation(restaurant_id, reservation_id):
     # Get the reservation from the DB
-    reservation = db.session.query(reservation).filter(reservation.restaurant_id == restaurant_id, reservation.id == reservation_id).first()
-
+    reservation = db.get_session().query(reservation).filter(reservation.restaurant_id == restaurant_id, reservation.id == reservation_id).first()
     if not reservation:
         # If the reservation doesn't exist, return a 404 error
         return jsonify({'error': 'Reservation not found'}), 404
 
     # Remove the reservation from the DB
-    db.session.delete(reservation)
-    db.session.commit()
+
+    db.get_session().delete(reservation)
+    db.get_session().commit()
+
 
     # Return a success message to the user
     return jsonify({'message': 'Reservation deleted successfully!'})

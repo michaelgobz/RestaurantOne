@@ -1,13 +1,14 @@
 import PropTypes from 'prop-types';
 import { noCase } from 'change-case';
 import { useState } from 'react';
+import { useNavigate } from 'react-router';
+
 // @mui
 import {
     Box,
     List,
     Button,
     Avatar,
-    Tooltip,
     Divider,
     Popover,
     Typography,
@@ -15,23 +16,24 @@ import {
     ListItemText,
     ListSubheader,
     ListItemAvatar,
-    ListItemButton,
+    ListItemButton, Badge,
 } from '@mui/material';
 // utils
-import { fToNow } from '../../../utils/formatTime';
+import { fToNow } from '../../utils/formatTime';
 // components
-import Iconify from '../../../components/iconify';
-import Scrollbar from '../../../components/scrollbar';
+import Iconify from '../../components/iconify';
+import Scrollbar from '../../components/scrollbar';
 // data
-import NOTIFICATIONS from '../../../_mock/noticification'
-import CartWidget from './ProductCartWidget';
+import NOTIFICATIONS from '../../_mock/noticification'
+
 
 // ----------------------------------------------------------------------
 
 export default function ProductCartPopover() {
-    const [notifications, setNotifications] = useState(NOTIFICATIONS);
+    const navigator = useNavigate()
+    const subTotal = 56790
+    const [notifications] = useState(NOTIFICATIONS);
 
-    const totalUnRead = notifications.filter((item) => item.isUnRead === true).length;
 
     const [open, setOpen] = useState(null);
 
@@ -43,20 +45,19 @@ export default function ProductCartPopover() {
         setOpen(null);
     };
 
-    const handleMarkAllAsRead = () => {
-        setNotifications(
-            notifications.map((notification) => ({
-                ...notification,
-                isUnRead: false,
-            }))
-        );
-    };
+    const HandleCheckout = () => {
+      navigator('customer/checkout')
+      handleClose()
+    }
+
 
     return (
         <>
             <IconButton color={open ? 'primary' : 'default'} onClick={handleOpen} sx={{ width: 40, height: 40 }}>
-                <CartWidget />
-            </IconButton>
+        <Badge badgeContent={2} color="error">
+          <Iconify icon="eva:shopping-cart-fill" />
+        </Badge>
+      </IconButton>
 
             <Popover
                 open={Boolean(open)}
@@ -74,19 +75,12 @@ export default function ProductCartPopover() {
             >
                 <Box sx={{ display: 'flex', alignItems: 'center', py: 2, px: 2.5 }}>
                     <Box sx={{ flexGrow: 1 }}>
-                        <Typography variant="subtitle1">Notifications</Typography>
+                        <Typography variant="subtitle1">Cart Summary</Typography>
                         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                            You have {totalUnRead} unread messages
+                            Total items : 2 <br/>
+                            Sub-Total : {subTotal}
                         </Typography>
                     </Box>
-
-                    {totalUnRead > 0 && (
-                        <Tooltip title=" Mark all as read">
-                            <IconButton color="primary" onClick={handleMarkAllAsRead}>
-                                <Iconify icon="eva:done-all-fill" />
-                            </IconButton>
-                        </Tooltip>
-                    )}
                 </Box>
 
                 <Divider sx={{ borderStyle: 'dashed' }} />
@@ -96,20 +90,7 @@ export default function ProductCartPopover() {
                         disablePadding
                         subheader={
                             <ListSubheader disableSticky sx={{ py: 1, px: 2.5, typography: 'overline' }}>
-                                New
-                            </ListSubheader>
-                        }
-                    >
-                        {notifications.slice(0, 2).map((notification) => (
-                            <NotificationItem key={notification.id} notification={notification} />
-                        ))}
-                    </List>
-
-                    <List
-                        disablePadding
-                        subheader={
-                            <ListSubheader disableSticky sx={{ py: 1, px: 2.5, typography: 'overline' }}>
-                                Before that
+                              Cart Details
                             </ListSubheader>
                         }
                     >
@@ -122,8 +103,8 @@ export default function ProductCartPopover() {
                 <Divider sx={{ borderStyle: 'dashed' }} />
 
                 <Box sx={{ p: 1 }}>
-                    <Button fullWidth disableRipple>
-                        View All
+                    <Button fullWidth disableRipple onClick={HandleCheckout}>
+                      checkout ({subTotal})
                     </Button>
                 </Box>
             </Popover>
