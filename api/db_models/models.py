@@ -46,7 +46,8 @@ class MenuItem(db.Model):
     is_available = db.Column(db.Boolean, nullable=False)
     is_deliverable = db.Column(db.Boolean, nullable=False)
     duration_of_preparation = db.Column(db.DateTime)
-    menu_id = db.Column(db.Integer, db.ForeignKey('menu.id'), nullable=False)
+    menu_id = db.Column(db.Integer, db.ForeignKey(
+        'menu.menu_id'), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False,
                           default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, nullable=False,
@@ -65,7 +66,8 @@ class Menu(db.Model):
     updated_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow,
                            onupdate=datetime.utcnow)
-    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'), nullable=False)
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'),
+                              nullable=False)
     restaurant = db.relationship('Restaurant', back_populates='menus')
 
 class OrderItem(db.Model):
@@ -75,8 +77,8 @@ class OrderItem(db.Model):
 class Order(db.Model):
     """order model"""
     id = db.Column(db.Integer, primary_key=True)
-    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     items = db.Column(db.String(500), nullable=False)
     total_price = db.Column(db.Float, nullable=False)
     address = db.Column(db.String(500), nullable=False)
