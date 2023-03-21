@@ -105,14 +105,6 @@ def profile(user_id):
 @login_required
 @api.route('/me/account/<int:user_id>/update_profile', methods=['PUT'], strict_slashes=False)
 def update_profile(user_id):
-    """Update user profile
-
-    Args:
-        user_id (UUID): user id
-
-    Returns:
-        _type_: JSON
-    """
     # get the user profile information from the DB
     profile = db.get_session().query(User).get_or_404(user_id)
     if profile.user != current_user:
@@ -279,12 +271,12 @@ def add_restaurant():
     return jsonify({'message': 'Restaurant created successfully', 'id': restaurant.id})
 
 
-# Read restaurant for the owner
+# Read restaurant
 @login_required
 @api.route('/dashboard/restaurant/<int:restaurant_id>', methods=['GET'])
 def restaurant(restaurant_id):
-    # check whether the user is admin, owner or simple user
-    if current_user.role == 'admin' or current_user.role == 'owner':
+    # check whether the user is admin, manager or simple user
+    if current_user.role == 'admin' or current_user.role == 'manager':
         # get the restaurant from the DB
         restaurant = db.get_session().query(Restaurant).get_or_404(restaurant_id)
         # get all the information for the restaurant
@@ -333,7 +325,7 @@ def restaurant(restaurant_id):
 @api.route('/account/<int:user_id>/restaurant/<int:restaurant_id>/update', methods=['PUT'])
 def update_restaurant(restaurant_id):
     # check if user is admin
-    if current_user.role != 'admin' or current_user.role != 'owner':
+    if current_user.role != 'admin' or current_user.role != 'manager':
         abort(403)
         
     # get the restaurant from the DB
@@ -369,7 +361,7 @@ def update_restaurant(restaurant_id):
 @login_required
 @api.route('/dashboard/restaurant/<int:restaurant_id>/delete', methods=['DELETE'])
 def delete_restaurant(restaurant_id):
-    # check if user is restaurant owner
+    # check if user is restaurant manager
     if current_user.role != 'admin':
         abort(403)
 
@@ -389,8 +381,8 @@ def delete_restaurant(restaurant_id):
 @login_required
 @api.route('/account/<int:user_id>/menu_item/new', methods=['POST'], strict_slashes=False)
 def add_menu_item():
-    # check if user is restaurant owner
-    if current_user.role != 'admin' or current_user.role != 'owner':
+    # check if user is restaurant manager
+    if current_user.role != 'admin' or current_user.role != 'manager':
         abort(403)
     # get menu item info from request
     data = request.get_json()
@@ -440,8 +432,8 @@ def menu_item(item_id):
 @login_required
 @api.route('/account/<int:user_id>/dashboard/menu_item/<int:id>/update', methods=['PUT'])
 def update_menu_item(id: int):
-    # check if user is admin or restaurant owner
-    if current_user.role != 'admin' or current_user.role != 'owner':
+    # check if user is admin or restaurant manager
+    if current_user.role != 'admin' or current_user.role != 'manager':
         abort(403)
     # get the menu_item informations from the DB
     menu_item = db.get_session().query(MenuItem).get_or_404(id)
@@ -478,8 +470,8 @@ def update_menu_item(id: int):
 @login_required
 @api.route('/account/<int:user_id>/dashboard/menu_item/<int:item_id>/delete', methods=['DELETE'])
 def delete_menu_item(item_id):
-    # check if user is admin or restaurant owner
-    if current_user.role != 'admin' or current_user.role != 'owner':
+    # check if user is admin or restaurant manager
+    if current_user.role != 'admin' or current_user.role != 'manager':
         abort(403)
 
     # get the menu item from the DB
@@ -498,8 +490,8 @@ def delete_menu_item(item_id):
 @login_required
 @api.route('/account/<int:user_id>/menu/new', methods=['POST'], strict_slashes=False)
 def add_menu():
-    # check if user is restaurant owner
-    if current_user.role != 'admin' or current_user.role != 'owner':
+    # check if user is restaurant manager
+    if current_user.role != 'admin' or current_user.role != 'manager':
         abort(403)
     # Get menu info from request
     data = request.get_json()
@@ -548,8 +540,8 @@ def menu(menu_id):
 @login_required
 @api.route('/account/<int:user_id>/dashboard/menu/<int:menu_id>/update', methods=['PUT'])
 def update_menu(menu_id):
-    # check if user is restaurant owner
-    if current_user.role != 'admin' or current_user.role != 'owner':
+    # check if user is restaurant manager
+    if current_user.role != 'admin' or current_user.role != 'manager':
         abort(403)
     # Get the menu to update
     menu = db.get_session().query(Menu).get_or_404(menu_id)
@@ -581,8 +573,8 @@ def update_menu(menu_id):
 @login_required
 @api.route('/account/<int:user_id>/menu/<int:menu_id>/delete', methods=['DELETE'])
 def delete_menu(menu_id):
-    # check if the user is admin or restaurant owner
-    if current_user.role != 'admin' or current_user.role != 'owner':
+    # check if the user is admin or restaurant manager
+    if current_user.role != 'admin' or current_user.role != 'manager':
         abort(403)
     # get menu from the DB
     menu = db.get_session().query(Menu).get_or_404(menu_id)
@@ -631,9 +623,9 @@ def add_order():
 @login_required
 @api.route('/dashboard/<int:user_id>/order/<int:order_id>', methods=['GET'])
 def order(user_id, order_id):
-    # get the order owner from the DB
-    order_owner = db.get_session().query(Order).get_or_404(user_id)
-    if order_owner.user != current_user:
+    # get the order manager from the DB
+    order_manager = db.get_session().query(Order).get_or_404(user_id)
+    if order_manager.user != current_user:
         abort(403)
     # Get the order from the DB
     order = db.get_session().query(Order).filter(Order.id == order_id).first()
