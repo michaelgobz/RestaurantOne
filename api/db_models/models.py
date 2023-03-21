@@ -8,7 +8,7 @@ from api.core.base import declarative_base as db
 
 class User(db.Model):
     """Users database model"""
-    __tablename__ = 'user'
+    __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(50), nullable=False)
@@ -23,7 +23,6 @@ class User(db.Model):
                            onupdate=datetime.utcnow)
     orders = db.relationship("Order", backref="user")
     reservations = db.relationship('Reservation', backref='user')
-    reservation_id = db.Column(db.Integer, db.ForeignKey('reservations.id'))
 
     # Define many-to-many relationship with Address model
     addresses = db.relationship("Address",
@@ -55,13 +54,13 @@ class UserAddress(db.Model):
     __tablename__ = 'users_address'
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    address_id = db.Column(db.Integer, db.ForeignKey('address.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    address_id = db.Column(db.Integer, db.ForeignKey('addresses.id'))
 
 
 class Restaurant(db.Model):
     """Restaurants database model"""
-    __tablename__ = 'restaurant'
+    __tablename__ = 'restaurants'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
@@ -69,7 +68,6 @@ class Restaurant(db.Model):
     location = db.Column(db.String(50), nullable=True)
     is_operational = db.Column(db.Boolean, nullable=True)
     order_fulfilling = db.Column(db.Boolean, nullable=True)
-    products = db.Column(db.String)
     payment_methods = db.Column(db.String)
     customers = db.Column(db.Integer, nullable=False, default=0)
     offers = db.Column(db.String(50))
@@ -90,7 +88,7 @@ class Restaurant(db.Model):
 
 class Menu(db.Model):
     """menus database model"""
-    __tablename__ = 'menu'
+    __tablename__ = 'menus'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True, nullable=False)
@@ -125,17 +123,17 @@ class MenuItem(db.Model):
     updated_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow,
                            onupdate=datetime.utcnow)
-    menu_id = db.Column(db.Integer, db.ForeignKey('menu.id'), nullable=False)
+    menu_id = db.Column(db.Integer, db.ForeignKey('menus.id'), nullable=False)
 
 
 class Order(db.Model):
     """orders database model"""
-    __tablename__ = 'order'
+    __tablename__ = 'orders'
 
     id = db.Column(db.Integer, primary_key=True)
-    menu = db.Column(db.String(500), nullable=False)
+    menus = db.Column(db.String(500), nullable=False)
     total_price = db.Column(db.Float, nullable=False)
-    address = db.Column(db.String(500), nullable=False)
+    address = db.Column(db.String(500), nullable=True)
     shipment_method = db.Column(db.String(50), nullable=False)
     payment_method = db.Column(db.String(50), nullable=False)
     status = db.Column(db.String(50), nullable=False)
@@ -144,7 +142,7 @@ class Order(db.Model):
     updated_at = db.Column(db.DateTime,
                            default=datetime.utcnow,
                            onupdate=datetime.utcnow)
-    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'))
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 
@@ -155,7 +153,7 @@ class OrderItem(db.Model):
 
 class Reservation(db.Model):
     """Reservations database model"""
-    __tablename__ = 'reservation'
+    __tablename__ = 'reservations'
 
     id = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.String(200), nullable=True)
@@ -205,33 +203,6 @@ class Transaction(db.Model):
     """Transaction model"""
     id = db.Column(db.Integer, primary_key=True)
     
-class ReservationItem(db.Model):
-    """Reservation Item model"""
-    id = db.Column(db.Integer, primary_key=True)
-    
-class Reservation(db.Model):
-    """Reservation model"""
-    id = db.Column(db.Integer, primary_key=True)
-    description = db.Column(db.String(200), nullable=True)
-    duration = db.Column(db.DateTime, nullable=True)
-    start = db.Column(db.DateTime, nullable=True)
-    end = db.Column(db.DateTime, nullable=True)
-    nb_of_person = db.Column(db.Integer, nullable=False, default=0)
-    additional_info = db.Column(db.String(200), nullable=True)
-    tables = db.Column(db.Integer, nullable=True)
-    category = db.Column(db.String(50), nullable=True)
-    price = db.Column(db.Float, nullable=False, default=0)
-    tax = db.Column(db.Float, nullable=True)
-    menu_item = db.Column(db.String(50), nullable=True)
-    created_at = db.Column(db.DateTime, nullable=False,
-                           default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, nullable=False,
-                           default=datetime.utcnow,
-                           onupdate=datetime.utcnow)
-    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'),
-                              nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-
 
 class ShipmentMethod(db.Model):
     """Shipment method model"""
