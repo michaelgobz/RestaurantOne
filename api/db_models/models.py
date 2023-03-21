@@ -1,8 +1,5 @@
 """data models that the api uses"""
 from datetime import datetime
-from email.policy import default
-from typing import List
-from datetime import datetime
 from api.core.base import declarative_base as db
 
 
@@ -51,7 +48,7 @@ class Address(db.Model):
 
 class UserAddress(db.Model):
     """Association table for many-to-many relationship"""
-    __tablename__ = 'users_address'
+    __tablename__ = 'users_addresses'
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
@@ -79,11 +76,11 @@ class Restaurant(db.Model):
                            default=datetime.utcnow,
                            onupdate=datetime.utcnow)
     menus = db.relationship("Menu",
-                            backref="restaurant",
+                            backref="restaurants",
                             cascade="all, delete-orphan")
-    shipments = db.relationship('Shipment', backref='restaurant')
-    orders = db.relationship('Order', backref='restaurant')
-    reservations = db.relationship('Reservation', backref='restaurant')
+    shipments = db.relationship('Shipment', backref='restaurants')
+    orders = db.relationship('Order', backref='restaurants')
+    reservations = db.relationship('Reservation', backref='restaurants')
 
 
 class Menu(db.Model):
@@ -107,7 +104,7 @@ class Menu(db.Model):
 
 class MenuItem(db.Model):
     """menu items database model"""
-    __tablename__ = 'menu_item'
+    __tablename__ = 'menu_items'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
@@ -148,6 +145,7 @@ class Order(db.Model):
 
 class OrderItem(db.Model):
     """OrderItem model"""
+    __tablename__ = 'order_items'
     id = db.Column(db.Integer, primary_key=True)
 
 
@@ -178,74 +176,107 @@ class Reservation(db.Model):
                         db.ForeignKey('users.id'), nullable=False)
 
 
-
 class ReservationItem(db.Model):
     """Reservation Item model"""
+    __tablename__ = 'reservation_items'
     id = db.Column(db.Integer, primary_key=True)
 
 
 class PaymentMethod(db.Model):
     """PaymentMethod model"""
+    __tablename__ = 'payment_methods'
     id = db.Column(db.Integer, primary_key=True)
 
 
 class Payment(db.Model):
     """Payment model"""
+    __tablename__ = 'payments'
     id = db.Column(db.Integer, primary_key=True)
 
 
 class TransactionItem(db.Model):
     """TransactionItem model"""
+    __tablename__ = 'transaction_items'
     id = db.Column(db.Integer, primary_key=True)
 
 
 class Transaction(db.Model):
     """Transaction model"""
-    id = db.Column(db.Integer, primary_key=True)
+    __tablename__ = 'transactions'
     
+    id = db.Column(db.Integer, primary_key=True)
+    description = db.Column(db.String(200), nullable=True)
+    duration = db.Column(db.DateTime, nullable=True)
+    start = db.Column(db.DateTime, nullable=True)
+    end = db.Column(db.DateTime, nullable=True)
+    nb_of_person = db.Column(db.Integer, nullable=False, default=0)
+    additional_info = db.Column(db.String(200), nullable=True)
+    tables = db.Column(db.Integer, nullable=True)
+    category = db.Column(db.String(50), nullable=True)
+    price = db.Column(db.Float, nullable=False, default=0)
+    tax = db.Column(db.Float, nullable=True)
+    menu_item = db.Column(db.String(50), nullable=True)
+    created_at = db.Column(db.DateTime, nullable=False,
+                           default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, nullable=False,
+                           default=datetime.utcnow,
+                           onupdate=datetime.utcnow)
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'),
+                              nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+
 
 class ShipmentMethod(db.Model):
     """Shipment method model"""
+    __tablename__ = 'shipment_methods'
     id = db.Column(db.Integer, primary_key=True)
 
 
 class Shipment(db.Model):
     """Shipment model"""
+    __tablename__ = 'shipments'
     id = db.Column(db.Integer, primary_key=True)
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'))
 
 
 class Invoice(db.Model):
     """ Invoice model"""
+    __tablename__ = 'invoices'
     id = db.Column(db.Integer, primary_key=True)
 
 
 class InvoiceItem(db.Model):
     """InvoiceItem model"""
+    __tablename__ = 'invoice_items'
     id = db.Column(db.Integer, primary_key=True)
 
 
 class Information(db.Model):
     """information model"""
+    __tablename__ = 'information'
     id = db.Column(db.Integer, primary_key=True)
 
 
 class Review(db.Model):
     """Review model"""
+    __tablename__ = 'reviews'
     id = db.Column(db.Integer, primary_key=True)
 
 
 class ReviewItem(db.Model):
     """ReviewItem model"""
+    __tablename__ = 'review_items'
     id = db.Column(db.Integer, primary_key=True)
 
 
 class Event(db.Model):
     """Event model"""
+    __tablename__ = 'events'
     id = db.Column(db.Integer, primary_key=True)
 
 
 class EventItem(db.Model):
     """EventItem model"""
+    __tablename__ = 'event_items'
     id = db.Column(db.Integer, primary_key=True)
     event = db.Column(db.String(50), default="", nullable=True)

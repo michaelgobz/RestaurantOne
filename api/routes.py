@@ -23,15 +23,17 @@ blacklist = set()
 @api.route('/')
 def home():
     return jsonify({
-        "message": "welcome to the Our Platform",
+        "message": "welcome to the Restaurant One",
         "company": "RestaurantOne",
-        "location": "Kampala",
+        "location": "Africa",
         "year": 2023,
         "month": "March",
         "Country": "Uganda",
         "Project": "Alx-webstack project",
         "supervisor": "Alx-SE Mentors",
-        })
+        "api-prefix": "api/v1"
+    })
+
 
 # ------------------------------------- AUTHENTICATION ------------------------------------- #
 
@@ -384,7 +386,7 @@ def update_restaurant(user_id, restaurant_id):
     # check if user is admin
     if (user.role != 'admin' or user.role != 'manager'):
         abort(403)
-        
+
     # get the restaurant from the DB
     restaurant = db.get_session().query(Restaurant).get_or_404(restaurant_id)
 

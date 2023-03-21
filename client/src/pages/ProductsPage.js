@@ -12,6 +12,8 @@ import ProductCartPopover from '../sections/products/ProductCartPopover';
 // ----------------------------------------------------------------------
 
 export default function ProductsPage() {
+
+  sessionStorage.setItem('signup', 'true')
   const [openFilter, setOpenFilter] = useState(false);
 
   const handleOpenFilter = () => {
