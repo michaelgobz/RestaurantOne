@@ -20,7 +20,7 @@
 name: "Deploy the Flask Api"
 
 env:
-  AZURE_WEBAPP_NAME: restuarant-one-api  # set this to the name of your Azure Web App
+  AZURE_WEBAPP_NAME: api-restaurant-one  # set this to the name of your Azure Web App
   PYTHON_VERSION: '3.9'              # set this to the Python version to use
 
 on:
