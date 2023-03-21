@@ -2,9 +2,10 @@ from re import A
 from datetime import datetime
 
 import bcrypt
-from flask import (Blueprint, abort, jsonify, redirect, request, session,
+from flask import (Blueprint, abort, jsonify, redirect, request,
                    url_for)
-from flask_login import current_user, login_required
+from flask_jwt_extended import (create_access_token, get_jwt_identity,
+                                jwt_required, get_jwt)
 from sqlalchemy.exc import IntegrityError
 
 # models
@@ -15,6 +16,7 @@ from app import db
 # use blueprint to create a new routes
 api = Blueprint('api', __name__, url_prefix='/api/v1/')
 
+blacklist = set()
 
 # initial route
 
@@ -54,61 +56,69 @@ def signup():
     try:
         db.get_session().add(new_user)
         db.get_session().commit()
-        return redirect(url_for('login'))
+        return jsonify({'User created successfully'}), 201
     except IntegrityError:
         db.get_session().rollback()
         return jsonify({'error': 'Email already registered'})
 
 
-@api.route('/auth/login', methods=['GET', 'POST'])
+@api.route('/auth/login', methods=['POST'])
 def login():
     # get user info from request
     email = request.json.get('email')
     password = request.json.get('password')
 
     # query the user email and password
-
     user = db.get_session().query(User).filter_by(email=email).first()
 
-    if user and bcrypt.checkpw(password, user.password.encode('utf-8')):
-        session['user_id'] = user.id
-        return redirect(url_for('home'))
+    if user and bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
+        # generate a JWT token with user ID as the identity
+        access_token = create_access_token(identity=user.id)
+
+        # send the token back to the client
+        return jsonify(access_token=access_token)
     else:
-        return jsonify({'error': 'Incorrect email or password'})
+        return jsonify({'error': 'Incorrect email or password'}), 401
 
 
-@api.route('/auth/logout', methods=['POST'], strict_slashes=False)
+@api.route('/auth/logout', methods=['POST'])
+@jwt_required()
 def logout():
-    # deletes the user session
-    session.pop('user_id', None)
-    return redirect(url_for('login'))
+    # Blacklist the current access token so that it can no longer be used
+    jti = get_jwt()['jti']
+    blacklist.add(jti)
+    
+    # Return a response indicating success
+    return jsonify({'message': 'Successfully logged out'}), 200
+
 
 
 # ------------------------------------- USER PROFILE ------------------------------------- #
 
-@login_required
+# get profile
+@jwt_required()
 @api.route('/me/account/profile/<int:user_id>', methods=['GET'], strict_slashes=False)
 def profile(user_id):
+    # access the identity of the current user
+    current_user = get_jwt_identity()
+    # check if the user ID from the JWT token matches the requested user ID
+    if current_user != user_id:
+        return abort(401)
     # get the user profile information form DB
-    profile = db.get_session().query(User).get_or_404(user_id)
-    if profile.user != current_user:
-        abort(403)
+    profile = db.get_session().query(User).get_or_404(current_user)
+    if not profile:
+        return jsonify({'error': 'No profile found'}), 404
+     # return a list of user objects as a JSON response
+    return jsonify([element.serialize() for element in profile]), 200
 
-    # return those data to the user
-    return jsonify({
-        "email": profile.email,
-        "first_name": profile.first_name,
-        "last_name": profile.last_name,
-        "addresses": profile.addresses})
-
-
-@login_required
+# update profile
+@jwt_required()
 @api.route('/me/account/<int:user_id>/update_profile', methods=['PUT'], strict_slashes=False)
-def update_profile(user_id):
+def update_profile():
+    # access the identity of the current user
+    current_user = get_jwt_identity()
     # get the user profile information from the DB
-    profile = db.get_session().query(User).get_or_404(user_id)
-    if profile.user != current_user:
-        abort(403)
+    profile = db.get_session().query(User).get_or_404(current_user)
 
     # Update profile
     data = request.get_json()
@@ -132,59 +142,78 @@ def update_profile(user_id):
 
 # ------------------------------------- ADDRESS ------------------------------------- #
 
-@login_required
 @api.route('/account/<int:user_id>/address/new', methods=['POST'], strict_slashes=False)
+@jwt_required()
 def add_address(user_id):
-    # get the user address from the DB
-    address = db.get_session().query(Address).get_or_404(user_id)
-    if address.user != current_user:
-        abort(403)
-
+    # access the identity of the current user
+    current_user = get_jwt_identity()
+    # check if the user ID from the JWT token matches the requested user ID
+    if current_user != user_id:
+        return abort(401)
     # get adddress info from request
     data = request.get_json()
 
+    # create a new address object and add it to the database
     new_address = Address(address_one=data.get('address_one'),
                           address_two=data.get('address_two'),
                           phone_number=data.get('phone_number'),
                           city=data.get('city'),
                           city_area=data.get('city_area'),
                           country=data.get('country'),
-                          country_area=data.get('country_area')
-                          )
+                          country_area=data.get('country_area'),
+                          user_id=current_user)
+    db.session.add(new_address)
+    db.session.commit()
 
-    db.get_session().add(new_address)
-    db.get_session().commit()
-    return jsonify({'Address added successfully'})
+    # return a success response
+    return jsonify({'message': 'Address added successfully'}), 200
 
+# get addresses
+@api.route('/account/<int:user_id>/addresses', methods=['GET'], strict_slashes=False)
+@jwt_required()
+def get_addresses(user_id):
+    # access the identity of the current user
+    current_user = get_jwt_identity()
+    # check if the user ID from the JWT token matches the requested user ID
+    if current_user != user_id:
+        return abort(401)
+    # retrieve all addresses for the user from the database
+    addresses = db.get_session().query(Address).filter_by(user_id=current_user).all()
+    # return a list of address objects as a JSON response
+    return jsonify([address.serialize() for address in addresses]), 200
 
-@login_required
-@api.route('/account/<int:user_id>/address/', methods=['GET'])
-def address(user_id):
-    # get the user address from the DB
-    address = db.get_session().query(Address).get_or_404(user_id)
-    if address.user != current_user:
-        abort(403)
+# get an address
+@api.route('/account/<int:user_id>/address/<int:address_id>', methods=['GET'], strict_slashes=False)
+@jwt_required()
+def get_address(user_id, address_id):
+    # access the identity of the current user
+    current_user = get_jwt_identity()
+    # check if the user ID from the JWT token matches the requested user ID
+    if current_user != user_id:
+        return abort(401)
+    # retrieve the specific address for the user from the database
+    address = db.get_session().query(Address).filter_by(id=address_id, user_id=current_user).first()
+    if not address:
+        return jsonify({'error': 'Address not found'}), 404
+    # return the address object as a JSON response
+    return jsonify([element.serialize() for element in address]), 200
 
-    # Return them to the user
-    return jsonify({
-        "address_one": address.address_one,
-        "address_two": address.address_two,
-        "phone_number": address.phone_number,
-        "city": address.city,
-        "city_area": address.city_area,
-        "country": address.country,
-        "country_area": address.country_area})
+# update address
+@api.route('/account/<int:user_id>/address/<int:address_id>',
+           methods=['PUT'], strict_slashes=False)
+@jwt_required()
+def update_address(user_id, address_id):
+    # access the identity of the current user
+    current_user = get_jwt_identity()
+    # check if the user ID from the JWT token matches the requested user ID
+    if current_user != user_id:
+        return abort(401)
+    # retrieve the address to update from the database
+    address = db.get_session().query(Address).filter_by(id=address_id, user_id=current_user).first()
+    if not address:
+        return jsonify({'error': 'No address found'}), 404
 
-
-@login_required
-@api.route('/account/<int:user_id>/address/update', methods=['GET', 'POST'])
-def update_address(user_id):
-    # get the user address informations from the DB
-    address = db.get_session().query(Address).get_or_404(user_id)
-    if address.user != current_user:
-        abort(403)
-
-    # Update address
+    # Update the address
     data = request.get_json()
 
     if 'address_one' in data:
@@ -204,16 +233,22 @@ def update_address(user_id):
 
     # Commit changes to DB
     db.get_session.commit()
-    return jsonify({'Address updated successfully'})
+    return jsonify({'Address updated successfully'}), 200
 
-
-@login_required
-@api.route('/account/<int:user_id>/address/delete', methods=['POST'])
-def delete_address(user_id):
-    # get the user address informations from the DB
-    address = db.get_session().query(Address).get_or_404(user_id)
-    if address.user != current_user:
-        abort(403)
+# delete address
+@api.route('/account/<int:user_id>/address/<int:address_id>/delete',
+           methods=['DELETE'], strict_slashes=False)
+@jwt_required()
+def delete_address(user_id, address_id):
+    # access the identity of the current user
+    current_user = get_jwt_identity()
+    # check if the user ID from the JWT token matches the requested user ID
+    if current_user != user_id:
+        return abort(401)
+    # retrieve the address to update from the database
+    address = db.get_session.query(Address).filter_by(id=address_id, user_id=current_user).first()
+    if not address:
+        return jsonify({'error': 'Address not found'}), 404
 
     # delete the address data in the db
     db.get_session().delete(address)
@@ -224,11 +259,19 @@ def delete_address(user_id):
 # ------------------------------------- RESTAURANT ------------------------------------- #
 
 # Create restaurant
-@login_required
-@api.route('/account/<int:user_id>/restaurant', methods=['POST'])
-def add_restaurant():
+@api.route('/account/<int:user_id>/restaurant/new',
+           methods=['POST'], strict_slashes=False)
+@jwt_required()
+def add_restaurant(user_id):
+    # access the identity of the current user
+    current_user = get_jwt_identity()
+    # check if the user ID from the JWT token matches the requested user ID
+    if current_user != user_id:
+        return abort(401)
+    # get user from the DB
+    user = db.get_session().query(User).get_or_404(current_user)
     # check if user is admin
-    if current_user.role != 'admin':
+    if user.role != 'admin':
         abort(403)
     # Get restaurant info from request
     data = request.get_json()
@@ -268,15 +311,20 @@ def add_restaurant():
     db.get_session().commit()
 
     # Return a JSON response with the ID of the newly created restaurant
-    return jsonify({'message': 'Restaurant created successfully', 'id': restaurant.id})
+    return jsonify({'message': 'Restaurant created successfully'}), 201
 
 
 # Read restaurant
-@login_required
-@api.route('/dashboard/restaurant/<int:restaurant_id>', methods=['GET'])
-def restaurant(restaurant_id):
+@api.route('/dashboard/restaurant/<int:restaurant_id>',
+           methods=['GET'], strict_slashes=False)
+def get_restaurant(restaurant_id):
+    # access the identity of the current user
+    current_user = get_jwt_identity()
+    # get user from the DB
+    user = db.get_session().query(User).get_or_404(current_user)
+
     # check whether the user is admin, manager or simple user
-    if current_user.role == 'admin' or current_user.role == 'manager':
+    if user.role == 'admin' or user.role == 'manager':
         # get the restaurant from the DB
         restaurant = db.get_session().query(Restaurant).get_or_404(restaurant_id)
         # get all the information for the restaurant
@@ -304,6 +352,7 @@ def restaurant(restaurant_id):
             "created_at": restaurant.created_at,
             "updated_at": restaurant.updated_at
         })
+    
     else:
         # get the restaurant from the DB
         restaurant = db.get_session().query(Restaurant).get_or_404(restaurant_id)
@@ -321,11 +370,19 @@ def restaurant(restaurant_id):
 
 
 # Update restaurant
-@login_required
-@api.route('/account/<int:user_id>/restaurant/<int:restaurant_id>/update', methods=['PUT'])
-def update_restaurant(restaurant_id):
+@api.route('/account/<int:user_id>/restaurant/<int:restaurant_id>/update',
+           methods=['PUT'], strict_slashes=False)
+@jwt_required()
+def update_restaurant(user_id, restaurant_id):
+    # access the identity of the current user
+    current_user = get_jwt_identity()
+    # check if the user ID from the JWT token matches the requested user ID
+    if current_user != user_id:
+        return abort(401)
+    # get user from the DB
+    user = db.get_session().query(User).get_or_404(current_user)
     # check if user is admin
-    if current_user.role != 'admin' or current_user.role != 'manager':
+    if (user.role != 'admin' or user.role != 'manager'):
         abort(403)
         
     # get the restaurant from the DB
@@ -358,11 +415,21 @@ def update_restaurant(restaurant_id):
     return jsonify({'message': 'Restaurant updated successfully'}), 200
 
 
-@login_required
-@api.route('/dashboard/restaurant/<int:restaurant_id>/delete', methods=['DELETE'])
-def delete_restaurant(restaurant_id):
-    # check if user is restaurant manager
-    if current_user.role != 'admin':
+# delete a restaurant
+@api.route('/dashboard/<int:user_id>/restaurant/<int:restaurant_id>/delete',
+           methods=['DELETE'], strict_slashes=False)
+@jwt_required()
+def delete_restaurant(user_id, restaurant_id):
+    # access the identity of the current user
+    current_user = get_jwt_identity()
+    # check if the user ID from the JWT token matches the requested user ID
+    if current_user != user_id:
+        return abort(401)
+    # get user from the DB
+    user = db.get_session().query(User).get_or_404(current_user)
+
+    # check whether the user is admin, manager or simple user
+    if user.role == 'admin':
         abort(403)
 
     # get the restaurant from the DB
@@ -375,16 +442,166 @@ def delete_restaurant(restaurant_id):
     return jsonify({'message': 'Restaurant deleted successfully'}), 200
 
 
+# ------------------------------------- MENU ------------------------------------- #
+
+# Create Menu
+@api.route('/account/<int:user_id>/restaurant/<int:restaurant_id>/menu/new',
+           methods=['POST'], strict_slashes=False)
+@jwt_required()
+def add_menu(user_id, restaurant_id):
+    # access the identity of the current user
+    current_user = get_jwt_identity()
+    # check if the user ID from the JWT token matches the requested user ID
+    if current_user != user_id:
+        return abort(401)
+    # get user from the DB
+    user = db.get_session().query(User).get_or_404(current_user)
+    # check if user is admin
+    if user.role != 'admin' or user.role != 'manager':
+        abort(403)
+
+    # Retrieve the restaurant by id
+    restaurant = db.get_session().query(Restaurant).filter_by(id=restaurant_id).first()
+    if not restaurant:
+        return jsonify({'error': 'No restaurant found'}), 404
+    
+    # Get menu info from request
+    data = request.get_json()
+
+    # Create a new menu object
+    menu = Menu(
+        name=data.get('name'),
+        description=data.get('description'),
+        category=data.get('category'),
+        items=data.get('items'),
+        created_at=datetime.utcnow(),
+        restaurant_id=restaurant_id
+    )
+
+    # Add the new menu object to the session and commit
+    db.get_session().add(menu)
+    db.get_session().commit()
+
+    # Return a JSON response
+    return jsonify({'message': 'Menu created successfully'}), 200
+
+# get menus
+@api.route('/dashboard/menu/', methods=['GET'], strict_slashes=False)
+def get_menus():
+    # retrieve all menus from the database
+    menus = db.get_session().query(Menu).all()
+    # return a list of menu objects as a JSON response
+    return jsonify([menu.serialize() for menu in menus]), 200
+
+# get a menu
+@api.route('/dashboard/menu/<int:menu_id>', methods=['GET'], strict_slashes=False)
+def get_menu(menu_id):
+    # retrieve the specific menu for the user from the database
+    menu = db.get_session().query(Menu).filter_by(id=menu_id).first()
+    if not menu:
+        return jsonify({'error': 'No menu found'}), 404
+    # return a list of menu object as a JSON response
+    return jsonify([element.serialize() for element in menu]), 200
+
+# Update menu
+
+@api.route('/account/<int:user_id>/restaurant/<int:restaurant_id>/menu/<int:menu_id>/update',
+           methods=['PUT'], strict_slashes=False)
+@jwt_required()
+def update_menu(user_id, restaurant_id, menu_id):
+    # access the identity of the current user
+    current_user = get_jwt_identity()
+    # check if the user ID from the JWT token matches the requested user ID
+    if current_user != user_id:
+        return abort(401)
+    # get user from the DB
+    user = db.get_session().query(User).get_or_404(current_user)
+    # check if user is admin
+    if user.role != 'admin' or user.role != 'manager':
+        abort(403)
+
+    # Retrieve the restaurant by id
+    restaurant = db.get_session().query(Restaurant).filter_by(id=restaurant_id).first()
+    if not restaurant:
+        return jsonify({'error': 'Restaurant not found'}), 404
+    
+    # Get the menu to update
+    menu = db.get_session().query(Menu).get_or_404(menu_id)
+
+    # Get updated menu info from request
+    data = request.get_json()
+
+    # Update the menu object
+    if 'name' in data:
+        menu.name = data['name']
+    if 'description' in data:
+        menu.description = data['description']
+    if 'category' in data:
+        menu.category = data['category']
+    if 'items' in data:
+        menu.items = data['items']
+
+    # Commit changes to DB
+
+    db.get_session().add(menu)
+    db.get_session().commit()
+
+    # Return a JSON response
+    return jsonify({'message': 'Menu updated successfully'}), 200
+
+# Delete Menu
+@api.route('/account/<int:user_id>/restaurant/<int:restaurant_id>/menu/<int:menu_id>/delete',
+           methods=['DELETE'], strict_slashes=False)
+@jwt_required()
+def delete_menu(user_id, restaurant_id, menu_id):
+    # access the identity of the current user
+    current_user = get_jwt_identity()
+    # check if the user ID from the JWT token matches the requested user ID
+    if current_user != user_id:
+        return abort(401)
+    # get user from the DB
+    user = db.get_session().query(User).get_or_404(current_user)
+    # check if user is admin
+    if user.role != 'admin' or user.role != 'manager':
+        abort(403)
+
+    # Retrieve the restaurant by id
+    restaurant = db.get_session().query(Restaurant).filter_by(id=restaurant_id).first()
+    if not restaurant:
+        return jsonify({'error': 'Restaurant not found'}), 404
+    # get menu from the DB
+    menu = db.get_session().query(Menu).get_or_404(menu_id)
+
+    # delete the menu
+    db.get_session().delete(menu)
+    db.get_session().commit()
+
+    return jsonify({'message': 'Menu deleted successfully'}), 200
+
+
 # ------------------------------------- MENU ITEM ------------------------------------- #
 
 # Create menu item
-@login_required
-@api.route('/account/<int:user_id>/menu_item/new', methods=['POST'], strict_slashes=False)
-def add_menu_item():
-    # check if user is restaurant manager
-    if current_user.role != 'admin' or current_user.role != 'manager':
+@api.route('/account/<int:user_id>/menu/<int:menu_id>/menu_item/new',
+           methods=['POST'], strict_slashes=False)
+@jwt_required()
+def add_menu_item(user_id, menu_id):
+    # access the identity of the current user
+    current_user = get_jwt_identity()
+    # check if the user ID from the JWT token matches the requested user ID
+    if current_user != user_id:
+        return abort(401)
+    # get user from the DB
+    user = db.get_session().query(User).get_or_404(current_user)
+    # check if user is admin
+    if user.role != 'admin' or user.role != 'manager':
         abort(403)
-    # get menu item info from request
+
+    # Retrieve the menu by id
+    menu = db.get_session().query(Menu).filter_by(id=menu_id).first()
+    if not menu:
+        return jsonify({'error': 'Menu not found!'}), 404
+    # Get menu item info from request
     data = request.get_json()
 
     menu_item = MenuItem(
@@ -396,6 +613,7 @@ def add_menu_item():
         is_available=data.get('is_available'),
         is_delivrable=data.get('is_delivrable'),
         duration_of_preparation=data.get('duration_of_preparation'),
+        menu_id=menu_id,
         created_at=datetime.utcnow(),
         updated_at=datetime.utcnow()
     )
@@ -405,38 +623,43 @@ def add_menu_item():
     db.get_session().commit()
 
     # Return a JSON response
-    return jsonify({'Menu item created successfully'})
+    return jsonify({'Menu item created successfully'}), 200
 
 
 # Read menu item
-@login_required
-@api.route('/dashboard/menu_item/<int:item_id>', methods=['GET'])
+@api.route('/dashboard/menu_item/<int:item_id>',
+           methods=['GET'], strict_slashes=False)
 def menu_item(item_id):
     # get the menu_item from the DB
     menu_item = db.get_session().query(MenuItem).get_or_404(item_id)
 
-    # Return them to the user
-    return jsonify({
-        "name": menu_item.name,
-        "description": menu_item.description,
-        "category": menu_item.category,
-        "price": menu_item.price,
-        "foods": menu_item.foods,
-        "is_available": menu_item.is_available,
-        "is_deliverable": menu_item.is_deliverable,
-        "duration_of_preparation": menu_item.duration_of_preparation,
-    })
+    # return a list of menu object as a JSON response
+    return jsonify([element.serialize() for element in menu_item]), 200
 
 
 # Update menu item
-@login_required
-@api.route('/account/<int:user_id>/dashboard/menu_item/<int:id>/update', methods=['PUT'])
-def update_menu_item(id: int):
-    # check if user is admin or restaurant manager
-    if current_user.role != 'admin' or current_user.role != 'manager':
+@api.route('/account/<int:user_id>/menu/<int:menu_id>/menu_item<int:item_id>/update',
+           methods=['PUT'], strict_slashes=False)
+@jwt_required()
+def update_menu_item(user_id, menu_id, item_id):
+    # access the identity of the current user
+    current_user = get_jwt_identity()
+    # check if the user ID from the JWT token matches the requested user ID
+    if current_user != user_id:
+        return abort(401)
+    # get user from the DB
+    user = db.get_session().query(User).get_or_404(current_user)
+    # check if user is admin
+    if user.role != 'admin' or user.role != 'manager':
         abort(403)
+
+    # Retrieve the menu by id
+    menu = db.get_session().query(Menu).filter_by(id=menu_id).first()
+    if not menu:
+        return jsonify({'error': 'Menu not found'}), 404
+    
     # get the menu_item informations from the DB
-    menu_item = db.get_session().query(MenuItem).get_or_404(id)
+    menu_item = db.get_session().query(MenuItem).get_or_404(item_id)
 
     # get the menu_item info from the user and update them in the db
     data = request.get_json()
@@ -467,13 +690,24 @@ def update_menu_item(id: int):
 
 
 # Delete menu item
-@login_required
-@api.route('/account/<int:user_id>/dashboard/menu_item/<int:item_id>/delete', methods=['DELETE'])
-def delete_menu_item(item_id):
-    # check if user is admin or restaurant manager
-    if current_user.role != 'admin' or current_user.role != 'manager':
+@api.route('/account/<int:user_id>/menu/<int:menu_id>/menu_item<int:item_id>/delete',
+           methods=['DELETE'], strict_slashes=False)
+@jwt_required()
+def delete_menu_item(user_id, menu_id, item_id):
+    # access the identity of the current user
+    current_user = get_jwt_identity()
+    # check if the user ID from the JWT token matches the requested user ID
+    if current_user != user_id:
+        return abort(401)
+    # get user from the DB
+    user = db.get_session().query(User).get_or_404(current_user)
+    # check if user is admin
+    if user.role != 'admin' or user.role != 'manager':
         abort(403)
-
+    # Retrieve the menu by id
+    menu = db.get_session().query(Menu).filter_by(id=menu_id).first()
+    if not menu:
+        return jsonify({'error': 'Menu not found'}), 404
     # get the menu item from the DB
     menu_item = db.get_session().query(MenuItem).get_or_404(item_id)
 
@@ -484,123 +718,26 @@ def delete_menu_item(item_id):
     return jsonify({'message': 'Menu item deleted successfully'}), 200
 
 
-# ------------------------------------- MENU ------------------------------------- #
-
-# Create Menu
-@login_required
-@api.route('/account/<int:user_id>/menu/new', methods=['POST'], strict_slashes=False)
-def add_menu():
-    # check if user is restaurant manager
-    if current_user.role != 'admin' or current_user.role != 'manager':
-        abort(403)
-    # Get menu info from request
-    data = request.get_json()
-
-    # Retrieve the restaurant by id
-    restaurant_id = data.get('restaurant_id')
-    restaurant = db.get_session().query(Restaurant).get_or_404(restaurant_id)
-
-    # Create a new menu object
-    menu = Menu(
-        name=data.get('name'),
-        description=data.get('description'),
-        category=data.get('category'),
-        items=data.get('items'),
-        created_at=datetime.utcnow(),
-        restaurant=restaurant
-    )
-
-    # Add the new menu object to the session and commit
-    db.get_session().add(menu)
-    db.get_session().commit()
-
-    # Return a JSON response
-    return jsonify({'message': 'Menu created successfully'})
-
-# Read Menu 
-@login_required
-@api.route('/dashboard/menu/<int:menu_id>')
-def menu(menu_id):
-    menu = db.get_session().query(Menu).get_or_404(menu_id)
-    menu_items = [{'id': item.id, 'name': item.name, 'description': item.description, 'price': item.price} for item in
-                  menu.items]
-
-    return jsonify({
-        'name': menu.name,
-        'description': menu.description,
-        'category': menu.category,
-        'menu_items': menu_items,
-        'created_at': datetime.utcnow(),
-        'restaurant': menu.restaurant
-    })
-
-
-# Update menu
-
-@login_required
-@api.route('/account/<int:user_id>/dashboard/menu/<int:menu_id>/update', methods=['PUT'])
-def update_menu(menu_id):
-    # check if user is restaurant manager
-    if current_user.role != 'admin' or current_user.role != 'manager':
-        abort(403)
-    # Get the menu to update
-    menu = db.get_session().query(Menu).get_or_404(menu_id)
-
-    # Get updated menu info from request
-    data = request.get_json()
-
-    # Update the menu object
-    if 'name' in data:
-        menu.name = data['name']
-    if 'description' in data:
-        menu.description = data['description']
-    if 'category' in data:
-        menu.category = data['category']
-    if 'items' in data:
-        menu.items = data['items']
-
-    # Commit changes to DB
-
-    db.get_session().add(menu)
-    db.get_session().commit()
-
-    # Return a JSON response
-    return jsonify({'message': 'Menu updated successfully'}), 200
-
-
-# Delete Menu
-
-@login_required
-@api.route('/account/<int:user_id>/menu/<int:menu_id>/delete', methods=['DELETE'])
-def delete_menu(menu_id):
-    # check if the user is admin or restaurant manager
-    if current_user.role != 'admin' or current_user.role != 'manager':
-        abort(403)
-    # get menu from the DB
-    menu = db.get_session().query(Menu).get_or_404(menu_id)
-
-    # delete the menu
-    db.get_session().delete(menu)
-    db.get_session().commit()
-
-    return jsonify({'message': 'Menu deleted successfully'})
-
 
 # ------------------------------------- ORDER ------------------------------------- #
 
 
-@login_required
-@api.route('/dashboard/<int:user_id>/orders/add', methods=['POST'])
-# @roles_required('customer')
-def add_order():
+# add an order
+@api.route('/dashboard/<int:user_id>/restaurant/<int:restaurant_id>/orders/add', methods=['POST'], strict_slashes=False)
+@jwt_required()
+def add_order(user_id, restaurant_id):
+    # access the identity of the current user
+    current_user = get_jwt_identity()
+    # check if the user ID from the JWT token matches the requested user ID
+    if current_user != user_id:
+        return abort(401)
     # Parse the data from the request
     data = request.get_json()
 
     # Create a new Order object
     order = Order(
-        user_id=current_user.id,
         restaurant=data.get('restaurant'),
-        items=data.get('items'),
+        menus=data.get('menu'),
         total_price=data.get('total_price'),
         address=data.get('address'),
         shipment_method=data.get('shipment_method'),
@@ -608,7 +745,9 @@ def add_order():
         status=data.get('status'),
         notes=data.get('notes'),
         created_at=datetime.utcnow(),
-        updated_at=datetime.utcnow()
+        updated_at=datetime.utcnow(),
+        user_id=current_user,
+        restaurant_id=restaurant_id
     )
 
     # Add the order to the DB
@@ -618,48 +757,49 @@ def add_order():
     # Return a success message to the user
     return jsonify({'message': 'Order added successfully!'}), 201
 
+# get orders
+@api.route('/account/<int:user_id>/orders', methods=['GET'], strict_slashes=False)
+@jwt_required()
+def get_orders(user_id):
+    # access the identity of the current user
+    current_user = get_jwt_identity()
+    # check if the user ID from the JWT token matches the requested user ID
+    if current_user != user_id:
+        return abort(401)
+    # retrieve all orders for the user from the database
+    orders = db.get_session().query(Order).filter_by(user_id=current_user).all()
+    # return a list of order objects as a JSON response
+    return jsonify([order.serialize() for order in orders]), 200
 
-# Read order
-@login_required
-@api.route('/dashboard/<int:user_id>/order/<int:order_id>', methods=['GET'])
-def order(user_id, order_id):
-    # get the order manager from the DB
-    order_manager = db.get_session().query(Order).get_or_404(user_id)
-    if order_manager.user != current_user:
-        abort(403)
-    # Get the order from the DB
-    order = db.get_session().query(Order).filter(Order.id == order_id).first()
-
+# get an order
+@api.route('/account/<int:user_id>/order/<int:order_id>', methods=['GET'], strict_slashes=False)
+@jwt_required()
+def get_order(user_id, order_id):
+    # access the identity of the current user
+    current_user = get_jwt_identity()
+    # check if the user ID from the JWT token matches the requested user ID
+    if current_user != user_id:
+        return abort(401)
+    # retrieve the specific order for the user from the database
+    order = db.get_session().query(Order).filter_by(id=order_id, user_id=current_user).first()
     if not order:
-        return jsonify({'error': 'Order not found'}), 404
-    
-    # get the restaurant where the order has been sent
-    restaurant = db.get_session().query(Restaurant).filter(Restaurant.id == order.restaurant_id).first()
-
-    # Return the order to the user
-    return jsonify({
-        "id": order.id,
-        "restaurant": restaurant.name,
-        "user_id": order.user_id,
-        "items": order.items,
-        "total_price": order.total_price,
-        "address": order.address,
-        "shipment_method": order.shipment_method,
-        "payment_method": order.payment_method,
-        "status": order.status,
-        "notes": order.notes,
-        "created_at": order.created_at,
-        "updated_at": order.updated_at
-    })
-
+        return jsonify({'error': 'Order not found!'}), 404
+    # return the order object as a JSON response
+    return jsonify([element.serialize() for element in order]), 200
 
 # Update order
-@login_required
-
-@api.route('/dashboard/<int:user_id>/order/<int:order_id>/update', methods=['PUT'])
-def update_order(order_id):
-    # Get the order from the DB
-    order = db.get_session().query(Order).get_or_404(order_id)
+@api.route('/dashboard/<int:user_id>/order/<int:order_id>/update', methods=['PUT'], strict_slashes=False)
+@jwt_required()
+def update_order(user_id, order_id):
+    # access the identity of the current user
+    current_user = get_jwt_identity()
+    # check if the user ID from the JWT token matches the requested user ID
+    if current_user != user_id:
+        return abort(401)
+    # retrieve the order to update from the database
+    order = db.get_session().query(Order).filter_by(id=order_id, user_id=current_user).first()
+    if not order:
+        return jsonify({'error': 'No order found'}), 404
 
     # Parse the data from the request
     data = request.get_json()
@@ -689,14 +829,17 @@ def update_order(order_id):
 
 
 # Delete order
-@login_required
-@api.route('/dashboard/<int:user_id>/order/<int:order_id>/delete', methods=['DELETE'])
-def delete_order(order_id):
+@api.route('/dashboard/<int:user_id>/order/<int:order_id>/delete', methods=['DELETE'], strict_slashes=False)
+@jwt_required()
+def delete_order(user_id, order_id):
+    # access the identity of the current user
+    current_user = get_jwt_identity()
+    # check if the user ID from the JWT token matches the requested user ID
+    if current_user != user_id:
+        return abort(401)
     # Get the order from the DB
-    order = db.get_session().query(Order).filter(Order.id == order_id).first()
-
+    order = db.get_session().query(Order).filter_by(id=order_id, user_id=current_user).first()
     if not order:
-        # If the order doesn't exist, return a 404 error
         return jsonify({'error': 'Order not found'}), 404
 
     # Remove the order from the DB
@@ -711,16 +854,21 @@ def delete_order(order_id):
 # ------------------------------------- RESERVATION ------------------------------------- #
 
 
-@login_required
-@api.route('/dashboard/<int:user_id>/reservation/add', methods=['POST'])
-# @roles_required('customer')
-def add_reservation():
+# add reservation
+@api.route('/dashboard/<int:user_id>/restaurant/<int:restaurant_id>reservation/add',
+           methods=['POST'], strict_slashes=False)
+@jwt_required()
+def add_reservation(user_id, restaurant_id):
+    # access the identity of the current user
+    current_user = get_jwt_identity()
+    # check if the user ID from the JWT token matches the requested user ID
+    if current_user != user_id:
+        return abort(401)
     # Parse the data from the request
     data = request.get_json()
 
     # Create a new reservation object
     reservation = Reservation(
-        user_id=current_user.id,
         description=data.get('description'),
         duration=data.get('duration'),
         start=data.get('start'),
@@ -731,7 +879,8 @@ def add_reservation():
         price=data.get('price'),
         tax=data.get('tax'),
         menu_item=data.get('menu_item'),
-        restaurant=data.get('restaurant'),
+        restaurant_id=restaurant_id,
+        user_id=current_user,
         created_at=datetime.utcnow(),
         updated_at=datetime.utcnow()
     )
@@ -744,45 +893,49 @@ def add_reservation():
     return jsonify({'message': 'Reservation added successfully!'}), 201
 
 
-# Read reservation
-@login_required
-@api.route('/dashboard/<int:user_id>/reservation/<int:reservation_id>', methods=['GET'])
+# get reservations
+@api.route('/account/<int:user_id>/reservations', methods=['GET'], strict_slashes=False)
+@jwt_required()
+def get_reservations(user_id):
+    # access the identity of the current user
+    current_user = get_jwt_identity()
+    # check if the user ID from the JWT token matches the requested user ID
+    if current_user != user_id:
+        return abort(401)
+    # retrieve all reservations for the user from the database
+    reservations = db.get_session().query(Reservation).filter_by(user_id=current_user).all()
+    # return a list of reservation objects as a JSON response
+    return jsonify([reservation.serialize() for reservation in reservations]), 200
 
-def reservation(reservation_id):
-    # Get the reservation from the DB
-    reservation = db.session.query(Reservation).filter(reservation.id == reservation_id).first()
-
+# get an reservation
+@api.route('/account/<int:user_id>/reservation/<int:reservation_id>', methods=['GET'], strict_slashes=False)
+@jwt_required()
+def get_reservation(user_id, reservation_id):
+    # access the identity of the current user
+    current_user = get_jwt_identity()
+    # check if the user ID from the JWT token matches the requested user ID
+    if current_user != user_id:
+        return abort(401)
+    # retrieve the specific reservation for the user from the database
+    reservation = db.get_session().query(Reservation).filter_by(id=reservation_id, user_id=current_user).first()
     if not reservation:
-        return jsonify({'error': 'Reservation not found'}), 404
-    # get the restaurant from where the reservation was made 
-    restaurant = db.get_session().query(Restaurant).filter(Restaurant.id == reservation.restaurant_id).first()
-
-    # Return the reservation to the user
-    return jsonify({
-        "id": reservation.id,
-        "restaurant": restaurant.name,
-        "user_id": reservation.user_id,
-        "description": reservation.description,
-        "duration": reservation.duration,
-        "start": reservation.start,
-        "end": reservation.end,
-        "nb_of_person": reservation.nb_of_person,
-        "tables": reservation.status,
-        "category": reservation.category,
-        "price": reservation.price,
-        "tax": reservation.tax,
-        "menu_item,": reservation.menu_item,
-        "created_at": reservation.created_at,
-        "updated_at": reservation.updated_at
-    })
-
+        return jsonify({'error': 'reservation not found!'}), 404
+    # return the reservation object as a JSON response
+    return jsonify([element.serialize() for element in reservation]), 200
 
 # Update reservation
-@login_required
-@api.route('/dashboard/<int:user_id>/reservation/<int:reservation_id>/update', methods=['PUT'])
-def update_reservation(reservation_id):
-    # Get the reservation from the DB
-    reservation = db.get_session().query(reservation).get_or_404(reservation_id)
+@api.route('/dashboard/<int:user_id>/reservation/<int:reservation_id>/update', methods=['PUT'], strict_slashes=False)
+@jwt_required()
+def update_reservation(user_id, reservation_id):
+    # access the identity of the current user
+    current_user = get_jwt_identity()
+    # check if the user ID from the JWT token matches the requested user ID
+    if current_user != user_id:
+        return abort(401)
+     # retrieve the reservation to update from the database
+    reservation = db.get_session().query(Reservation).filter_by(id=reservation_id, user_id=current_user).first()
+    if not reservation:
+        return jsonify({'error': 'No reservation found'}), 404
     # Parse the data from the request
     data = request.get_json()
 
@@ -820,13 +973,17 @@ def update_reservation(reservation_id):
 
 
 # Delete reservation
-@login_required
-@api.route('/dashboard/<int:user_id>/reservation/<int:reservation_id>/delete', methods=['DELETE'])
-def delete_reservation(reservation_id):
+@api.route('/dashboard/<int:user_id>/reservation/<int:reservation_id>/delete', methods=['DELETE'], strict_slashes=False)
+@jwt_required()
+def delete_reservation(user_id, reservation_id):
+    # access the identity of the current user
+    current_user = get_jwt_identity()
+    # check if the user ID from the JWT token matches the requested user ID
+    if current_user != user_id:
+        return abort(401)
     # Get the reservation from the DB
-    reservation = db.get_session().query(reservation).filter(reservation.id == reservation_id).first()
+    reservation = db.get_session().query(Reservation).filter_by(id=reservation_id, user_id=current_user).first()
     if not reservation:
-        # If the reservation doesn't exist, return a 404 error
         return jsonify({'error': 'Reservation not found'}), 404
 
     # Remove the reservation from the DB
@@ -835,4 +992,4 @@ def delete_reservation(reservation_id):
     db.get_session().commit()
 
     # Return a success message to the user
-    return jsonify({'message': 'Reservation deleted successfully!'})
+    return jsonify({'message': 'Reservation deleted successfully!'}), 200
