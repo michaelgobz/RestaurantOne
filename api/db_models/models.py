@@ -3,6 +3,7 @@
 from email.policy import default
 from typing import List
 from datetime import datetime
+from api.core.base import declarative_base as db
 
 
 
@@ -31,7 +32,7 @@ class User(db.Model):
 
 class Address(db.Model):
     """Addresses database model"""
-    __tablename__ = 'addresses
+    __tablename__ = 'addresses'
 
     id = db.Column(db.Integer, primary_key=True)
     address_one = db.Column(db.String(50), nullable=False)
@@ -96,8 +97,10 @@ class Menu(db.Model):
     updated_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow,
                            onupdate=datetime.utcnow)
-    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'), nullable=False)
-    items = db.relationship('MenuItem', backref='menu', cascade="all, delete-orphan")
+    restaurant_id = db.Column(db.Integer,
+                              db.ForeignKey('restaurants.id'), nullable=False)
+    items = db.relationship('MenuItem',
+                            backref='menu', cascade="all, delete-orphan")
     
 class MenuItem(db.Model):
     """menu items database model"""
@@ -162,8 +165,10 @@ class Reservation(db.Model):
     updated_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow,
                            onupdate=datetime.utcnow)
-    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    restaurant_id = db.Column(db.Integer,
+                              db.ForeignKey('restaurants.id'), nullable=False)
+    user_id = db.Column(db.Integer,
+                        db.ForeignKey('users.id'), nullable=False)
 
 class ReservationItem(db.Model):
     """Reservation Item model"""
@@ -185,12 +190,6 @@ class TransactionItem(db.Model):
 class Transaction(db.Model):
     """Transaction model"""
     id = db.Column(db.Integer, primary_key=True)
-    
-class ReservationItem(db.Model):
-    """Reservation Item model"""
-    id = Column(Integer, primary_key=True)
-    
-class Reservation(db.Model):
     """Reservation model"""
     id = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.String(200), nullable=True)
@@ -212,8 +211,7 @@ class Reservation(db.Model):
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'),
                               nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    
-class Restaurant(db.Model):
+
     """Restaurant model"""
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
