@@ -1,4 +1,5 @@
 """data models that the api uses"""
+from datetime import datetime
 from email.policy import default
 from typing import List
 from datetime import datetime
@@ -14,6 +15,7 @@ class User(db.Model):
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(255), nullable=False)
+    role = db.Column(db.String(10), nullable=False, default='customer')
     created_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, nullable=False,
@@ -201,6 +203,14 @@ class TransactionItem(db.Model):
 
 class Transaction(db.Model):
     """Transaction model"""
+    id = db.Column(db.Integer, primary_key=True)
+    
+class ReservationItem(db.Model):
+    """Reservation Item model"""
+    id = db.Column(db.Integer, primary_key=True)
+    
+class Reservation(db.Model):
+    """Reservation model"""
     id = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.String(200), nullable=True)
     duration = db.Column(db.DateTime, nullable=True)
