@@ -23,6 +23,7 @@ class User(db.Model):
                            onupdate=datetime.utcnow)
     orders = db.relationship("Order", backref="user")
     reservations = db.relationship('Reservation', backref='user')
+    reservation_id = db.Column(db.Integer, db.ForeignKey('reservations.id'))
 
     # Define many-to-many relationship with Address model
     addresses = db.relationship("Address",
@@ -144,7 +145,7 @@ class Order(db.Model):
                            default=datetime.utcnow,
                            onupdate=datetime.utcnow)
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
 
 class OrderItem(db.Model):
@@ -177,6 +178,7 @@ class Reservation(db.Model):
                               db.ForeignKey('restaurants.id'), nullable=False)
     user_id = db.Column(db.Integer,
                         db.ForeignKey('users.id'), nullable=False)
+
 
 
 class ReservationItem(db.Model):
