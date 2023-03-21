@@ -1,11 +1,10 @@
-from re import A
 from datetime import datetime
+from re import A
 
 import bcrypt
-from flask import (Blueprint, abort, jsonify, redirect, request,
-                   url_for)
-from flask_jwt_extended import (create_access_token, get_jwt_identity,
-                                jwt_required, get_jwt)
+from flask import Blueprint, abort, jsonify, redirect, request, url_for
+from flask_jwt_extended import (create_access_token, get_jwt, get_jwt_identity,
+                                jwt_required)
 from sqlalchemy.exc import IntegrityError
 
 # models
