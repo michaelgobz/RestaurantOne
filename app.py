@@ -1,9 +1,9 @@
 """application entry point"""
 
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
 from os import getenv
+
 from dotenv import load_dotenv
+from flask import Flask
 
 # load environment variables from .env file
 load_dotenv()
