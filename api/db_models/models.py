@@ -7,7 +7,7 @@ from api.core.base import declarative_base as db
 
 class User(db.Model):
     """Users database model"""
-    __tablename__ = 'users'
+    __tablename__ = 'user'
 
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(50), nullable=False)
@@ -49,16 +49,17 @@ class Address(db.Model):
 
 class UserAddress(db.Model):
     """Association table for many-to-many relationship"""
-    __tablename__ = 'users_addresses'
+    __tablename__ = 'users_address'
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    address_id = db.Column(db.Integer, db.ForeignKey('addresses.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    address_id = db.Column(db.Integer, db.ForeignKey('address.id'))
+
 
 
 class Restaurant(db.Model):
     """Restaurants database model"""
-    __tablename__ = 'restaurants'
+    __tablename__ = 'restaurant'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
@@ -87,7 +88,7 @@ class Restaurant(db.Model):
 
 class Menu(db.Model):
     """menus database model"""
-    __tablename__ = 'menus'
+    __tablename__ = 'menu'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), unique=True, nullable=False)
@@ -106,7 +107,7 @@ class Menu(db.Model):
 
 class MenuItem(db.Model):
     """menu items database model"""
-    __tablename__ = 'menu_items'
+    __tablename__ = 'menu_item'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50), nullable=False)
@@ -122,12 +123,13 @@ class MenuItem(db.Model):
     updated_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow,
                            onupdate=datetime.utcnow)
-    menu_id = db.Column(db.Integer, db.ForeignKey('menus.id'), nullable=False)
+    menu_id = db.Column(db.Integer, db.ForeignKey('menu.id'), nullable=False)
+
 
 
 class Order(db.Model):
     """orders database model"""
-    __tablename__ = 'orders'
+    __tablename__ = 'order'
 
     id = db.Column(db.Integer, primary_key=True)
     menu = db.Column(db.String(500), nullable=False)
@@ -141,8 +143,9 @@ class Order(db.Model):
     updated_at = db.Column(db.DateTime,
                            default=datetime.utcnow,
                            onupdate=datetime.utcnow)
-    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
 
 
 class OrderItem(db.Model):
@@ -152,7 +155,7 @@ class OrderItem(db.Model):
 
 class Reservation(db.Model):
     """Reservations database model"""
-    __tablename__ = 'reservations'
+    __tablename__ = 'reservation'
 
     id = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.String(200), nullable=True)
@@ -175,7 +178,6 @@ class Reservation(db.Model):
                               db.ForeignKey('restaurants.id'), nullable=False)
     user_id = db.Column(db.Integer,
                         db.ForeignKey('users.id'), nullable=False)
-
 
 class ReservationItem(db.Model):
     """Reservation Item model"""
@@ -220,7 +222,6 @@ class Transaction(db.Model):
                               nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
-
 class ShipmentMethod(db.Model):
     """Shipment method model"""
     id = db.Column(db.Integer, primary_key=True)
@@ -230,7 +231,6 @@ class Shipment(db.Model):
     """Shipment model"""
     id = db.Column(db.Integer, primary_key=True)
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'))
-
 
 class Invoice(db.Model):
     """ Invoice model"""
@@ -253,6 +253,7 @@ class Review(db.Model):
 
 
 class ReviewItem(db.Model):
+
     """ReviewItem model"""
     id = db.Column(db.Integer, primary_key=True)
 
