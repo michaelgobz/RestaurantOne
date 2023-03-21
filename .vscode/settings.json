@@ -51,7 +51,10 @@
     "editor.defaultFormatter": "vscode.typescript-language-features"
 },
 "editor.fontSize": 18,
-"files.autoSave": "afterDelay"
+"files.autoSave": "afterDelay",
+"githubPullRequests.ignoredPullRequestBranches": [
+    "main"
+]
    
 
 }
