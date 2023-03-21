@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 flask==2.2.3
 click==8.0.3
 sqlalchemy==2.0.6
@@ -25,3 +26,5 @@ flask-redis==0.4.0
 flask-socketio==5.1.0
 promise==2.3.0
 measurement==3.2.0
+=======
+>>>>>>> 53e4ebee99f722e766ddf3c0599854681aa577e3

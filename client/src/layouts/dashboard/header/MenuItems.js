@@ -6,7 +6,7 @@ export function MenuItems() {
 
     const navigator = useNavigate();
 
-    const [value, setValue] = useState();
+    const [value , setValue] = useState();
 
     const handleChange = () => {
         setValue(value)
@@ -27,13 +27,13 @@ export function MenuItems() {
                         setValue("one")
                         navigator("customer/products")
                     }}
-                    label="New Order" />
+                    label="Order" />
                 <Tab value="two"
                     onFocus={() => {
                         setValue("two")
                         navigator("customer/reservations")
                     }}
-                    label="New Reservation" />
+                    label="Find a Spot" />
             </Tabs>
         </>
     );

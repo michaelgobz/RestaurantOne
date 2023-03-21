@@ -56,7 +56,7 @@ export default function NotificationsPopover() {
     <>
       <IconButton color={open ? 'primary' : 'default'} onClick={handleOpen} sx={{ width: 40, height: 40 }}>
         <Badge badgeContent={totalUnRead} color="error">
-          <Iconify icon="eva:bell-fill" />
+          <Iconify icon="eva:shopping-cart-fill" />
         </Badge>
       </IconButton>
 

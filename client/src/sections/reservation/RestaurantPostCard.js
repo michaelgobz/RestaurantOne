@@ -1,13 +1,15 @@
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router';
 // @mui
 import { alpha, styled } from '@mui/material/styles';
-import { Box, Link, Card, Grid, Avatar, Typography, CardContent } from '@mui/material';
+import {Box, Link, Card, Grid, Avatar, Typography, CardContent, Rating, Button , Stack} from '@mui/material';
 // utils
-import { fDate } from '../../../utils/formatTime';
-import { fShortenNumber } from '../../../utils/formatNumber';
+import { fDate } from '../../utils/formatTime';
+import { fShortenNumber } from '../../utils/formatNumber';
 //
-import SvgColor from '../../../components/svg-color';
-import Iconify from '../../../components/iconify';
+import SvgColor from '../../components/svg-color';
+import Iconify from '../../components/iconify';
+
 
 // ----------------------------------------------------------------------
 
@@ -57,9 +59,15 @@ RestaurantPostCard.propTypes = {
 };
 
 export default function RestaurantPostCard({ post, index }) {
+
+  const navigate = useNavigate()
   const { cover, title, view, comment, share, author, createdAt } = post;
   const latestPostLarge = index === 0;
   const latestPost = index === 1 || index === 2;
+
+  const HandleReservation = () => {
+    navigate('new')
+  }
 
   const POST_INFO = [
     { number: comment, icon: 'eva:message-circle-fill' },
@@ -167,6 +175,14 @@ export default function RestaurantPostCard({ post, index }) {
               </Box>
             ))}
           </StyledInfo>
+
+<Stack direction="row" alignItems="center" justifyContent="space-between" mb={2} mt={2}>
+         <Rating name="disabled" value={3} disabled  sx={{ mb: 2, mt: 2 }} />
+            <Button variant="contained" onClick={HandleReservation}
+            sx={{ mb: 2, mt: 2 }}>
+                Reserve
+          </Button>
+</Stack>
         </CardContent>
       </Card>
     </Grid>
