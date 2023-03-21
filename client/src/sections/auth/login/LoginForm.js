@@ -45,13 +45,13 @@ export default function LoginForm() {
   return (
     <>
       <Stack spacing={3}>
-        <TextField name="email" value={email} onChange={HandleChange} label="Email address" />
+        <TextField name="email" value={email} onKeyDown={HandleChange} label="Email address" />
 
         <TextField
           name="password"
           label="Password"
           value={password}
-          onChange={HandleChange}
+          onKeyDown={HandleChange}
           type={showPassword ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
