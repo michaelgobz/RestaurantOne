@@ -56,7 +56,6 @@ class UserAddress(db.Model):
     address_id = db.Column(db.Integer, db.ForeignKey('address.id'))
 
 
-
 class Restaurant(db.Model):
     """Restaurants database model"""
     __tablename__ = 'restaurant'
@@ -126,7 +125,6 @@ class MenuItem(db.Model):
     menu_id = db.Column(db.Integer, db.ForeignKey('menu.id'), nullable=False)
 
 
-
 class Order(db.Model):
     """orders database model"""
     __tablename__ = 'order'
@@ -145,7 +143,6 @@ class Order(db.Model):
                            onupdate=datetime.utcnow)
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
 
 
 class OrderItem(db.Model):
@@ -178,6 +175,7 @@ class Reservation(db.Model):
                               db.ForeignKey('restaurants.id'), nullable=False)
     user_id = db.Column(db.Integer,
                         db.ForeignKey('users.id'), nullable=False)
+
 
 class ReservationItem(db.Model):
     """Reservation Item model"""
@@ -222,6 +220,7 @@ class Transaction(db.Model):
                               nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
+
 class ShipmentMethod(db.Model):
     """Shipment method model"""
     id = db.Column(db.Integer, primary_key=True)
@@ -231,6 +230,7 @@ class Shipment(db.Model):
     """Shipment model"""
     id = db.Column(db.Integer, primary_key=True)
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'))
+
 
 class Invoice(db.Model):
     """ Invoice model"""
@@ -253,7 +253,6 @@ class Review(db.Model):
 
 
 class ReviewItem(db.Model):
-
     """ReviewItem model"""
     id = db.Column(db.Integer, primary_key=True)
 

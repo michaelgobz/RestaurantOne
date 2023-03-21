@@ -1,4 +1,3 @@
-
 from re import A
 from flask import request, session, jsonify, Blueprint, redirect, url_for, abort
 from flask_login import current_user, login_required
@@ -11,7 +10,6 @@ from app import db
 from api.db_models import Address, User, MenuItem, Menu, Order, \
     Reservation, \
     Restaurant, Shipment
-
 
 # use blueprint to create a new routes
 api = Blueprint('api', __name__, url_prefix='/api/v1/')
@@ -30,7 +28,9 @@ def home():
         "Country": "Uganda",
         "Project": "Alx-webstack project",
         "supervisor": "Alx-SE Mentors",
-        })
+    })
+
+
 # ------------------------------------- AUTHENTICATION ------------------------------------- #
 
 @api.route('/auth/signup', methods=['GET', 'POST'], strict_slashes=False)
@@ -42,14 +42,14 @@ def signup():
     # generate salt and hash the password
     salt = bcrypt.gensalt()
     password_hash = bcrypt.hashpw(password.encode('utf-8'), salt)
-    
+
     # create a new user object
     new_user = User(email=data.get('email'),
                     password=password_hash,
                     first_name=data.get('first_name'),
                     last_name=data.get('last_name'),
                     created_at=datetime.utcnow())
-    
+
     # try to add user to database
     try:
         db.get_session().add(new_user)
@@ -58,7 +58,7 @@ def signup():
     except IntegrityError:
         db.get_session().rollback()
         return jsonify({'error': 'Email already registered'})
-    
+
 
 @api.route('/auth/login', methods=['GET', 'POST'])
 def login():
@@ -83,11 +83,12 @@ def logout():
     session.pop('user_id', None)
     return redirect(url_for('login'))
 
+
 # ------------------------------------- USER PROFILE ------------------------------------- #
 
 @login_required
 @api.route('/me/account/profile/<int:user_id>', methods=['GET'], strict_slashes=False)
-def profile(user_id):
+def Profile(user_id):
     # get the user profile information form DB
     profile = db.get_session().query(User).get_or_404(user_id)
     if profile.user != current_user:
@@ -99,6 +100,7 @@ def profile(user_id):
         "first_name": profile.first_name,
         "last_name": profile.last_name,
         "addresses": profile.addresses})
+
 
 @login_required
 @api.route('/me/account/<int:user_id>/update_profile', methods=['PUT'], strict_slashes=False)
@@ -128,7 +130,7 @@ def update_profile(user_id):
     if 'addresses' in data:
         profile.addresses = data['addresses']
 
-    profile.updated_at=datetime.utcnow()
+    profile.updated_at = datetime.utcnow()
 
     # Commit changes to DB
     db.get_session().commit()
@@ -157,10 +159,11 @@ def add_address(user_id):
                           country=data.get('country'),
                           country_area=data.get('country_area')
                           )
-    
+
     db.get_session().add(new_address)
     db.get_session().commit()
     return jsonify({'Address added successfully'})
+
 
 @login_required
 @api.route('/account/<int:user_id>/address/', methods=['GET'])
@@ -180,6 +183,7 @@ def address(user_id):
         "country": address.country,
         "country_area": address.country_area})
 
+
 @login_required
 @api.route('/account/<int:user_id>/address/update', methods=['GET', 'POST'])
 def update_address(user_id):
@@ -187,7 +191,7 @@ def update_address(user_id):
     address = db.get_session().query(Address).get_or_404(user_id)
     if address.user != current_user:
         abort(403)
-    
+
     # Update address
     data = request.get_json()
 
@@ -205,10 +209,11 @@ def update_address(user_id):
         address.country = data['country']
     if 'country_area' in data:
         address.country_area = data['country_area']
-    
+
     # Commit changes to DB
     db.get_session.commit()
     return jsonify({'Address updated successfully'})
+
 
 @login_required
 @api.route('/account/<int:user_id>/address/delete', methods=['POST'])
@@ -222,7 +227,6 @@ def delete_address(user_id):
     db.get_session().delete(address)
     db.get_session().commit()
     return redirect(url_for('address'))
-
 
 
 # ------------------------------------- RESTAURANT ------------------------------------- #
@@ -245,7 +249,7 @@ def add_restaurant(user_id):
     payment_methods = data.get('payment_methods')
     offers = data.get('offers')
     suppliers = data.get('suppliers')
-    
+
     # Validate input data
     if not name or not location:
         return jsonify({'error': 'Name and location are required'}), 400
@@ -253,7 +257,7 @@ def add_restaurant(user_id):
         return jsonify({'error': 'is_operational must be a boolean'}), 400
     if not isinstance(payment_methods, list):
         return jsonify({'error': 'payment_methods must be a list'}), 400
-    
+
     # Create a new restaurant object
     restaurant = Restaurant(
         name=name,
@@ -325,6 +329,7 @@ def restaurant(restaurant_id):
             "updated_at": restaurant.updated_at
         })
 
+
 # Update restaurant
 @login_required
 @api.route('/account/<int:user_id>/restaurant/<int:restaurant_id>/update', methods=['PUT'])
@@ -355,12 +360,13 @@ def update_restaurant(restaurant_id):
         restaurant.offers = data['offers']
     if 'suppliers' in data:
         restaurant.suppliers = data['suppliers']
-    
+
     restaurant.updated_at = datetime.utcnow()
 
     # Commit the updated data to the database
     db.get_session().commit()
     return jsonify({'message': 'Restaurant updated successfully'}), 200
+
 
 @login_required
 @api.route('/dashboard/restaurant/<int:restaurant_id>/delete', methods=['DELETE'])
@@ -383,7 +389,6 @@ def delete_restaurant(restaurant_id):
 # Create menu item
 @login_required
 @api.route('/account/<int:user_id>/menu_item/new', methods=['POST'], strict_slashes=False)
-
 def add_menu_item():
     # check if user is restaurant owner
     if current_user.role != 'restaurant_owner':
@@ -403,13 +408,14 @@ def add_menu_item():
         created_at=datetime.utcnow(),
         updated_at=datetime.utcnow()
     )
-    
+
     # Add the new menu object to the session and commit the changes
     db.get_session().add(menu_item)
     db.get_session().commit()
 
     # Return a JSON response
     return jsonify({'Menu item created successfully'})
+
 
 # Read menu item
 @login_required
@@ -428,12 +434,12 @@ def menu_item(item_id):
         "is_available": menu_item.is_available,
         "is_deliverable": menu_item.is_deliverable,
         "duration_of_preparation": menu_item.duration_of_preparation,
-       })
+    })
+
 
 # Update menu item
 @login_required
 @api.route('/account/<int:user_id>/dashboard/menu_item/<int:id>/update', methods=['PUT'])
-
 def update_menu_item(id: int):
     # check if user is restaurant owner
     if current_user.role != 'restaurant_owner':
@@ -441,7 +447,6 @@ def update_menu_item(id: int):
     # get the menu_item informations from the DB
     menu_item = db.get_session().query(MenuItem).get_or_404(id)
 
-    
     # get the menu_item info from the user and update them in the db
     data = request.get_json()
 
@@ -462,12 +467,13 @@ def update_menu_item(id: int):
         menu_item.is_deliverable = data['is_deliverable']
     if 'duration_of_preparation' in data:
         menu_item.duration_of_preparation = data['duration_of_preparation']
-    
+
     menu_item.updated_at = datetime.utcnow()
-    
+
     # Commit the changes to DB
     db.get_session().commit()
     return jsonify({'Menu item updated successfully'}), 200
+
 
 # Delete menu item
 @login_required
@@ -478,7 +484,7 @@ def delete_menu_item(item_id):
     # delete the menu item
     db.get_session().delete(menu_item)
     db.get_session().commit()
-    
+
     return jsonify({'message': 'Menu item deleted successfully'}), 200
 
 
@@ -493,11 +499,11 @@ def add_menu():
         abort(403)
     # Get menu info from request
     data = request.get_json()
-    
+
     # Retrieve the restaurant by id
     restaurant_id = data.get('restaurant_id')
     restaurant = db.get_session().query(Restaurant).get_or_404(restaurant_id)
-    
+
     # Create a new menu object
     menu = Menu(
         name=data.get('name'),
@@ -512,17 +518,18 @@ def add_menu():
     db.get_session().add(menu)
     db.get_session().commit()
 
-
     # Return a JSON response
     return jsonify({'message': 'Menu created successfully'})
 
-# Read Menu 
+
+# Read Menu
 
 @login_required
 @api.route('/dashboard/menu/<int:menu_id>')
 def menu(menu_id):
     menu = db.get_session().query(Menu).get_or_404(menu_id)
-    menu_items = [{'id': item.id, 'name': item.name, 'description': item.description, 'price': item.price} for item in menu.items]
+    menu_items = [{'id': item.id, 'name': item.name, 'description': item.description, 'price': item.price} for item in
+                  menu.items]
 
     return jsonify({
         'name': menu.name,
@@ -532,6 +539,7 @@ def menu(menu_id):
         'created_at': datetime.utcnow(),
         'restaurant': menu.restaurant
     })
+
 
 # Update menu
 
@@ -565,17 +573,18 @@ def update_menu(menu_id):
     # Return a JSON response
     return jsonify({'message': 'Menu updated successfully'}), 200
 
+
 # Delete Menu
 
 @login_required
 @api.route('/account/<int:user_id>/menu/<int:menu_id>/delete', methods=['DELETE'])
 def delete_menu(menu_id):
     menu = db.get_session().query(Menu).get_or_404(menu_id)
-    
+
     # delete the menu
     db.get_session().delete(menu)
     db.get_session().commit()
-    
+
     return jsonify({'message': 'Menu deleted successfully'})
 
 
@@ -583,7 +592,6 @@ def delete_menu(menu_id):
 
 
 @login_required
-
 @api.route('/restaurant/<int:restaurant_id>/orders', methods=['POST'])
 # @roles_required('customer')
 def add_order(restaurant_id):
@@ -612,9 +620,9 @@ def add_order(restaurant_id):
     db.get_session().add(order)
     db.get_session().commit()
 
-
     # Return a success message to the user
     return jsonify({'message': 'Order added successfully!'}), 201
+
 
 # Read order
 @login_required
@@ -642,9 +650,9 @@ def order(restaurant_id, order_id):
         "updated_at": order.updated_at
     })
 
+
 # Update order
 @login_required
-
 @api.route('/restaurant/<int:restaurant_id>/orders/<int:order_id>', methods=['PUT'])
 def update_order(restaurant_id, order_id):
     # Get the restaurant and order from the DB
@@ -674,9 +682,9 @@ def update_order(restaurant_id, order_id):
     # Commit the changes to the DB
     db.get_session().commit()
 
-
     # Return a success message to the user
     return jsonify({'message': 'Order updated successfully!'}), 200
+
 
 # Delete order
 @login_required
@@ -698,7 +706,6 @@ def delete_order(restaurant_id, order_id):
     return jsonify({'message': 'Order deleted successfully!'})
 
 
-
 # ------------------------------------- RESERVATION ------------------------------------- #
 
 
@@ -708,7 +715,6 @@ def delete_order(restaurant_id, order_id):
 def add_reservation(restaurant_id):
     # Get the restaurant from the DB
     db.get_session().query(Restaurant).get_or_404(restaurant_id)
-
 
     # Parse the data from the request
     data = request.get_json()
@@ -738,13 +744,14 @@ def add_reservation(restaurant_id):
     # Return a success message to the user
     return jsonify({'message': 'Reservation added successfully!'}), 201
 
+
 # Read reservation
 @login_required
 @api.route('/restaurant/<int:restaurant_id>/reservations/<int:reservation_id>', methods=['GET'])
-
 def reservation(restaurant_id, reservation_id):
     # Get the reservation from the DB
-    reservation = db.session.query(Reservation).filter(reservation.restaurant_id == restaurant_id, reservation.id == reservation_id).first()
+    reservation = db.session.query(Reservation).filter(reservation.restaurant_id == restaurant_id,
+                                                       reservation.id == reservation_id).first()
 
     if not reservation:
         return jsonify({'error': 'Reservation not found'}), 404
@@ -767,6 +774,7 @@ def reservation(restaurant_id, reservation_id):
         "created_at": reservation.created_at,
         "updated_at": reservation.updated_at
     })
+
 
 # Update reservation
 @login_required
@@ -807,16 +815,17 @@ def update_reservation(restaurant_id, reservation_id):
     # Commit the changes to the DB
     db.get_session().commit()
 
-
     # Return a success message to the user
     return jsonify({'message': 'Reservation updated successfully!'}), 200
+
 
 # Delete reservation
 @login_required
 @api.route('/restaurant/<int:restaurant_id>/reservations/<int:reservation_id>', methods=['DELETE'])
 def delete_reservation(restaurant_id, reservation_id):
     # Get the reservation from the DB
-    reservation = db.get_session().query(reservation).filter(reservation.restaurant_id == restaurant_id, reservation.id == reservation_id).first()
+    reservation = db.get_session().query(reservation).filter(reservation.restaurant_id == restaurant_id,
+                                                             reservation.id == reservation_id).first()
     if not reservation:
         # If the reservation doesn't exist, return a 404 error
         return jsonify({'error': 'Reservation not found'}), 404
@@ -825,7 +834,6 @@ def delete_reservation(restaurant_id, reservation_id):
 
     db.get_session().delete(reservation)
     db.get_session().commit()
-
 
     # Return a success message to the user
     return jsonify({'message': 'Reservation deleted successfully!'})
