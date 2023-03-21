@@ -48,7 +48,7 @@ class Address(db.Model):
 
 class UserAddress(db.Model):
     """Association table for many-to-many relationship"""
-    __tablename__ = 'users_address'
+    __tablename__ = 'users_addresses'
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
