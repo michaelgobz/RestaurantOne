@@ -21,15 +21,17 @@ api = Blueprint('api', __name__, url_prefix='/api/v1/')
 @api.route('/')
 def home():
     return jsonify({
-        "message": "welcome to the Our Platform",
+        "message": "welcome to the Restaurant One",
         "company": "RestaurantOne",
-        "location": "Kampala",
+        "location": "Africa",
         "year": 2023,
         "month": "March",
         "Country": "Uganda",
         "Project": "Alx-webstack project",
         "supervisor": "Alx-SE Mentors",
-        })
+        "api-prefix": "api/v1"
+    })
+
 
 # ------------------------------------- AUTHENTICATION ------------------------------------- #
 
@@ -327,7 +329,7 @@ def update_restaurant(restaurant_id):
     # check if user is admin
     if current_user.role != 'admin' or current_user.role != 'manager':
         abort(403)
-        
+
     # get the restaurant from the DB
     restaurant = db.get_session().query(Restaurant).get_or_404(restaurant_id)
 
@@ -517,7 +519,8 @@ def add_menu():
     # Return a JSON response
     return jsonify({'message': 'Menu created successfully'})
 
-# Read Menu 
+
+# Read Menu
 @login_required
 @api.route('/dashboard/menu/<int:menu_id>')
 def menu(menu_id):
@@ -632,7 +635,7 @@ def order(user_id, order_id):
 
     if not order:
         return jsonify({'error': 'Order not found'}), 404
-    
+
     # get the restaurant where the order has been sent
     restaurant = db.get_session().query(Restaurant).filter(Restaurant.id == order.restaurant_id).first()
 
@@ -655,7 +658,6 @@ def order(user_id, order_id):
 
 # Update order
 @login_required
-
 @api.route('/dashboard/<int:user_id>/order/<int:order_id>/update', methods=['PUT'])
 def update_order(order_id):
     # Get the order from the DB
@@ -747,7 +749,6 @@ def add_reservation():
 # Read reservation
 @login_required
 @api.route('/dashboard/<int:user_id>/reservation/<int:reservation_id>', methods=['GET'])
-
 def reservation(reservation_id):
     # Get the reservation from the DB
     reservation = db.session.query(Reservation).filter(reservation.id == reservation_id).first()

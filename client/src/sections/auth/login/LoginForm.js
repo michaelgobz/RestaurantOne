@@ -10,7 +10,8 @@ import Iconify from '../../../components/iconify';
 
 export default function LoginForm() {
 
-  const url = 'http://localhost:5000/api/v1/auth/login';
+  const url = process.env.api
+  const navigator = useNavigate()
 
   // get data from the form
   const [email] = useState('');
@@ -30,12 +31,26 @@ export default function LoginForm() {
     headers: { 'Content-Type': 'application/json' },
   };
 
-  const HandleSubmit = () => { 
-    console.log('clicked');
-    fetch(url, requestOptions)
-      .then((response) => {
-        console.log(response);
-      })
+  const HandleSubmit = () => {
+      if(sessionStorage.getItem('auth') !== 'true'){
+          console.log('clicked');
+          fetch(url, requestOptions)
+              .then((response) => {
+                  if (response.status === 200) {
+                      const session = response.json()
+                      console.log(session)
+                      sessionStorage.setItem(session.key, session.value)
+                      sessionStorage.setItem('auth', 'true')
+                      navigator('/customer/products')
+          } else {
+                      console.log('some error has happend')
+          }
+          }).catch((reason) => {
+          console.log(`This {reason} issue has happend`)
+          })
+      } else  {
+          navigator('/customer/products')
+      }
   };
 
   const HandleChange = (e) => {
