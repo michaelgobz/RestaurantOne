@@ -144,6 +144,7 @@ class Order(db.Model):
 class OrderItem(db.Model):
     """OrderItem model"""
     id = db.Column(db.Integer, primary_key=True)
+    
 class Reservation(db.Model):
     """Reservations database model"""
     __tablename__ = 'reservations'
