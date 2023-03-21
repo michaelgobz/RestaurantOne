@@ -1,9 +1,10 @@
 
 """data models that the api uses"""
+from datetime import datetime
 from email.policy import default
 from typing import List
-from datetime import datetime
 
+from app import db
 
 
 class User(db.Model):
@@ -15,6 +16,7 @@ class User(db.Model):
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(255), nullable=False)
+    role = db.Column(db.String(10), nullable=False, default='customer')
     created_at = db.Column(db.DateTime, nullable=False,
                             default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, nullable=False,
@@ -31,7 +33,7 @@ class User(db.Model):
 
 class Address(db.Model):
     """Addresses database model"""
-    __tablename__ = 'addresses
+    __tablename__ = 'addresses'
 
     id = db.Column(db.Integer, primary_key=True)
     address_one = db.Column(db.String(50), nullable=False)
@@ -188,7 +190,7 @@ class Transaction(db.Model):
     
 class ReservationItem(db.Model):
     """Reservation Item model"""
-    id = Column(Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
     
 class Reservation(db.Model):
     """Reservation model"""
