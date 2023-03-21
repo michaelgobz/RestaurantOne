@@ -1,10 +1,11 @@
 """application entry point"""
 from os import getenv
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+
 from dotenv import load_dotenv
+from flask import Flask
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
+
 from api.core.base import Db as db
 from api.routes import api
 
