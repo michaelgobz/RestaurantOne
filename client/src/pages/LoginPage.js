@@ -1,5 +1,6 @@
 import { Helmet } from 'react-helmet-async';
-import {useNavigate} from "react-router";
+
+
 // @mui
 import { styled } from '@mui/material/styles';
 import { Link, Container, Typography, Divider, Stack, Button } from '@mui/material';
@@ -47,8 +48,7 @@ const StyledContent = styled('div')(({ theme }) => ({
 
 export default function LoginPage() {
 
-  const api = `${process.env.client }/auth/signup/`
-
+  const api = `${process.env.REACT_APP_CLIENT}/auth/signup`;
   const mdUp = useResponsive('up', 'md')
 
   return (

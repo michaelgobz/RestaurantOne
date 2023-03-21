@@ -6,24 +6,37 @@ import { LoadingButton } from '@mui/lab';
 // components
 import Iconify from '../../../components/iconify';
 
+
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
 
-  const url = process.env.api
+  const login = '/auth/login'
+
+  const url = `${process.env.REACT_APP_API}/auth/login`;
+    console.log(url)
   const navigator = useNavigate()
 
   // get data from the form
-  const [email] = useState('');
-  const [password] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [data, setData] = useState({
     email: '',
     password: '',
   });
 
-  console.log(data)
-  const [showPassword, setShowPassword] = useState(false);
+  const HandleSetEmail = (e) => {
+      setEmail(e.target.email)
+  }
 
+  const HandleSetPassword = (e) => {
+      setPassword(e.target.password)
+  }
+  const form = {
+      email,
+      password
+  }
   const requestOptions = {
     method: 'POST',
     mode: 'cors',
@@ -32,6 +45,7 @@ export default function LoginForm() {
   };
 
   const HandleSubmit = () => {
+      console.log(data)
       if(sessionStorage.getItem('auth') !== 'true'){
           console.log('clicked');
           fetch(url, requestOptions)
@@ -43,10 +57,10 @@ export default function LoginForm() {
                       sessionStorage.setItem('auth', 'true')
                       navigator('/customer/products')
           } else {
-                      console.log('some error has happend')
+                      console.log('some error has happened')
           }
           }).catch((reason) => {
-          console.log(`This {reason} issue has happend`)
+          console.log(`This {reason} issue has happened`)
           })
       } else  {
           navigator('/customer/products')
@@ -60,13 +74,13 @@ export default function LoginForm() {
   return (
     <>
       <Stack spacing={3}>
-        <TextField name="email" value={email} onKeyDown={HandleChange} label="Email address" />
+        <TextField name="email" value={email} onChangeCapture={HandleChange} label="Email address" />
 
         <TextField
           name="password"
           label="Password"
           value={password}
-          onKeyDown={HandleChange}
+          onChangeCapture={HandleChange}
           type={showPassword ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
