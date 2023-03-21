@@ -149,15 +149,14 @@ def add_address(user_id):
     # get adddress info from request
     data = request.get_json()
 
-    user = current_user
     new_address = Address(address_one=data.get('address_one'),
                           address_two=data.get('address_two'),
                           phone_number=data.get('phone_number'),
                           city=data.get('city'),
                           city_area=data.get('city_area'),
                           country=data.get('country'),
-                          country_area=data.get('country_area'),
-                          user=user)
+                          country_area=data.get('country_area')
+                          )
     
     db.get_session().add(new_address)
     db.get_session().commit()

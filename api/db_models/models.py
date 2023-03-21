@@ -1,4 +1,3 @@
-
 """data models that the api uses"""
 from email.policy import default
 from typing import List
@@ -31,7 +30,7 @@ class User(db.Model):
 
 class Address(db.Model):
     """Addresses database model"""
-    __tablename__ = 'address'
+    __tablename__ = 'addresses'
 
     id = db.Column(db.Integer, primary_key=True)
     address_one = db.Column(db.String(50), nullable=False)
@@ -44,8 +43,8 @@ class Address(db.Model):
 
     # Define many-to-many relationship with User model
     users = db.relationship("User",
-                            secondary="users_address",
-                            back_populates="address")
+                            secondary="users_addresses",
+                            back_populates="addresses")
 
 
 class UserAddress(db.Model):
@@ -55,6 +54,7 @@ class UserAddress(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     address_id = db.Column(db.Integer, db.ForeignKey('address.id'))
+
 
 
 class Restaurant(db.Model):
@@ -99,10 +99,10 @@ class Menu(db.Model):
     updated_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow,
                            onupdate=datetime.utcnow)
-    restaurant_id = db.Column(db.Integer, db.ForeignKey(
-        'restaurant.id'), nullable=False)
-    items = db.relationship('MenuItem', backref='menu',
-                            cascade="all, delete-orphan")
+    restaurant_id = db.Column(db.Integer,
+                              db.ForeignKey('restaurants.id'), nullable=False)
+    items = db.relationship('MenuItem',
+                            backref='menu', cascade="all, delete-orphan")
 
 
 class MenuItem(db.Model):
@@ -126,6 +126,7 @@ class MenuItem(db.Model):
     menu_id = db.Column(db.Integer, db.ForeignKey('menu.id'), nullable=False)
 
 
+
 class Order(db.Model):
     """orders database model"""
     __tablename__ = 'order'
@@ -144,6 +145,7 @@ class Order(db.Model):
                            onupdate=datetime.utcnow)
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
 
 
 class OrderItem(db.Model):
@@ -172,10 +174,10 @@ class Reservation(db.Model):
     updated_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow,
                            onupdate=datetime.utcnow)
-    restaurant_id = db.Column(db.Integer, db.ForeignKey(
-        'restaurant.id'), nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-
+    restaurant_id = db.Column(db.Integer,
+                              db.ForeignKey('restaurants.id'), nullable=False)
+    user_id = db.Column(db.Integer,
+                        db.ForeignKey('users.id'), nullable=False)
 
 class ReservationItem(db.Model):
     """Reservation Item model"""
@@ -200,31 +202,25 @@ class TransactionItem(db.Model):
 class Transaction(db.Model):
     """Transaction model"""
     id = db.Column(db.Integer, primary_key=True)
-
-    """Restaurant model"""
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(50), nullable=False)
-    description = db.Column(db.Text, nullable=False)
-    location = db.Column(db.String(50), nullable=True)
-    is_operational = db.Column(db.Boolean, nullable=True)
-    order_fulfilling = db.Column(db.Boolean, nullable=True)
-    menus = db.relationship("Menu", back_populates="restaurant",
-                            cascade="all, delete-orphan")
-    products = db.Column(db.String)
-    orders = db.relationship('Orders', backref='restaurant')
-    payment_methods = db.Column(db.String)
-    reservations = db.relationship('Reservations', backref='restaurant')
-    customers = db.Column(db.Integer, nullable=False, default=0)
-    shipments = db.relationship('Shipments', backref='restaurants')
-    offers = db.Column(db.String(50))
-    suppliers = db.Column(db.String(50))
+    description = db.Column(db.String(200), nullable=True)
+    duration = db.Column(db.DateTime, nullable=True)
+    start = db.Column(db.DateTime, nullable=True)
+    end = db.Column(db.DateTime, nullable=True)
+    nb_of_person = db.Column(db.Integer, nullable=False, default=0)
+    additional_info = db.Column(db.String(200), nullable=True)
+    tables = db.Column(db.Integer, nullable=True)
+    category = db.Column(db.String(50), nullable=True)
+    price = db.Column(db.Float, nullable=False, default=0)
+    tax = db.Column(db.Float, nullable=True)
+    menu_item = db.Column(db.String(50), nullable=True)
     created_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, nullable=False,
-
                            default=datetime.utcnow,
                            onupdate=datetime.utcnow)
-
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'),
+                              nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
 class ShipmentMethod(db.Model):
     """Shipment method model"""
@@ -234,8 +230,7 @@ class ShipmentMethod(db.Model):
 class Shipment(db.Model):
     """Shipment model"""
     id = db.Column(db.Integer, primary_key=True)
-    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurant.id'))
-
+    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'))
 
 class Invoice(db.Model):
     """ Invoice model"""
@@ -270,6 +265,5 @@ class Event(db.Model):
 
 class EventItem(db.Model):
     """EventItem model"""
-
     id = db.Column(db.Integer, primary_key=True)
     event = db.Column(db.String(50), default="", nullable=True)
