@@ -20,7 +20,6 @@ class User(db.Model):
                            onupdate=datetime.utcnow)
     orders = db.relationship("Order", backref="users")
     reservations = db.relationship('Reservation', backref='users')
-    reservation_id = db.Column(db.Integer, db.ForeignKey('reservations.id'))
 
     # Define many-to-many relationship with Address model
     addresses = db.relationship("Address",
