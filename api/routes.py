@@ -36,7 +36,8 @@ def home():
 
 # ------------------------------------- AUTHENTICATION ------------------------------------- #
 
-@api.route('/auth/signup', methods=['GET', 'POST'], strict_slashes=False)
+
+@api.route('/auth/signup', methods=['POST'], strict_slashes=False)
 def signup():
     # get user info from request
     data = request.get_json()
@@ -63,7 +64,7 @@ def signup():
         return jsonify({'error': 'Email already registered'})
 
 
-@api.route('/auth/login', methods=['POST'])
+@api.route('/auth/login', methods=['POST'], strict_slashes=False)
 def login():
     # get user info from request
     email = request.json.get('email')
@@ -82,7 +83,7 @@ def login():
         return jsonify({'error': 'Incorrect email or password'}), 401
 
 
-@api.route('/auth/logout', methods=['POST'])
+@api.route('/auth/logout', methods=['POST'], strict_slashes=False)
 @jwt_required()
 def logout():
     # Blacklist the current access token so that it can no longer be used
@@ -93,12 +94,73 @@ def logout():
     return jsonify({'message': 'Successfully logged out'}), 200
 
 
+# ------------------------------------- DASHBOARD ------------------------------------- #
+
+
+# admin dashboard
+@api.route('/admin/dashboard/<int:user_id>', methods=['GET'], strict_slashes=False)
+@jwt_required()
+def admin_dashboard(user_id):
+    # access the identity of the current user
+    current_user = get_jwt_identity()
+    # check if the user ID from the JWT token matches the requested user ID
+    if current_user != user_id:
+        return abort(401)
+    # get user from the DB
+    user = db.get_session().query(User).get_or_404(current_user)
+
+    # admin dashboard
+    if user.role == 'admin':
+        return abort(403)
+    
+    restaurants = db.get_session().query(Restaurant).all()
+    if not restaurants:
+        return jsonify({'message': 'No restaurant to display'}), 404
+    # return the restaurant object as a JSON response
+    return jsonify([restaurant.serialize() for restaurant in restaurants]), 200
+    
+
+# manager dashboard
+@api.route('/manager/dashboard/<int:user_id>', methods=['GET'], strict_slashes=False)
+@jwt_required()
+def manager_dashboard(user_id):
+    # access the identity of the current user
+    current_user = get_jwt_identity()
+    # check if the user ID from the JWT token matches the requested user ID
+    if current_user != user_id:
+        return abort(401)
+    # get user from the DB
+    user = db.get_session().query(User).get_or_404(current_user)
+    # manager dashboard 
+    if user.role != 'manager':
+        return abort(403)
+    
+    restaurants = db.get_session().query(Restaurant).filter(Restaurant.manager_id == current_user).all()
+    if not restaurants:
+        return jsonify({'message': 'No restaurant to display'}), 404
+    
+    # Initialize an empty dictionary to store the serialized Menu objects for each Restaurant.
+    all_menus = {}
+    for restaurant in restaurants:
+        menus = db.get_session().query(Menu).filter(Menu.restaurant_id == restaurant.id).all()
+        # If there are no Menu objects for the current Restaurant,add an empty list of menus to the all_menus dictionary.
+        if not menus:
+            all_menus[restaurant.id] = {'restaurant_name': restaurant.name, 'menus': []}
+        else:
+        # If there are Menu objects for the current Restaurant, add a list of serialized menus to the all_menus dictionary.
+            all_menus[restaurant.id] = {'restaurant_name': restaurant.name, 'menus': [menu.serialize() for menu in menus]}
+
+    # Serialize the all_menus dictionary as JSON and return it as the response.
+    return jsonify(all_menus), 200
+
+
 
 # ------------------------------------- USER PROFILE ------------------------------------- #
 
+
 # get profile
-@jwt_required()
 @api.route('/me/account/profile/<int:user_id>', methods=['GET'], strict_slashes=False)
+@jwt_required()
 def profile(user_id):
     # access the identity of the current user
     current_user = get_jwt_identity()
@@ -113,8 +175,8 @@ def profile(user_id):
     return jsonify([element.serialize() for element in profile]), 200
 
 # update profile
-@jwt_required()
 @api.route('/me/account/<int:user_id>/update_profile', methods=['PUT'], strict_slashes=False)
+@jwt_required()
 def update_profile():
     # access the identity of the current user
     current_user = get_jwt_identity()
@@ -142,6 +204,7 @@ def update_profile():
 
 
 # ------------------------------------- ADDRESS ------------------------------------- #
+
 
 @api.route('/account/<int:user_id>/address/new', methods=['POST'], strict_slashes=False)
 @jwt_required()
@@ -259,6 +322,7 @@ def delete_address(user_id, address_id):
 
 # ------------------------------------- RESTAURANT ------------------------------------- #
 
+
 # Create restaurant
 @api.route('/account/<int:user_id>/restaurant/new',
            methods=['POST'], strict_slashes=False)
@@ -271,8 +335,8 @@ def add_restaurant(user_id):
         return abort(401)
     # get user from the DB
     user = db.get_session().query(User).get_or_404(current_user)
-    # check if user is admin
-    if user.role != 'admin':
+    # check if user is manager
+    if user.role != 'manager':
         abort(403)
     # Get restaurant info from request
     data = request.get_json()
@@ -304,6 +368,7 @@ def add_restaurant(user_id):
         payment_methods=payment_methods,
         offers=offers,
         suppliers=suppliers,
+        manager_id=current_user,
         created_at=datetime.utcnow()
     )
 
@@ -445,6 +510,7 @@ def delete_restaurant(user_id, restaurant_id):
 
 # ------------------------------------- MENU ------------------------------------- #
 
+
 # Create Menu
 @api.route('/account/<int:user_id>/restaurant/<int:restaurant_id>/menu/new',
            methods=['POST'], strict_slashes=False)
@@ -581,6 +647,7 @@ def delete_menu(user_id, restaurant_id, menu_id):
 
 
 # ------------------------------------- MENU ITEM ------------------------------------- #
+
 
 # Create menu item
 @api.route('/account/<int:user_id>/menu/<int:menu_id>/menu_item/new',
