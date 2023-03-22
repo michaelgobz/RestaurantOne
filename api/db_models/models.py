@@ -20,6 +20,8 @@ class User(db.Model):
     updated_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow,
                            onupdate=datetime.utcnow)
+    token_id = db.Column(
+        db.String(50), db.ForeignKey('verification_tokens.id', use_alter=True))
     orders = db.relationship("Order", backref="users")
     reservations = db.relationship('Reservation', backref='users')
 
@@ -289,7 +291,8 @@ class EventItem(db.Model):
 class VerificationToken(db.Model):
     """VerificationToken model"""
     __tablename__ = 'verification_tokens'
-    token = db.Column(db.String(255), nullable=False, primary_key=True)
+    id = db.Column(db.String(50), primary_key=True)
+    token = db.Column(db.String(255), nullable=False)
     created_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow)
     user_id = db.Column(db.String(50), db.ForeignKey(

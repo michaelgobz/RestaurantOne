@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 
 # models
 from api.db_models import (Address, Menu, MenuItem, Order, Reservation,
-                           Restaurant, Shipment, User)
+                           Restaurant, Shipment, User, VerificationToken)
 from app import db
 
 # load env variables
@@ -74,12 +74,19 @@ def signup():
             filter_by(email=data.get('email')).first()
         token = encode({'email': data.get('email')},
                        os.environ.get('SECRET_KEY'), algorithm="HS256")
+        # send verification email
+
 
         # store the verification token in the database
-        user_verification = {'user_id': new_user.id, 'token': token}
-        db.get_session().add(user_verification)
+        user_verification_token = VerificationToken(id=str(uuid.uuid4()),
+                                                    token=token,
+                                                    created_at=datetime.utcnow())
+        db.get_session().add(user_verification_token)
         db.get_session().commit()
-        return jsonify({'message': 'user created successfully', 'redirect': 'login', 'details': 'check your email to confirm your account', 'token': token})
+        return jsonify({'message': 'user created successfully',
+                        'redirect': 'login',
+                        'details': 'check your email to confirm your account',
+                        'token': token})
     except IntegrityError:
         db.get_session().rollback()
         return jsonify({'error': 'Email already registered  or server error or token error'})
