@@ -77,7 +77,7 @@ class Restaurant(db.Model):
     updated_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow,
                            onupdate=datetime.utcnow)
-    manager_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    manager_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     menus = db.relationship("Menu",
                             backref="restaurants",
                             cascade="all, delete-orphan")
