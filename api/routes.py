@@ -212,6 +212,7 @@ def profile(user_id):
 @login_required
 @api.route('/me/account/<int:user_id>/update_profile', methods=['PUT'], strict_slashes=False)
 def update_profile(user_id):
+    """ update profile """
     # get the user profile information from the DB
     profile = db.get_session().query(User).get_or_404(user_id)
     if profile.user != current_user:
@@ -242,6 +243,7 @@ def update_profile(user_id):
 @login_required
 @api.route('/account/<int:user_id>/address/new', methods=['POST'], strict_slashes=False)
 def add_address(user_id):
+    """ add address"""
     # get the user address from the DB
     address = db.get_session().query(Address).get_or_404(user_id)
     if address.user != current_user:
@@ -267,6 +269,7 @@ def add_address(user_id):
 @login_required
 @api.route('/account/<int:user_id>/address/', methods=['GET'])
 def address(user_id):
+    """ get address"""
     # get the user address from the DB
     address = db.get_session().query(Address).get_or_404(user_id)
     if address.user != current_user:
@@ -286,7 +289,8 @@ def address(user_id):
 @login_required
 @api.route('/account/<int:user_id>/address/update', methods=['GET', 'POST'])
 def update_address(user_id):
-    # get the user address informations from the DB
+    """ update address"""
+    # get the user address information from the DB
     address = db.get_session().query(Address).get_or_404(user_id)
     if address.user != current_user:
         abort(403)
@@ -317,7 +321,7 @@ def update_address(user_id):
 @login_required
 @api.route('/account/<int:user_id>/address/delete', methods=['POST'])
 def delete_address(user_id):
-    # get the user address informations from the DB
+    # get the user address information from the DB
     address = db.get_session().query(Address).get_or_404(user_id)
     if address.user != current_user:
         abort(403)
@@ -330,7 +334,6 @@ def delete_address(user_id):
 
 # ------------------------------------- RESTAURANT ------------------------------------- #
 
-# Create restaurant
 @login_required
 @api.route('/account/<int:user_id>/restaurant', methods=['POST'])
 def add_restaurant():
