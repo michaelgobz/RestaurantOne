@@ -40,23 +40,26 @@ export default function SignUpForm() {
   const HandleSignUp = () => {
     fetch(url, requestOptions).then
       (response => {
-        if (response.status === 200) {
-          const session = response.body
-          console.log(session)
-          // we need to get varification token form the response
-          sessionStorage.setItem(session.key, session.value)
-          sessionStorage.setItem('auth', 'true')
-          navigator('/auth/confirm-account')
-          // need to verify the user
-        } else {
-          console.log('some error has happened')
-        }
+        response.json().then((data) => {
+          console.log(data)
+          if (response.status === 200) {
+            const session = response.body
+            console.log(session)
+            // we need to get varification token form the response
+            sessionStorage.setItem(session.key, session.value)
+            sessionStorage.setItem('auth', 'true')
+            navigator('/auth/confirm-account')
+            // need to verify the user
+          } else {
+            console.log('some error has happened')
+          }
+
       }).catch((reason) => {
         console.log(`This ${reason} happened and caused the error in the fetch request`)
       }).finally(() => {
         console.log()
-      }
-    )
+      })
+      })
   };
 
   return (

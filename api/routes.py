@@ -59,9 +59,11 @@ def signup():
     new_user = User(id=str(uuid.uuid4()),
                     email=data.get('email'),
                     password=password_hash,
-                    first_name=data.get('first_name'),
-                    last_name=data.get('last_name'),
-                    created_at=datetime.utcnow())
+                    first_name=data.get('firstname'),
+                    last_name=data.get('lastname'),
+                    is_verified=False,
+                    created_at=datetime.utcnow(),
+                    updated_at=datetime.utcnow())
 
     # try to add user to database
     try:

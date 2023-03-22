@@ -284,3 +284,13 @@ class EventItem(db.Model):
     __tablename__ = 'event_items'
     id = db.Column(db.String(50), primary_key=True)
     event = db.Column(db.String(50), default="", nullable=True)
+
+
+class VerificationToken(db.Model):
+    """VerificationToken model"""
+    __tablename__ = 'verification_tokens'
+    token = db.Column(db.String(255), nullable=False, primary_key=True)
+    created_at = db.Column(db.DateTime, nullable=False,
+                           default=datetime.utcnow)
+    user_id = db.Column(db.String(50), db.ForeignKey(
+        'users.id'), nullable=False)
