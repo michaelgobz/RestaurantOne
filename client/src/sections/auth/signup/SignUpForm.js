@@ -53,7 +53,9 @@ export default function SignUpForm() {
         }
       }).catch((reason) => {
         console.log(`This ${reason} happened and caused the error in the fetch request`)
-      })
+      }).finally(() => {
+        console.log()
+      }
   };
 
   return (

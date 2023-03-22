@@ -16,7 +16,7 @@ from api.db_models import (Address, Menu, MenuItem, Order, Reservation,
 from app import db
 
 # load env variables
-dotenv_path = join(dirname, '.env')
+dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
 
 # use blueprint to create a new routes
