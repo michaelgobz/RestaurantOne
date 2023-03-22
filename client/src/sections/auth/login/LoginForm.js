@@ -11,9 +11,11 @@ import Iconify from '../../../components/iconify';
 
 export default function LoginForm() {
 
+  const recoverPassword = `${process.env.REACT_APP_CLIENT}/auth/recover-password`;
+
   const login = '/auth/login'
 
-  const url = `${process.env.REACT_APP_API}/auth/login`;
+  const url = `${process.env.REACT_APP_API}${login}`;
     console.log(url)
   const navigator = useNavigate()
 
@@ -97,7 +99,7 @@ export default function LoginForm() {
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
         <Checkbox name="remember" label="Remember me" />
         <Typography variant='body5' sx={{ ml: -5 }}>Remember Me</Typography>
-        <Link variant="subtitle2" underline="hover">
+        <Link href={sessionStorage.getItem('signup') === 'true'? recoverPassword :null}variant="subtitle2" underline="hover">
           Forgot password?
         </Link>
       </Stack>

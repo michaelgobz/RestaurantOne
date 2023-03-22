@@ -11,6 +11,11 @@ import Page404 from './pages/Page404';
 import ProductsPage from './pages/ProductsPage';
 import Checkout from './sections/checkouts/Checkout'
 import NewReservation from './sections/reservation/new/NewReservation';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ConfirmAccountPage from './pages/ConfirmAccountPage';
+import UpdatePasswordPage from './pages/UpdatePasswordPage'
+
+
 
 // ----------------------------------------------------------------------
 
@@ -66,6 +71,18 @@ export default function Router() {
     {
       path: 'auth/login',
       element: <LoginPage />
+    },
+    {
+      path: 'auth/confirm-account',
+      element : <ConfirmAccountPage/>
+    },
+    {
+      path: 'auth/update-password',
+      element: <UpdatePasswordPage />
+    },
+    {
+      path: 'auth/forgot-password',
+      element: <ForgotPasswordPage />
     },
     {
       element: <SimpleLayout />,
