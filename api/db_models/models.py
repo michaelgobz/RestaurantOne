@@ -15,6 +15,8 @@ class User(db.Model):
     role = db.Column(db.String(10), nullable=False, default='customer')
     created_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow)
+    is_verified = db.Column(db.Boolean, nullable=False, default=False)
+    password_reset_token = db.Column(db.String(255), nullable=True)
     updated_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow,
                            onupdate=datetime.utcnow)
