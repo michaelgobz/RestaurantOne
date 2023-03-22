@@ -70,6 +70,13 @@ export default function LoginForm() {
       navigator('/customer/products')
     }
   };
+  const HandleChangeEmail = (e) => {
+    setData({ ...data, [e.target.name]: e.target.value });
+  };
+
+  const HandleChangePassword = (e) => {
+    setData({ ...data, [e.target.name]: e.target.value });
+  };
 
   const HandleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
@@ -78,13 +85,12 @@ export default function LoginForm() {
   return (
     <>
       <Stack spacing={3}>
-        <TextField name="email" value={email} onChangeCapture={HandleChange} label="Email address" />
+        <TextField name="email" onChange={HandleChangeEmail} label="Email address" />
 
         <TextField
           name="password"
           label="Password"
-          value={password}
-          onChangeCapture={HandleChange}
+          onChange={HandleChangePassword}
           type={showPassword ? 'text' : 'password'}
           InputProps={{
             endAdornment: (

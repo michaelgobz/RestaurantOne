@@ -62,14 +62,13 @@ export default function SignUpForm() {
   return (
     <>
       <Stack spacing={3}>
-        <TextField name="firstname" value={firstname} onChangeCapture={HandleChange} label="First Name" />
-        <TextField name="lastname" value={lastname} onChangCapture={HandleChange} label="Last Name" />
-        <TextField name="email" value={email} onChangeCapture={HandleChange} label="Email address" />
+        <TextField name="firstname" onChange={HandleChange} label="First Name" />
+        <TextField name="lastname" onChange={HandleChange} label="Last Name" />
+        <TextField name="email" onChange={HandleChange} label="Email address" />
         <TextField
           name="password"
           label="Password"
-          value={password}
-          onChangeCapture={HandleChange}
+          onChange={HandleChange}
           type={showPassword ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
@@ -84,8 +83,7 @@ export default function SignUpForm() {
         <TextField
           name="Retype-password"
           label="Retype Password"
-          value={retypePassword}
-          onChangeCapture={HandleChange}
+          onChange={HandleChange}
           type={showPassword ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
@@ -97,7 +95,7 @@ export default function SignUpForm() {
             ),
           }}
         />
-        <TextField value={phoneNumber} onChangeCapture={HandleChange} name="Phonenumber" label="Phone number" />
+        <TextField onChange={HandleChange} name="Phonenumber" label="Phone number" />
 
       </Stack>
 

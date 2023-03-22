@@ -1,4 +1,5 @@
 import os
+import uuid
 from os.path import join, dirname
 from datetime import datetime
 
@@ -55,7 +56,8 @@ def signup():
     password_hash = bcrypt.hashpw(password.encode('utf-8'), salt)
 
     # create a new user object
-    new_user = User(email=data.get('email'),
+    new_user = User(id=str(uuid.uuid4()),
+                    email=data.get('email'),
                     password=password_hash,
                     first_name=data.get('first_name'),
                     last_name=data.get('last_name'),
