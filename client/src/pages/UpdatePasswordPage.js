@@ -9,7 +9,7 @@ import useResponsive from '../hooks/useResponsive';
 
 // components
 
-import UpdatePassword from '../sections/auth/utils/UpdatePassword';
+import UpdatePassword from '../sections/auth/utils/PasswordUpdate';
 
 
 // ----------------------------------------------------------------------
