@@ -57,11 +57,11 @@ export default function ForgotPasswordPage() {
 
                 <Container maxWidth="sm">
                     <StyledContent>
-                        <Typography variant="h4" gutterBottom>
+                        <Typography variant="h4" gutterBottom align='centre'>
                             Recover Password
                         </Typography>
 
-                        <Typography variant="body2" sx={{ mb: 5 }}>
+                        <Typography variant="body5" sx={{ mb: 5 }} align='centre'>
                             Please enter your email address below and we will send you instructions on how to reset your password.
                         </Typography>
 

@@ -18,21 +18,14 @@ export default function UpdatePassword() {
     const navigator = useNavigate()
 
     // get data from the form
-    const [password, setPassword] = useState('');
-    const [retypePassword, setRetypePassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [data, setData] = useState({
         password: '',
-        retypedPassword: '',
+        confirmedPassword: '',
     });
 
-    const HandleSetEmail = (e) => {
-        setEmail(e.target.email)
-    }
-
-    const HandleSetPassword = (e) => {
-        setPassword(e.target.password)
-    }
     const requestOptions = {
         method: 'POST',
         mode: 'cors',
@@ -89,9 +82,9 @@ export default function UpdatePassword() {
                 />
 
                 <TextField
-                    name="Retype-password"
-                    label="Retype Password"
-                    value={newPassword}
+                    name="Confirm password"
+                    label="Confirm  Password"
+                    value={confirmPassword}
                     onChangeCapture={HandleChange}
                     type={showPassword ? 'text' : 'password'}
                     InputProps={{
@@ -103,11 +96,13 @@ export default function UpdatePassword() {
                             </InputAdornment>
                         ),
                     }}
+                    sx={{ my: 5 }}
                 />
             </Stack>
 
 
-            <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={HandleUpdatePassword}>
+            <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={HandleUpdatePassword}
+                sx={{ my: 5 }}>
                 Update Password
             </LoadingButton>
         </>

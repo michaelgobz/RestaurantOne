@@ -61,7 +61,7 @@ export default function ConfirmAccount() {
     return (
         <>
             <Stack spacing={3}>
-                <TextField name="Token" value={token} onChangeCapture={HandleChange} label="Email address" />
+                <TextField name="Token" value={token} onChangeCapture={HandleChange} label="Token" sx={{ my: 5 }} />
 
             </Stack>
 

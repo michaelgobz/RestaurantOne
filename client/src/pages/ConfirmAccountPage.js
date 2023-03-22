@@ -68,6 +68,8 @@ export default function ConfirmAccountPage() {
                         <Divider sx={{ my: 3 }} />
 
                         <ConfirmAccount />
+
+                        <Divider sx={{ my: 3 }} />
                     </StyledContent>
                 </Container>
             </StyledRoot>

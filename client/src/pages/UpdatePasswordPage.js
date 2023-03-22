@@ -10,6 +10,7 @@ import useResponsive from '../hooks/useResponsive';
 // components
 
 import UpdatePassword from '../sections/auth/utils/PasswordUpdate';
+import { CenterFocusStrong } from '@mui/icons-material';
 
 
 // ----------------------------------------------------------------------
@@ -57,17 +58,18 @@ export default function UpdatePasswordPage() {
 
                 <Container maxWidth="sm">
                     <StyledContent>
-                        <Typography variant="h4" gutterBottom>
+                        <Typography variant="h4" gutterBottom textAlign={CenterFocusStrong}>
                             Create new password
                         </Typography>
 
-                        <Typography variant="body2" sx={{ mb: 5 }}>
+                        <Typography variant="body5" sx={{ mb: 5 }}>
                             Please enter your new password
                         </Typography>
 
                         <Divider sx={{ my: 3 }} />
 
                         <UpdatePassword />
+
                     </StyledContent>
                 </Container>
             </StyledRoot>

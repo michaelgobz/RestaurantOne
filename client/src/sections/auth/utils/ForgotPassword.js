@@ -64,7 +64,9 @@ export default function ForgotPassword() {
     return (
         <>
             <Stack spacing={3}>
-                <TextField fullWidth label="Email" name="email" onChange={HandleChange} type="email" value={email} variant="outlined" />
+                <TextField fullWidth label="Email" name="email" onChange={HandleChange} type="email" value={email}
+                    sx={{ my: 3 }}
+                    variant="outlined" />
             </Stack>
             <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={HandleVerifyEmail}>
                 Confirm Email Address

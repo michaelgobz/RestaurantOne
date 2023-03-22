@@ -11,7 +11,7 @@ import Iconify from '../../../components/iconify';
 
 export default function LoginForm() {
 
-  const recoverPassword = `${process.env.REACT_APP_CLIENT}/auth/recover-password`;
+  const recoverPassword = `${process.env.REACT_APP_CLIENT}/auth/forgot-password`;
 
   const login = '/auth/login'
 
