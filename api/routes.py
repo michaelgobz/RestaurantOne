@@ -188,6 +188,14 @@ def confirm_account(token):
 @login_required
 @api.route('/me/account/profile/<int:user_id>', methods=['GET'], strict_slashes=False)
 def profile(user_id):
+    """_summary_
+
+    Args:
+        user_id (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     # get the user profile information form DB
     profile = db.get_session().query(User).get_or_404(user_id)
     if profile.user != current_user:
@@ -302,7 +310,7 @@ def update_address(user_id):
         address.country_area = data['country_area']
 
     # Commit changes to DB
-    db.get_session.commit()
+    db.get_session().commit()
     return jsonify({'Address updated successfully'})
 
 
