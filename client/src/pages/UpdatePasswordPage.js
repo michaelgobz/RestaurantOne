@@ -4,13 +4,14 @@ import { Helmet } from 'react-helmet-async';
 // @mui
 import { styled } from '@mui/material/styles';
 import { Container, Typography, Divider, Stack, Button } from '@mui/material';
+import { CenterFocusStrong } from '@mui/icons-material';
 // hooks
 import useResponsive from '../hooks/useResponsive';
 
 // components
 
 import UpdatePassword from '../sections/auth/utils/PasswordUpdate';
-import { CenterFocusStrong } from '@mui/icons-material';
+
 
 
 // ----------------------------------------------------------------------
@@ -58,11 +59,11 @@ export default function UpdatePasswordPage() {
 
                 <Container maxWidth="sm">
                     <StyledContent>
-                        <Typography variant="h4" gutterBottom textAlign={CenterFocusStrong}>
+                        <Typography variant="h4" align='center'>
                             Create new password
                         </Typography>
 
-                        <Typography variant="body5" sx={{ mb: 5 }}>
+                        <Typography variant="body5" sx={{ my: 5 }} align='center'>
                             Please enter your new password
                         </Typography>
 

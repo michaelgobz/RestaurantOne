@@ -57,11 +57,11 @@ export default function ConfirmAccountPage() {
 
                 <Container maxWidth="sm">
                     <StyledContent>
-                        <Typography variant="h4" gutterBottom>
+                        <Typography variant="h4" gutterBottom align='center'>
                             Confirm Account
                         </Typography>
 
-                        <Typography variant="body2" sx={{ mb: 5 }}>
+                        <Typography variant="body5" sx={{ my: 5 }} align='center'>
                             Enter the token you received in your email to verify account
                         </Typography>
 

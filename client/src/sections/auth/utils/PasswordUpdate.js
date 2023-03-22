@@ -11,7 +11,9 @@ import Iconify from '../../../components/iconify';
 
 export default function UpdatePassword() {
 
-    const UpdatePassword = '/auth/login'
+    // get hold of the use's email and if it is valid
+
+    const UpdatePassword = '/auth/update-password'
 
     const url = `${process.env.REACT_APP_API}${UpdatePassword}`;
     console.log(url)
@@ -49,7 +51,7 @@ export default function UpdatePassword() {
                         console.log('some error has happened')
                     }
                 }).catch((reason) => {
-                    console.log(`This {reason} issue has happened`)
+                    console.log(`This ${reason} happened and caused the error in the fetch request`)
                 })
         } else {
             navigator('/auth/login')

@@ -44,12 +44,15 @@ export default function SignUpForm() {
           const session = response.json()
           console.log(session)
           // we need to get varification token form the response
-
+          sessionStorage.setItem(session.key, session.value)
+          sessionStorage.setItem('auth', 'true')
+          navigator('/auth/confirm-account')
           // need to verify the user
-          navigator('/auth/login')
         } else {
           console.log('some error has happened')
         }
+      }).catch((reason) => {
+        console.log(`This ${reason} happened and caused the error in the fetch request`)
       })
   };
 
@@ -98,9 +101,6 @@ export default function SignUpForm() {
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
         <Checkbox name="remember" label="Remember me" />
         <Typography> Accept the privacy policy and T&Cs</Typography>
-        <Link variant="subtitle2" underline="hover">
-          Forgot password?
-        </Link>
       </Stack>
 
       <LoadingButton fullWidth size="large" type="submit" variant="contained" onClick={HandleSignUp}>

@@ -47,7 +47,7 @@ export default function ConfirmAccount() {
                         console.log('some error has happened')
                     }
                 }).catch((reason) => {
-                    console.log(`This {reason} issue has happened`)
+                    console.log(`This ${reason} happened and caused the error in the fetch request`)
                 })
         } else {
             navigator('/customer/products')
