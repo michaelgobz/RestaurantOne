@@ -6,6 +6,8 @@ from flask import (Blueprint, abort, jsonify, redirect, request, session,
                    url_for)
 from flask_login import current_user, login_required
 from sqlalchemy.exc import IntegrityError
+from jwt import encode , decode
+
 
 # models
 from api.db_models import (Address, Menu, MenuItem, Order, Reservation,
@@ -84,6 +86,28 @@ def logout():
     # deletes the user session
     session.pop('user_id', None)
     return redirect(url_for('login'))
+
+
+@api.route('/auth/reset_password', methods=['POST'], strict_slashes=False)
+def reset_password():
+    """Reset password for a user
+
+    Returns:
+        _type_: token
+    """
+    email = request.json.get('email')
+    user = db.get_session().query(User).filter_by(email=email).first()
+    # check for the email in the database
+    if (email is None):
+        return jsonify({'error': 'Email is required'})
+    elif (user is None):
+        return jsonify({'error': 'Email does not exist'})
+    elif (user.email == email):
+        # generate token and send to the user email
+        token = encode({'set_password':'true'},"",algorithm="HS256")
+        # store the password reset token in the database
+        return jsonify({'message': 'token is sent to your email'})
+
 
 
 # ------------------------------------- USER PROFILE ------------------------------------- #
