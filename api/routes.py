@@ -45,6 +45,7 @@ def home():
 
 @api.route('/auth/signup', methods=['GET', 'POST'], strict_slashes=False)
 def signup():
+    """Sign up a new user"""
     # get user info from request
     data = request.get_json()
 
