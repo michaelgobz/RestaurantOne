@@ -21,6 +21,7 @@ class User(db.Model):
                            onupdate=datetime.utcnow)
     orders = db.relationship("Order", backref="user")
     reservations = db.relationship('Reservation', backref='user')
+    restaurants = db.relationship('Restaurant', backref='manager')
 
     # Define many-to-many relationship with Address model
     addresses = db.relationship("Address",
@@ -76,6 +77,7 @@ class Restaurant(db.Model):
     updated_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow,
                            onupdate=datetime.utcnow)
+    manager_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     menus = db.relationship("Menu",
                             backref="restaurants",
                             cascade="all, delete-orphan")
