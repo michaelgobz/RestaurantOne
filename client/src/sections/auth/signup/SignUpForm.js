@@ -41,7 +41,7 @@ export default function SignUpForm() {
     fetch(url, requestOptions).then
       (response => {
         if (response.status === 200) {
-          const session = response.json()
+          const session = response.body
           console.log(session)
           // we need to get varification token form the response
           sessionStorage.setItem(session.key, session.value)
@@ -56,6 +56,7 @@ export default function SignUpForm() {
       }).finally(() => {
         console.log()
       }
+    )
   };
 
   return (

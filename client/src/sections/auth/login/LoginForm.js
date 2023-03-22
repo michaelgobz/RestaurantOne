@@ -16,7 +16,7 @@ export default function LoginForm() {
   const login = '/auth/login'
 
   const url = `${process.env.REACT_APP_API}${login}`;
-    console.log(url)
+  console.log(url)
   const navigator = useNavigate()
 
   // get data from the form
@@ -29,15 +29,15 @@ export default function LoginForm() {
   });
 
   const HandleSetEmail = (e) => {
-      setEmail(e.target.email)
+    setEmail(e.target.email)
   }
 
   const HandleSetPassword = (e) => {
-      setPassword(e.target.password)
+    setPassword(e.target.password)
   }
   const form = {
-      email,
-      password
+    email,
+    password
   }
   const requestOptions = {
     method: 'POST',
@@ -47,26 +47,28 @@ export default function LoginForm() {
   };
 
   const HandleSubmit = () => {
-      console.log(data)
-      if(sessionStorage.getItem('auth') !== 'true'){
-          console.log('clicked');
-          fetch(url, requestOptions)
-              .then((response) => {
-                  if (response.status === 200) {
-                      const session = response.json()
-                      console.log(session)
-                      sessionStorage.setItem(session.key, session.value)
-                      sessionStorage.setItem('auth', 'true')
-                      navigator('/customer/products')
-          } else {
-                      console.log('some error has happened')
-          }
-          }).catch((reason) => {
-            console.log(`This ${reason} happened and caused the error in the fetch request`)
+    console.log(data)
+    if (sessionStorage.getItem('auth') !== 'true') {
+      console.log('clicked');
+      fetch(url, requestOptions)
+        .then((response) => {
+          response.json().then((data) => {
+            console.log(data)
+            if (response.status === 200) {
+              sessionStorage.setItem('auth', 'true')
+              sessionStorage.setItem('token', data.token)
+              sessionStorage.setItem('user', data.user)
+              navigator('/customer/products')
+            } else {
+              console.log('some error has happened')
+            }
           })
-      } else  {
-          navigator('/customer/products')
-      }
+        }).catch((reason) => {
+          console.log(`This ${reason} happened and caused the error in the fetch request`)
+        })
+    } else {
+      navigator('/customer/products')
+    }
   };
 
   const HandleChange = (e) => {
@@ -99,7 +101,7 @@ export default function LoginForm() {
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
         <Checkbox name="remember" label="Remember me" />
         <Typography variant='body5' sx={{ ml: -5 }}>Remember Me</Typography>
-        <Link href={sessionStorage.getItem('signup') === 'true'? recoverPassword :null}variant="subtitle2" underline="hover">
+        <Link href={sessionStorage.getItem('signup') === 'true' ? recoverPassword : null} variant="subtitle2" underline="hover">
           Forgot password?
         </Link>
       </Stack>
