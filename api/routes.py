@@ -11,7 +11,8 @@ from sqlalchemy.orm import contains_eager
 
 # models
 from api.db_models import (Address, Cart, CartItem, Menu, MenuItem, Order,
-                           OrderItem, Reservation, Restaurant, Shipment, User)
+                           OrderItem, Payment, PaymentMethod, Reservation,
+                           Restaurant, Shipment, Transaction, User)
 from app import db
 
 # use blueprint to create a new routes
@@ -49,12 +50,8 @@ def signup():
     salt = bcrypt.gensalt()
     password_hash = bcrypt.hashpw(password.encode('utf-8'), salt)
 
-    # generate a UUID
-    user_id = uuid4()
-
     # create a new user object
-    new_user = User(
-                    id=user_id,
+    new_user = User(id=uuid4(),
                     email=data.get('email'),
                     password=password_hash,
                     first_name=data.get('first_name'),
@@ -874,12 +871,13 @@ def add_item_to_cart(user_id):
 
 
 
-# ------------------------------------- CHECKOUT ------------------------------------- #
+# ------------------------------------- ORDER ------------------------------------- #
 
 
-@api.route('/account/<int:user_id>/checkout', methods=['POST'], strict_slashes=False)
+
+@api.route('/account/<int:user_id>/order/add', methods=['POST'], strict_slashes=False)
 @jwt_required()
-def checkout(user_id):
+def place_order(user_id):
     # Access the identity of the current user
     current_user = get_jwt_identity()
     # check if the user ID from the JWT token matches the requested user ID
@@ -916,8 +914,9 @@ def checkout(user_id):
         db.get_session().commit()
 
     # total price of the order
-    total_price = sum([item.menu_item.menu.price * item.quantity for item in cart.items])
+    total_price = sum([item.menu_item.price * item.quantity for item in cart.items])
     order.total_price = total_price
+    order.status = 'succeeded'
 
     # Clear the cart
     for item in cart.items:
@@ -930,10 +929,6 @@ def checkout(user_id):
     db.get_session().commit()
 
     return jsonify({'message': 'Order placed successfully!'}), 201
-
-
-
-# ------------------------------------- ORDER ------------------------------------- #
 
 
 # get orders
@@ -1005,21 +1000,22 @@ def add_reservation(user_id, restaurant_id):
         return abort(401)
     # Parse the data from the request
     data = request.get_json()
-
+    # get the restaurant of the reservation
+    restaurant = db.get_session().query(Restaurant).get_or_404(restaurant_id)
     # Create a new reservation object
     reservation = Reservation(
+        user_id=current_user,
+        restaurant_id=restaurant.id,
         description=data.get('description'),
         duration=data.get('duration'),
         start=data.get('start'),
         end=data.get('end'),
         nb_of_person=data.get('nb_of_person'),
+        menu_item_id=data.get('menu_item_id'),
         additional_info=data.get('additional_info'),
         tables=data.get('tables'),
         price=data.get('price'),
         tax=data.get('tax'),
-        menu_item=data.get('menu_item'),
-        restaurant_id=restaurant_id,
-        user_id=current_user,
         created_at=datetime.utcnow(),
         updated_at=datetime.utcnow()
     )
@@ -1046,7 +1042,7 @@ def get_reservations(user_id):
     # return a list of reservation objects as a JSON response
     return jsonify([reservation.serialize() for reservation in reservations]), 200
 
-# get an reservation
+# get a reservation
 @api.route('/account/<int:user_id>/reservation/<int:reservation_id>', methods=['GET'], strict_slashes=False)
 @jwt_required()
 def get_reservation(user_id, reservation_id):
@@ -1099,8 +1095,8 @@ def update_reservation(user_id, reservation_id):
         reservation.price = data['price']
     if 'tax' in data:
         reservation.tax = data['tax']
-    if 'menu_item' in data:
-        reservation.menu_item = data['menu_item']
+    if 'menu_item_id' in data:
+        reservation.menu_item_id = data['menu_item_id']
 
     reservation.updated_at = datetime.utcnow()
 
@@ -1132,3 +1128,85 @@ def delete_reservation(user_id, reservation_id):
 
     # Return a success message to the user
     return jsonify({'message': 'Reservation deleted successfully!'}), 200
+
+
+# ------------------------------------- CHECKOUT ------------------------------------- #
+
+
+@api.route('/account/<int:user_id>/order/<int:order_id>/checkout', methods=['POST'], strict_slashes=False)
+@jwt_required()
+def checkout(user_id, order_id):
+    # Access the identity of the current user
+    current_user = get_jwt_identity()
+    # check if the user ID from the JWT token matches the requested user ID
+    if current_user != user_id:
+        return abort(401)
+    
+    # Parse the data from the request
+    data = request.get_json()
+
+    order = db.get_session.query(Order).filter_by(id=order_id).first()
+    if not order:
+        return jsonify({'message': 'No order found'}), 404
+    
+    payment_method = db.get_session.query(PaymentMethod).filter_by(user_id=current_user).first()
+    if not payment_method:
+        payment_method = PaymentMethod(
+            user_id=current_user,
+            type=data.get('type'),
+            last4=data.get('last4'),
+            exp_month=data.get('exp_month'),
+            exp_year=data.get('exp_year'),
+            created_at=datetime.utcnow(),
+            updated_at=datetime.utcnow(),
+        )
+        db.get_session().add(payment_method)
+        db.get_session().commit()
+        payment_method = db.get_session.query(PaymentMethod).filter_by(user_id=current_user).first()
+    
+    payment = Payment(
+        order_id=order_id,
+        payment_method_id=payment_method.id,
+        amount=order.total_price,
+        currency=data.get('currency'),
+        status=data.get('status'),
+        created_at=datetime.utcnow(),
+        updated_at=datetime.utcnow(),
+    )
+
+    db.get_session().add(payment)
+    db.get_session().commit()
+
+    return jsonify({'message': 'Checkout procided successfully'})
+
+
+# ------------------------------------- TRANSACTION ------------------------------------- #
+
+
+@api.route('/account/<int:user_id>/', methods=['POST'], strict_slashes=False)
+@jwt_required()
+def transaction(user_id, order_id):
+    # Access the identity of the current user
+    current_user = get_jwt_identity()
+    # check if the user ID from the JWT token matches the requested user ID
+    if current_user != user_id:
+        return abort(401)
+    
+    data = request.get_json()
+
+    payment = db.get_session.query(Payment).filter_by(order_id=order_id).first()
+
+    transaction = Transaction(
+        payment_id=payment.id,
+        amount=payment.amount,
+        currency=payment.currency,
+        type=data.get('type'),
+        status=data.get('status'),
+        created_at=datetime.utcnow(),
+        updated_at=datetime.utcnow()
+    )
+
+    db.get_session().add(transaction)
+    db.get_session().commit()
+
+    return jsonify({'message': 'Transaction added successfully!'}), 200
