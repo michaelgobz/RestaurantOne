@@ -14,6 +14,7 @@ import NewReservation from './sections/reservation/new/NewReservation';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ConfirmAccountPage from './pages/ConfirmAccountPage';
 import UpdatePasswordPage from './pages/UpdatePasswordPage'
+import ProductDetailPage from './pages/ProductDetailPage';
 
 
 
@@ -34,15 +35,16 @@ export default function Router() {
           element: <ProductsPage />
         },
         {
+          path: 'customer/products/:productId',
+          element: <ProductDetailPage />
+        },
+        {
+          path: 'customer/restaurants/:restaurantId',
+          element: <RestaurantsDetailsPage />
+        },
+        {
           path: 'customer/checkout',
           element: <Checkout />,
-          children:
-            [
-              {
-                path: 'new/:id',
-                element: <ProductsPage />
-              }
-            ]
         },
         {
           path: 'customer/reservations',

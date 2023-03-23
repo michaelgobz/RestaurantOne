@@ -4,80 +4,93 @@ export default function validateAddressForm(values, setErrors) {
   // name
 
   if (!values.name) {
-    errors.name = 'Nombre requerido';
+    errors.name = 'Name is required;
   } else if (values.name?.length < 3) {
-    errors.name = 'El nombre debe tener al menos 3 caracteres';
+    errors.name = 'Name must be at least 3 characters';
   } else if (!/^[A-Za-z]+(?:[ _-][A-Za-z]+)*$/i.test(values.name)) {
-    errors.name = 'El nombre no es válido';
+    errors.name = 'Name should be Alphabetic';
   }
 
   // lastName
 
   if (!values.lastName) {
-    errors.lastName = 'Apellido requerido';
+    errors.lastName = 'Last Name is required';
   } else if (values.lastName?.length < 3) {
-    errors.lastName = 'El apellido debe tener al menos 3 caracteres';
+    errors.lastName = ' Last Name must be at least 3 characters';
   } else if (!/^[A-Za-z]+(?:[ _-][A-Za-z]+)*$/i.test(values.lastName)) {
-    errors.lastName = 'El Apellido no es válido';
+    errors.lastName = 'Last Name should be Alphabetic';
   }
 
   // email
 
   if (!values.email) {
-    errors.email = 'Email requerido';
+    errors.email = 'Email is required';
   } else if (values.email?.length < 3) {
-    errors.email = 'El email debe tener al menos 3 caracteres';
+    errors.email = 'Email must be at least 3 characters';
   } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-    errors.email = 'El email no es válido';
+    errors.email = 'Email should have a valid format with and @ and a dot';
   }
 
   //address
 
   if (!values.address) {
-    errors.address = 'Dirección requerida';
-  } else if (values.address?.length < 3) {
-    errors.address = 'La dirección debe tener al menos 3 caracteres';
+    errors.address = 'Address is required';
+  } else if (values.address?.length < 10) {
+    errors.address = 'Address must be at least 10 characters';
   }
 
   // city
 
   if (!values.city) {
-    errors.city = 'Ciudad requerida';
+    errors.city = 'City is required';
   } else if (values.city?.length < 3) {
-    errors.city = 'La ciudad debe tener al menos 3 caracteres';
+    errors.city = 'City must be at least 3 characters';
   } else if (!/^[A-Za-z]+(?:[ _-][A-Za-z]+)*$/i.test(values.city)) {
-    errors.city = 'La ciudad no es válida';
+    errors.city = 'City should be Alphabetic';
   }
 
-  // state
 
-  if (!values.state) {
-    errors.state = 'Provicia/Estado requerido';
+  // country area
+
+  if (!values.countryArea) {
+    errors.countryArea = 'Country Area is required';
   } else if (values.state?.length < 3) {
-    errors.state = 'El campo debe tener al menos 3 caracteres';
+    errors.state = 'Country Area must be at least 3 characters';
   } else if (!/^[A-Za-z]+(?:[ _-][A-Za-z]+)*$/i.test(values.state)) {
-    errors.state = 'El campo no es válido';
+    errors.state = 'Country Area should be Alphabetic';
   }
 
-  if (!values.zip) {
-    errors.zip = 'Código postal requerido';
+  // city area
+
+  if (!values.cityArea) {
+    errors.cityArea = 'City Area is required';
+  } else if (values.cityArea?.length < 3) {
+    errors.cityArea = 'City Area must be at least 3 characters';
+  } else if (!/^[A-Za-z]+(?:[ _-][A-Za-z]+)*$/i.test(values.cityArea)) {
+    errors.cityArea = 'City Area should be Alphabetic';
+  }
+
+  // notes
+
+  if (!values.notes) {
+    errors.notes = 'Notes is not required';
   } else if (values.zip?.length < 4 || values.zip?.length > 6) {
-    errors.zip = 'El código postal tiene que tener de 4 a 6 caracteres';
-  } else if (!/^[0-9]{4,6}$/i.test(values.zip)) {
-    errors.zip = 'El código postal no es válido';
+    errors.zip = "notes  must be between 10 and 200 characters"
+  } else if (!/^[A-Za-z]+(?:[ _-][A-Za-z]+)*$/i.test(values.notes)) {
+    errors.zip = 'notes should be Alphabetic';
   }
 
   // phoneNumber
 
   if (!values.phoneNumber) {
-    errors.phoneNumber = 'Teléfono requerido';
+    errors.phoneNumber = 'Telephone Number is required';
   } else if (
     values.phoneNumber?.length < 8 ||
     values.phoneNumber?.length > 10
   ) {
-    errors.phoneNumber = 'El teléfono tiene que tener de 8 a 10 caracteres';
+    errors.phoneNumber = 'Telephone Number must be between 8 and 10 characters';
   } else if (!/^[0-9]{8,10}$/i.test(values.phoneNumber)) {
-    errors.phoneNumber = 'El teléfono no es válido';
+    errors.phoneNumber = 'Telephone Number should be Numeric';
   }
 
   setErrors(errors);

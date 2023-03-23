@@ -1,4 +1,4 @@
-import {useState , useContext}  from "react";
+import { useState, useContext } from "react";
 import PropTypes from "prop-types";
 import { Link } from 'react-router-dom';
 // mui components
@@ -10,21 +10,35 @@ import CardMedia from '@mui/material/CardMedia';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+// custom components
+import SnackBar from '../snackbar/SnackBar';
+// context
+import { CartContext } from '../contexts/CartContext';
+import { ItemCount } from '../ProductItemCount/ItemCount';
+import { GoBackBtn } from '../../utils/GoBackButton';
+import { ItemDescription } from './ProductDescription';
+
 
 
 ProductDetails.propTypes = {
-    Product: PropTypes.shape({
-    })
-
+  Product: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    price: PropTypes.number.isRequired,
+    description: PropTypes.object.isRequired,
+    imgPath: PropTypes.string.isRequired,
+    stock: PropTypes.number.isRequired,
+  }).isRequired
 }
+
 
 export default function ProductDetails(product) {
 
-      const { addItemToCart, isInCart } = useContext(CartContext);
-      const {showSnackbar , setShowSnackbar} = useState(false)
+  const { addItemToCart, isInCart } = useContext(CartContext);
+  const { showSnackbar, setShowSnackbar } = useState(false)
 
-    return (
-        <>
+  return (
+    <>
       <Grid
         container
         mt={5}
@@ -72,22 +86,22 @@ export default function ProductDetails(product) {
                 component={Link}
                 to='/cart'
               >
-                Terminar mi compra
+                add to cart
               </Button>
             ) : stock > 0 ? (
               <ItemCount stock={stock} onAdd={handleAddItemToCart} />
             ) : (
               <Typography variant='h6' color='textSecondary'>
-                Sin stock
+                    Currently unavailable
               </Typography>
             )}
           </Box>
         </Grid>
       </Grid>
       {showSuccessBar && (
-        <SuccessSnackbar message={'Producto agregado al carrito'} />
+        <SnackBar message={'Added item '} severity={'success'} />
       )}
-        </>
-    )
+    </>
+  )
 
 }

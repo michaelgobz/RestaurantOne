@@ -4,13 +4,13 @@ export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
   const [userData, setUserData] = useState({
-    name: '',
+    firstname: '',
     lastName: '',
     email: '',
     address: '',
     city: '',
-    state: '',
-    zip: '',
+    countryArea: '',
+    cityArea: '',
     phoneNumber: '',
     cardName: '',
     cardNumber: '',
@@ -37,17 +37,20 @@ export const UserProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider
-      value={{
-        handleChange,
-        userData,
-        errors,
-        setErrors,
-        setUserData,
-        resetUserData,
-      }}
-    >
-      {children}
-    </UserContext.Provider>
+    <>
+      <UserContext.Provider
+        value={{
+          handleChange,
+          userData,
+          errors,
+          setErrors,
+          setUserData,
+          resetUserData,
+        }}
+      >
+        {children}
+      </UserContext.Provider>
+    </>
+
   );
 };
