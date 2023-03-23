@@ -11,13 +11,10 @@ import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 // custom components
-import SnackBar from '../snackbar/SnackBar';
 // context
 import { CartContext } from '../../contexts/CartContext';
-import ItemCount from './ProductItemCount';
 import GoBackButton from '../../utils/GoBackButton';
-import ItemDescription from './ProductDescription';
-import LoadingSpinner from "../loadingSpinner/LoadingSpinner";
+
 
 
 ProductDetails.propTypes = {
@@ -32,10 +29,7 @@ ProductDetails.propTypes = {
 }
 
 
-export default function ProductDetails(product) {
-
-    const { addItemToCart, isInCart } = useContext(CartContext);
-    const { showSnackbar, setShowSnackbar } = useState(false)
+export default function RestaurantDetails(product) {
 
     return (
         <>
@@ -52,7 +46,7 @@ export default function ProductDetails(product) {
                     className='animate__animated animate__fadeInLeft'
                 >
                     <Card raised>
-                        <CardMedia component='img' image={imgPath} alt={id} />
+                        <CardMedia component='img' image={'imgPath'} alt={'id'} />
                     </Card>
                     <Box
                         display='flex'
@@ -69,12 +63,10 @@ export default function ProductDetails(product) {
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={8}>
-                    <Typography component='h3' textAlign='center' gutterBottom>
-                        {title}
-                    </Typography>
                     <Divider />
 
-                    <ItemDescription characteristics={description} />
+                    <RestaurantDetails />
+
                     <Divider sx={{ mb: 2 }} />
 
                     <Box display='flex' justifyContent={'center'} my>
@@ -83,7 +75,7 @@ export default function ProductDetails(product) {
                             color='error'
                             startIcon={<AssignmentTurnedInIcon />}
                             component={Link}
-                            to='/cart'
+                            to='/customer/reservation'
                         >
                             Reserve
                         </Button>
@@ -91,9 +83,6 @@ export default function ProductDetails(product) {
                     </Box>
                 </Grid>
             </Grid>
-            {showSuccessBar && (
-                <SnackBar message={'Added item '} severity={'success'} />
-            )}
         </>
     )
 
