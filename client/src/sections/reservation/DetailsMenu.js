@@ -77,20 +77,16 @@ export default function RestaurantDetailsMenu() {
                     onChangeIndex={handleChangeIndex}
                 >
                     <TabPanel value={value} index={0} dir={theme.direction}>
-                    // add menu items here
                         <DisplayMenu />
                     </TabPanel>
                     <TabPanel value={value} index={1} dir={theme.direction}>
-                    // add drinks items here
                         <DisplayMenu />
                     </TabPanel>
                     <TabPanel value={value} index={2} dir={theme.direction}>
-                    // add experiences items here
                         <DisplayMenu />
                     </TabPanel>
                 </SwipeableViews>
             </Box>
         </>
-
     );
 }

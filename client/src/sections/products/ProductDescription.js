@@ -1,15 +1,17 @@
 import Paper from '@mui/material/Paper';
 import RestaurantDetailsMenu from '../reservation/DetailsMenu';
 
-//should take in restaurant details as props
+function RestaurantDetails() {
 
-const RestaurantDetails = () => (
-  <>
-    <Paper elevation={8} sx={{ my: 3 }}>
-      <RestaurantDetailsMenu />
-    </Paper>
-  </>
+  return (
+    <>
+      <Paper elevation={8} sx={{ my: 3 }}>
+        <RestaurantDetailsMenu />
+      </Paper>
+    </>
 
-);
+  )
+
+};
 
 export default RestaurantDetails;

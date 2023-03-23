@@ -1,4 +1,5 @@
-import Typography from "src/theme/overrides/Typography";
+import Typography from "@mui/material/Typography";
+import Divider from "@mui/material/Divider";
 
 
 
@@ -8,6 +9,7 @@ export default function DisplayMenu() {
             <Typography variant="h4" component="h1" gutterBottom>
                 Dinner Menu
             </Typography>
+            <Divider sx={{ my: 5 }} />
             <Typography variant="body3" gutterBottom>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
                 malesuada, nisl eget aliquam tincidunt, nunc elit aliquam erat,
@@ -20,6 +22,7 @@ export default function DisplayMenu() {
             <Typography variant="h4" component="h1" gutterBottom>
                 Lunch Menu
             </Typography>
+            <Divider sx={{ my: 5 }} />
             <Typography variant="body3" gutterBottom>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
                 malesuada, nisl eget aliquam tincidunt, nunc elit aliquam erat,
@@ -29,5 +32,6 @@ export default function DisplayMenu() {
             </Typography>
 
         </>
+
     )
 }

@@ -9,7 +9,8 @@ const ProductDetailContainer = () => {
     const [item, setItem] = useState(null);
     const { itemId } = useParams();
     const [loading, setLoading] = useState(true);
-    const request_options = {
+
+    const requestOptions = {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -20,7 +21,7 @@ const ProductDetailContainer = () => {
 
     useEffect(async () => {
         // get the product from the db
-        const response = await fetch(url, request_options);
+        const response = await fetch(url, requestOptions);
         const data = await response.json();
         setItem(data);
     }, [itemId]);

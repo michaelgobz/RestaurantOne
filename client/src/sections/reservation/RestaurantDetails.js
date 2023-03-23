@@ -17,7 +17,7 @@ import GoBackButton from '../../utils/GoBackButton';
 
 
 
-ProductDetails.propTypes = {
+RestaurantDetails.propTypes = {
     Product: PropTypes.shape({
         id: PropTypes.string.isRequired,
         title: PropTypes.string.isRequired,
@@ -57,7 +57,7 @@ export default function RestaurantDetails() {
                         <GoBackButton />
 
                         <Typography component='h5' variant='h6' textAlign='center'>
-                            ${price}
+                            ${1000}
                         </Typography>
                     </Box>
                 </Grid>

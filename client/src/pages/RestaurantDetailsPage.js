@@ -1,15 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-
+import RestaurantDetails from '../sections/reservation/RestaurantDetails';
 import LoadingSpinner from '../sections/loadingSpinner/LoadingSpinner';
-import RestaurantDetails from 'src/sections/reservation/RestaurantDetails';
+
 
 
 const RestaurantDetailContainer = () => {
     const [item, setItem] = useState(null);
     const { itemId } = useParams();
     const [loading, setLoading] = useState(true);
-    const request_options = {
+
+    const requestOptions = {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -20,15 +21,15 @@ const RestaurantDetailContainer = () => {
 
     useEffect(async () => {
         // get the product from the db
-        const response = await fetch(url, request_options);
+        const response = await fetch(url, requestOptions);
         const data = await response.json();
         setItem(data);
     }, [itemId]);
 
     return (
         // needs to be changed to restaurant details
-        item ? <RestaurantDetails />
-            : <LoadingSpinner />);
+        item ? <LoadingSpinner />
+            : <RestaurantDetails />);
 
 };
 
