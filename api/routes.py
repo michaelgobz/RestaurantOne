@@ -7,6 +7,7 @@ from flask import Blueprint, abort, jsonify, redirect, request, url_for
 from flask_jwt_extended import (create_access_token, get_jwt, get_jwt_identity,
                                 jwt_required)
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import contains_eager
 
 # models
 from api.db_models import (Address, Cart, CartItem, Menu, MenuItem, Order,
@@ -143,22 +144,22 @@ def manager_dashboard(user_id):
         return abort(403)
     
     restaurants = db.get_session().query(Restaurant).filter(Restaurant.manager_id == current_user).all()
-    if not restaurants:
-        return jsonify({'message': 'No restaurant to display'}), 404
+    if restaurants:
+        # Initialize an empty dictionary to store the serialized Menu objects for each Restaurant.
+        all_menus = {}
+        for restaurant in restaurants:
+            menus = db.get_session().query(Menu).filter(Menu.restaurant_id == restaurant.id).all()
+            # If there are no Menu objects for the current Restaurant,add an empty list of menus to the all_menus dictionary.
+            if not menus:
+                all_menus[restaurant.id] = {'restaurant_name': restaurant.name, 'menus': []}
+            else:
+            # If there are Menu objects for the current Restaurant, add a list of serialized menus to the all_menus dictionary.
+                all_menus[restaurant.id] = {'restaurant_name': restaurant.name, 'menus': [menu.serialize() for menu in menus]}
+        
+        # Serialize the all_menus dictionary as JSON and return it as the response.
+        return jsonify(all_menus), 200
     
-    # Initialize an empty dictionary to store the serialized Menu objects for each Restaurant.
-    all_menus = {}
-    for restaurant in restaurants:
-        menus = db.get_session().query(Menu).filter(Menu.restaurant_id == restaurant.id).all()
-        # If there are no Menu objects for the current Restaurant,add an empty list of menus to the all_menus dictionary.
-        if not menus:
-            all_menus[restaurant.id] = {'restaurant_name': restaurant.name, 'menus': []}
-        else:
-        # If there are Menu objects for the current Restaurant, add a list of serialized menus to the all_menus dictionary.
-            all_menus[restaurant.id] = {'restaurant_name': restaurant.name, 'menus': [menu.serialize() for menu in menus]}
-
-    # Serialize the all_menus dictionary as JSON and return it as the response.
-    return jsonify(all_menus), 200
+    return jsonify({'message': 'No restaurant to display'}), 404
 
 
 
@@ -396,39 +397,50 @@ def get_restaurant(restaurant_id):
     # get user from the DB
     user = db.get_session().query(User).get_or_404(current_user)
 
-    # check whether the user is admin, manager or simple user
+    # check whether the user is admin or manager
     if user.role == 'admin' or user.role == 'manager':
-        # get the restaurant from the DB
-        restaurant = db.get_session().query(Restaurant).get_or_404(restaurant_id)
-        # get all the information for the restaurant
-        reservations = db.get_session().query(Reservation).filter(Reservation.restaurant_id == restaurant_id).all()
-        menus = db.get_session().query(Menu).filter(Menu.restaurant_id == restaurant_id).all()
-        orders = db.get_session().query(Order).filter(Order.restaurant_id == restaurant_id).all()
-        shipments = db.get_session().query(Shipment).filter(Shipment.restaurant_id == restaurant_id).all()
+        # get the restaurant from the DB with related tables
+        restaurant = db.get_session().query(Restaurant)\
+                            .join(Menu, Restaurant.menus)\
+                            .join(Order, Restaurant.orders)\
+                            .join(Shipment, Restaurant.shipments)\
+                            .join(Reservation, Restaurant.reservations)\
+                            .options(
+                                contains_eager(Restaurant.menus),
+                                contains_eager(Restaurant.orders),
+                                contains_eager(Restaurant.shipments),
+                                contains_eager(Restaurant.reservations)
+                            )\
+                            .filter(Restaurant.id == restaurant_id,
+                                    Restaurant.manager_id == current_user).one_or_none()
 
+        if restaurant is None:
+            abort(404, description="Restaurant not found")
+
+        # return informations to the manager
         return jsonify({
             "id": restaurant.id,
             "name": restaurant.name,
             "description": restaurant.description,
             "location": restaurant.location,
             "is_operational": restaurant.is_operational,
-            "order_fulfilling": restaurant.order_fulfilling,
-            "menus": menus,
-            "products": restaurant.products,
-            "orders": orders,
-            "payment_methods": restaurant.payment_methods,
-            "reservations": reservations,
-            "customers": restaurant.customers,
-            "shipments": shipments,
             "offers": restaurant.offers,
-            "suppliers": restaurant.suppliers,
+            "menus": [menu.to_dict() for menu in restaurant.menus],
+            "orders": [order.to_dict() for order in restaurant.orders],
+            "shipments": [shipment.to_dict() for shipment in restaurant.shipments],
+            "reservations": [reservation.to_dict() for reservation in restaurant.reservations],
             "created_at": restaurant.created_at,
             "updated_at": restaurant.updated_at
         })
-    
+
     else:
         # get the restaurant from the DB
-        restaurant = db.get_session().query(Restaurant).get_or_404(restaurant_id)
+        restaurant = db.get_session().query(Restaurant)\
+                            .join(Menu, Restaurant.menus)\
+                            .options(
+                                contains_eager(Restaurant.menus),
+                            )\
+                            .filter(Restaurant.id == restaurant_id).one_or_none()
         # get only public information for the restaurant
         return jsonify({
             "id": restaurant.id,
@@ -438,7 +450,8 @@ def get_restaurant(restaurant_id):
             "is_operational": restaurant.is_operational,
             "order_fulfilling": restaurant.order_fulfilling,
             "payment_methods": restaurant.payment_methods,
-            "offers": restaurant.offers
+            "offers": restaurant.offers,
+            "menus": [menu.to_dict() for menu in restaurant.menus]
         })
 
 
@@ -513,6 +526,7 @@ def delete_restaurant(user_id, restaurant_id):
     db.get_session().commit()
 
     return jsonify({'message': 'Restaurant deleted successfully'}), 200
+
 
 
 # ------------------------------------- MENU ------------------------------------- #
