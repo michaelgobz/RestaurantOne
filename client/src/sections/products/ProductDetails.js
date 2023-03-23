@@ -16,7 +16,7 @@ import SnackBar from '../snackbar/SnackBar';
 import { CartContext } from '../../contexts/CartContext';
 import ItemCount from './ProductItemCount';
 import GoBackButton from '../../utils/GoBackButton';
-import ItemDescription from './ProductDescription';
+import RestaurantDetails from './ProductDescription';
 
 
 ProductDetails.propTypes = {
@@ -73,7 +73,7 @@ export default function ProductDetails(product) {
           </Typography>
           <Divider />
 
-          <ItemDescription characteristics={description} />
+          <RestaurantDetails />
           <Divider sx={{ mb: 2 }} />
 
           <Box display='flex' justifyContent={'center'} my>
