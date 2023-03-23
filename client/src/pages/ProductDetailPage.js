@@ -19,16 +19,9 @@ const ProductDetailContainer = () => {
 
     const url = `${process.env.REACT_APP_API}/products/${itemId}`;
 
-    useEffect(async () => {
-        // get the product from the db
-        const response = await fetch(url, requestOptions);
-        const data = await response.json();
-        setItem(data);
-    }, [itemId]);
-
     return (
-        item ? <ProductDetails {...item} />
-            : <LoadingSpinner />);
+        item ? <ProductDetails />
+            : <ProductDetails />);
 
 };
 

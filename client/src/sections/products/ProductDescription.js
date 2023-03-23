@@ -1,12 +1,14 @@
 import Paper from '@mui/material/Paper';
-import RestaurantDetailsMenu from '../reservation/DetailsMenu';
+import ProductDetailsMenu from './ProductDetailsMenu';
 
-function RestaurantDetails() {
+function ProductDetailsDescription() {
 
   return (
     <>
-      <Paper elevation={8} sx={{ my: 3 }}>
-        <RestaurantDetailsMenu />
+      <Paper elevation={10} sx={{
+        my: 3,
+      }}>
+        < ProductDetailsMenu />
       </Paper>
     </>
 
@@ -14,4 +16,4 @@ function RestaurantDetails() {
 
 };
 
-export default RestaurantDetails;
+export default ProductDetailsDescription;

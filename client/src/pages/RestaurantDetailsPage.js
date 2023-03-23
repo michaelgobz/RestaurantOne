@@ -19,16 +19,9 @@ const RestaurantDetailContainer = () => {
 
     const url = `${process.env.REACT_APP_API}/restaurants/${itemId}`;
 
-    useEffect(async () => {
-        // get the product from the db
-        const response = await fetch(url, requestOptions);
-        const data = await response.json();
-        setItem(data);
-    }, [itemId]);
-
     return (
         // needs to be changed to restaurant details
-        item ? <LoadingSpinner />
+        item ? <RestaurantDetails />
             : <RestaurantDetails />);
 
 };

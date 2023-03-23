@@ -14,8 +14,25 @@ import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 // context
 import { CartContext } from '../../contexts/CartContext';
 import GoBackButton from '../../utils/GoBackButton';
+import RestaurantDetailsDescription from "./RestaurantDescription";
 
 
+/**
+ * RestaurantDetails.propTypes = {
+    Product: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
+        price: PropTypes.number.isRequired,
+        description: PropTypes.object.isRequired,
+        imgPath: PropTypes.string.isRequired,
+        stock: PropTypes.number.isRequired,
+    })
+}
+ * 
+ * 
+ * 
+ * 
+ */
 
 RestaurantDetails.propTypes = {
     Product: PropTypes.shape({
@@ -46,7 +63,7 @@ export default function RestaurantDetails() {
                     className='animate__animated animate__fadeInLeft'
                 >
                     <Card raised>
-                        <CardMedia component='img' image={'imgPath'} alt={'id'} />
+                        <CardMedia component='img' image={`/assets/images/products/product_${5}.jpg`} alt={'id'} />
                     </Card>
                     <Box
                         display='flex'
@@ -65,14 +82,13 @@ export default function RestaurantDetails() {
                 <Grid item xs={12} sm={6} md={8}>
                     <Divider />
 
-                    <RestaurantDetails />
+                    <RestaurantDetailsDescription />
 
                     <Divider sx={{ mb: 2 }} />
 
                     <Box display='flex' justifyContent={'center'} my>
                         <Button
-                            variant='contained'
-                            color='error'
+                            variant='contained'                 
                             startIcon={<AssignmentTurnedInIcon />}
                             component={Link}
                             to='/customer/reservation/new'

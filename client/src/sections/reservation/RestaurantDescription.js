@@ -1,7 +1,7 @@
 import Paper from '@mui/material/Paper';
 import RestaurantDetailsMenu from './DetailsMenu';
 
-function RestaurantDetails() {
+function RestaurantDetailsDescription() {
 
     return (
         <>
@@ -14,4 +14,4 @@ function RestaurantDetails() {
 
 };
 
-export default RestaurantDetails;
+export default RestaurantDetailsDescription;
