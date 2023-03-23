@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 // @mui
-import {Box, Card, Link, Typography, Stack, Rating, Button} from '@mui/material';
+import { Box, Card, Typography, Stack, Rating, Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 // utils
 import { fCurrency } from '../../utils/formatNumber';
@@ -73,8 +74,8 @@ export default function ShopProductCard({ product }) {
             {fCurrency(price)}
           </Typography>
           <Stack direction="column" alignItems="center" justifyContent="space-between" mb={0.2} mt={0.2}>
-            <Rating varient="small" value={2} disabled  sx={{ mb: 2, mt: 2 }} />
-            <Button variant="small" startIcon={<Iconify icon="eva:plus-fill" />}
+            <Rating variant="small" value={2} disabled sx={{ mb: 2, mt: 2 }} />
+            <Button variant="small" component={Link} to='/customer/products/details'
             sx={{ mb: 0.1, mt: 0.1 }}>
               view
           </Button>

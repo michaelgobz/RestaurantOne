@@ -71,18 +71,28 @@ export default function RestaurantDetails() {
                         mt={1}
                         alignContent='center'
                     >
-                        <GoBackButton />
+                        <GoBackButton sx={{ my: 5 }} />
 
-                        <Typography component='h5' variant='h6' textAlign='center'>
+                        <Typography component='h5' variant='h6' textAlign='center'
+                            sx={{ my: 5 }}
+                        >
                             ${1000}
                         </Typography>
                     </Box>
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={8}>
-                    <Divider />
 
-                    <RestaurantDetailsDescription />
+                    <Typography component='body6' align='center' sx={{
+                        my: 5,
+                        textAlign: 'center',
+                        fontSize: '1.5rem',
+                    }} gutterBottom>
+                        Nile Restaurant
+                    </Typography>
+                    <Divider sx={{ my: 5 }} />
+
+                    <RestaurantDetailsDescription sx={{ my: 5 }} />
 
                     <Divider sx={{ mb: 2 }} />
 
@@ -91,7 +101,7 @@ export default function RestaurantDetails() {
                             variant='contained'                 
                             startIcon={<AssignmentTurnedInIcon />}
                             component={Link}
-                            to='/customer/reservation/new'
+                            to='/customer/reservations/new'
                         >
                             Reserve
                         </Button>
