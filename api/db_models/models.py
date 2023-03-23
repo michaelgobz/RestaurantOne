@@ -19,6 +19,7 @@ class User(db.Model):
     updated_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow,
                            onupdate=datetime.utcnow)
+    payment_methods = db.relationship('PaymentMethod', backref='user', lazy=True)
     orders = db.relationship("Order", backref="user")
     reservations = db.relationship('Reservation', backref='user')
     restaurants = db.relationship('Restaurant', backref='manager')
@@ -124,7 +125,8 @@ class MenuItem(db.Model):
                            default=datetime.utcnow,
                            onupdate=datetime.utcnow)
     menu_id = db.Column(db.Integer, db.ForeignKey('menus.id'), nullable=False)
-    carts = db.relationship('MenuItem', backref='menu_item')
+    carts = db.relationship('CartItem', backref='menu_item')
+    reservations = db.relationship('Reservation', backref='menu_item')
 
 
 class Cart(db.Model):
@@ -163,6 +165,7 @@ class Order(db.Model):
     payment_method = db.Column(db.String(255), nullable=False)
     status = db.Column(db.String(255), default='pending')
     notes = db.Column(db.String(255))
+    transaction = db.relationship('Transaction', backref='order', lazy=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow())
     updated_at = db.Column(db.DateTime, default=datetime.utcnow(), onupdate=datetime.utcnow())
 
@@ -183,50 +186,58 @@ class Reservation(db.Model):
     __tablename__ = 'reservations'
 
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer,
+                        db.ForeignKey('users.id'), nullable=False)
+    restaurant_id = db.Column(db.Integer,
+                              db.ForeignKey('restaurants.id'), nullable=False)
     description = db.Column(db.String(200), nullable=True)
     duration = db.Column(db.DateTime, nullable=True)
     start = db.Column(db.DateTime, nullable=True)
     end = db.Column(db.DateTime, nullable=True)
-    nb_of_person = db.Column(db.Integer, nullable=False, default=0.0)
+    nb_of_person = db.Column(db.Integer, nullable=False, default=0)
+    menu_item_id = db.Column(db.Integer, db.ForeignKey('menu_items.id'), nullable=False)
     additional_info = db.Column(db.String(200), nullable=True)
     tables = db.Column(db.Integer, nullable=True)
     category = db.Column(db.String(50), nullable=True)
-    price = db.Column(db.Float, nullable=False, default=0)
-    tax = db.Column(db.Float, nullable=True)
-    menu = db.Column(db.String(50), nullable=True)
+    price = db.Column(db.Float, nullable=False, default=0.0)
+    payment_method = db.Column(db.String(255), nullable=False)
+    transaction = db.relationship('Transaction', backref='reservation', lazy=True)
     created_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow,
                            onupdate=datetime.utcnow)
-    restaurant_id = db.Column(db.Integer,
-                              db.ForeignKey('restaurants.id'), nullable=False)
-    user_id = db.Column(db.Integer,
-                        db.ForeignKey('users.id'), nullable=False)
-
-
-class ReservationItem(db.Model):
-    """Reservation Item model"""
-    __tablename__ = 'reservation_items'
-    id = db.Column(db.Integer, primary_key=True)
 
 
 class PaymentMethod(db.Model):
     """PaymentMethod model"""
     __tablename__ = 'payment_methods'
+
     id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'),
+                         nullable=False)
+    type = db.Column(db.String(50), nullable=False)
+    last4 = db.Column(db.String(4), nullable=True)
+    exp_month = db.Column(db.Integer, nullable=True)
+    exp_year = db.Column(db.Integer, nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow)
+    payments = db.relationship('Payment', backref='payment_method', lazy=True)
 
 
 class Payment(db.Model):
     """Payment model"""
     __tablename__ = 'payments'
-    id = db.Column(db.Integer, primary_key=True)
 
-
-class TransactionItem(db.Model):
-    """TransactionItem model"""
-    __tablename__ = 'transaction_items'
     id = db.Column(db.Integer, primary_key=True)
+    order_id = db.Column(db.Integer, db.ForeignKey('orders.id'), nullable=False)
+    payment_method_id = db.Column(db.Integer, db.ForeignKey('payment_methods.id'), nullable=False)
+    amount = db.Column(db.Float)
+    currency = db.Column(db.String(10))
+    status = db.Column(db.String(20), default='pending')
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow)
+    transactions = db.relationship('Transaction', backref='payment', lazy=True)
 
 
 class Transaction(db.Model):
@@ -234,25 +245,13 @@ class Transaction(db.Model):
     __tablename__ = 'transactions'
     
     id = db.Column(db.Integer, primary_key=True)
-    description = db.Column(db.String(200), nullable=True)
-    duration = db.Column(db.DateTime, nullable=True)
-    start = db.Column(db.DateTime, nullable=True)
-    end = db.Column(db.DateTime, nullable=True)
-    nb_of_person = db.Column(db.Integer, nullable=False, default=0.0)
-    additional_info = db.Column(db.String(200), nullable=True)
-    tables = db.Column(db.Integer, nullable=True)
-    category = db.Column(db.String(50), nullable=True)
-    price = db.Column(db.Float, nullable=False, default=0)
-    tax = db.Column(db.Float, nullable=True)
-    menu_item = db.Column(db.String(50), nullable=True)
-    created_at = db.Column(db.DateTime, nullable=False,
-                           default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, nullable=False,
-                           default=datetime.utcnow,
-                           onupdate=datetime.utcnow)
-    restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'),
-                              nullable=False)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    payment_id = db.Column(db.Integer, db.ForeignKey('payments.id'), nullable=False)
+    amount = db.Column(db.Float)
+    currency = db.Column(db.String(10))
+    type = db.Column(db.String(20))
+    status = db.Column(db.String(20))
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow)
 
 
 class ShipmentMethod(db.Model):
