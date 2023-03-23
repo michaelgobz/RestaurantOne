@@ -4,7 +4,7 @@ import DefaultLayout from './layouts/dashboard';
 import SimpleLayout from './layouts/simple';
 // pages
 import RestaurantsPage from './pages/RestaurantPage';
-import UserPage from './pages/UserPage';
+import OrderPage from './pages/OrdersPage';
 import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/signupPage';
 import Page404 from './pages/Page404';
@@ -59,11 +59,11 @@ export default function Router() {
 
         {
           path: 'customer/orders',
-          element: <UserPage />
+          element: <OrderPage />
         },
         {
           path: 'customer/account',
-          element: <UserPage />
+          element: <OrderPage />
         },
       ],
     },
@@ -93,6 +93,10 @@ export default function Router() {
         { path: '404', element: <Page404 /> },
       ],
     },
+    {
+      path: '*',
+      element: <Navigate to="/404" />
+    }
   ]);
 
   return routes;

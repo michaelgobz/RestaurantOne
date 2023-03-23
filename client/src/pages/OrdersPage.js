@@ -73,7 +73,7 @@ function applySortFilter(array, comparator, query) {
     return stabilizedThis.map((el) => el[0]);
 }
 
-export default function UserPage() {
+export default function OrdersPage() {
     const [open, setOpen] = useState(null);
 
     const [page, setPage] = useState(0);
@@ -149,22 +149,17 @@ export default function UserPage() {
     return (
         <>
             <Helmet>
-                <title> Reservation | Open Restaurant </title>
+                <title> Orders| Open Restaurant </title>
             </Helmet>
 
             <Container>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
                     <Typography variant="h4" gutterBottom>
-                        User
+                        Orders
                     </Typography>
-                    <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}>
-                        New User
-                    </Button>
                 </Stack>
 
                 <Card>
-                    <UserListToolbar numSelected={selected.length} filterName={filterName} onFilterName={handleFilterByName} />
-
                     <Scrollbar>
                         <TableContainer sx={{ minWidth: 800 }}>
                             <Table>
