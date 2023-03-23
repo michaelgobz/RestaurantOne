@@ -3,6 +3,7 @@ import { useState, createContext } from 'react';
 export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
+
   const [cart, setCart] = useState(
     JSON.parse(localStorage.getItem('cart')) || []
   );
@@ -27,9 +28,14 @@ export const CartProvider = ({ children }) => {
   const amountOfItemsInCart = () =>
       // eslint-disable-next-line no-return-assign
     cart.reduce((acc, item) => (acc += item.quantity), 0);
+  /**
+   * function totalCartPrice() {
+      return cart.reduce((acc, item) => (acc += item.price * item.quantity), 0);
+    }
+  
+   * 
+   */
 
-  const totalCartPrice = () =>
-    cart.reduce((acc, item) => (acc += item.price * item.quantity), 0);
 
   const resetCart = () => {
     setCart([]);
@@ -46,7 +52,7 @@ export const CartProvider = ({ children }) => {
           removeItemFromCart,
           isInCart,
           amountOfItemsInCart,
-          totalCartPrice,
+          // totalCartPrice,
           resetCart,
         }}
       >

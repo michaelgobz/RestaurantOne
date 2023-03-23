@@ -16,10 +16,10 @@ import SnackBar from '../snackbar/SnackBar';
 import { CartContext } from '../../contexts/CartContext';
 import ItemCount from './ProductItemCount';
 import GoBackButton from '../../utils/GoBackButton';
-import ItemDescription from './ProductDescription';
+import ProductDetailsDescription from "./ProductDescription";
 
-
-ProductDetails.propTypes = {
+/**
+ * ProductDetails.propTypes = {
   Product: PropTypes.shape({
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
@@ -27,13 +27,16 @@ ProductDetails.propTypes = {
     description: PropTypes.object.isRequired,
     imgPath: PropTypes.string.isRequired,
     stock: PropTypes.number.isRequired,
-  }).isRequired
-}
+  })
+ * 
+ * 
+ */
 
 
-export default function ProductDetails(product) {
 
-  const { addItemToCart, isInCart } = useContext(CartContext);
+export default function ProductDetails() {
+
+  // const { addItemToCart, isInCart } = useContext(CartContext);
   const { showSnackbar, setShowSnackbar } = useState(false)
 
   return (
@@ -51,7 +54,7 @@ export default function ProductDetails(product) {
           className='animate__animated animate__fadeInLeft'
         >
           <Card raised>
-            <CardMedia component='img' image={'imgPath'} alt={'id'} />
+            <CardMedia component='img' image={`/assets/images/products/product_${1}.jpg`} alt={'id'} />
           </Card>
           <Box
             display='flex'
@@ -59,31 +62,35 @@ export default function ProductDetails(product) {
             mt={1}
             alignContent='center'
           >
-            <GoBackButton />
+            <GoBackButton sx={{ my: 5 }} />
 
-            <Typography component='h5' variant='h6' textAlign='center'>
+            <Typography component='h5' variant='h6' textAlign='center' sx={{ my: 5 }}>
               ${1000}
             </Typography>
           </Box>
         </Grid>
 
-        <Grid item xs={12} sm={6} md={8}>
-          <Typography component='h3' textAlign='center' gutterBottom>
-            {'Chicken in Rough Pocket'}
+        <Grid item xs={8} sm={6} md={8}>
+          <Typography component='body6' align='center' sx={{
+            my: 5,
+            textAlign: 'center',
+            fontSize: '1.5rem',
+          }} gutterBottom>
+            Chicken in Rough Pocket
           </Typography>
-          <Divider />
+          <Divider sx={{ my: 5 }} />
 
-          <ItemDescription characteristics={description} />
+          <ProductDetailsDescription />
           <Divider sx={{ mb: 2 }} />
 
           <Box display='flex' justifyContent={'center'} my>
 
               <Button
-                variant='contained'
-                color='error'
+              variant='contained'
                 startIcon={<AssignmentTurnedInIcon />}
-                component={Link}
-                to='/cart'
+              component={Link}
+              sx={{ my: 5 }}
+              to='/customer/checkout'
               >
               Add to cart
             </Button>

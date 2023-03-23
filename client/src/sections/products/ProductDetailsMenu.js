@@ -7,7 +7,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import DisplayMenu from './DisplayMenu';
+import DisplayMenu from '../reservation/DisplayMenu';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -42,7 +42,8 @@ function a11yProps(index) {
     };
 }
 
-export default function RestaurantDetailsMenu() {
+export default function ProductDetailsMenu() {
+
     const theme = useTheme();
     const [value, setValue] = React.useState(0);
 
@@ -56,7 +57,7 @@ export default function RestaurantDetailsMenu() {
 
     return (
         <>
-            <Box sx={{ bgcolor: 'background.blur', width: 880 }}>
+            <Box sx={{ bgcolor: 'background.paper', width: 880 }}>
                 <AppBar position="static">
                     <Tabs
                         value={value}

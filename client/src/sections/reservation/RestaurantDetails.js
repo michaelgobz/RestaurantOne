@@ -14,10 +14,11 @@ import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 // context
 import { CartContext } from '../../contexts/CartContext';
 import GoBackButton from '../../utils/GoBackButton';
+import RestaurantDetailsDescription from "./RestaurantDescription";
 
 
-
-ProductDetails.propTypes = {
+/**
+ * RestaurantDetails.propTypes = {
     Product: PropTypes.shape({
         id: PropTypes.string.isRequired,
         title: PropTypes.string.isRequired,
@@ -25,7 +26,23 @@ ProductDetails.propTypes = {
         description: PropTypes.object.isRequired,
         imgPath: PropTypes.string.isRequired,
         stock: PropTypes.number.isRequired,
-    }).isRequired
+    })
+}
+ * 
+ * 
+ * 
+ * 
+ */
+
+RestaurantDetails.propTypes = {
+    Product: PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
+        price: PropTypes.number.isRequired,
+        description: PropTypes.object.isRequired,
+        imgPath: PropTypes.string.isRequired,
+        stock: PropTypes.number.isRequired,
+    })
 }
 
 
@@ -46,7 +63,7 @@ export default function RestaurantDetails() {
                     className='animate__animated animate__fadeInLeft'
                 >
                     <Card raised>
-                        <CardMedia component='img' image={'imgPath'} alt={'id'} />
+                        <CardMedia component='img' image={`/assets/images/products/product_${5}.jpg`} alt={'id'} />
                     </Card>
                     <Box
                         display='flex'
@@ -54,28 +71,37 @@ export default function RestaurantDetails() {
                         mt={1}
                         alignContent='center'
                     >
-                        <GoBackButton />
+                        <GoBackButton sx={{ my: 5 }} />
 
-                        <Typography component='h5' variant='h6' textAlign='center'>
-                            ${price}
+                        <Typography component='h5' variant='h6' textAlign='center'
+                            sx={{ my: 5 }}
+                        >
+                            ${1000}
                         </Typography>
                     </Box>
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={8}>
-                    <Divider />
 
-                    <RestaurantDetails />
+                    <Typography component='body6' align='center' sx={{
+                        my: 5,
+                        textAlign: 'center',
+                        fontSize: '1.5rem',
+                    }} gutterBottom>
+                        Nile Restaurant
+                    </Typography>
+                    <Divider sx={{ my: 5 }} />
+
+                    <RestaurantDetailsDescription sx={{ my: 5 }} />
 
                     <Divider sx={{ mb: 2 }} />
 
                     <Box display='flex' justifyContent={'center'} my>
                         <Button
-                            variant='contained'
-                            color='error'
+                            variant='contained'                 
                             startIcon={<AssignmentTurnedInIcon />}
                             component={Link}
-                            to='/customer/reservation/new'
+                            to='/customer/reservations/new'
                         >
                             Reserve
                         </Button>

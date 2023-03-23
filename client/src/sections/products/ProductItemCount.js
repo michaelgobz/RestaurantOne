@@ -1,6 +1,4 @@
 import React from 'react';
-import { useCounter } from '../../hooks/useCounter';
-
 import InputAdornment from '@mui/material/InputAdornment';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import FormControl from '@mui/material/FormControl';
@@ -12,6 +10,8 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/system/Box';
 import Button from '@mui/material/Button';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+// custom components
+import { useCounter } from '../../hooks/useCounter';
 
 const ItemCount = ({ stock = 0, initial = 1, onAdd }) => {
     const { counter, increment, decrement } = useCounter(initial);
