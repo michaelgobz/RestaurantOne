@@ -66,7 +66,7 @@ export default function RestaurantPostCard({ post, index }) {
   const latestPost = index === 1 || index === 2;
 
   const HandleReservation = () => {
-    navigate('new')
+    navigate('customer/restaurants')
   }
 
   const POST_INFO = [

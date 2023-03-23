@@ -15,6 +15,7 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ConfirmAccountPage from './pages/ConfirmAccountPage';
 import UpdatePasswordPage from './pages/UpdatePasswordPage'
 import ProductDetailContainer from './pages/ProductDetailPage';
+import RestaurantsDetailsContainer from './pages/RestaurantDetailsPage';
 
 
 
@@ -39,8 +40,8 @@ export default function Router() {
           element: <ProductDetailContainer />
         },
         {
-          path: 'customer/restaurants/:restaurantId',
-          element: <RestaurantsDetailsPage />
+          path: 'customer/restaurants/',
+          element: <RestaurantsDetailsContainer />
         },
         {
           path: 'customer/checkout',

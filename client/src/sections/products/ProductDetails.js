@@ -51,7 +51,7 @@ export default function ProductDetails(product) {
           className='animate__animated animate__fadeInLeft'
         >
           <Card raised>
-            <CardMedia component='img' image={imgPath} alt={id} />
+            <CardMedia component='img' image={'imgPath'} alt={'id'} />
           </Card>
           <Box
             display='flex'
@@ -62,14 +62,14 @@ export default function ProductDetails(product) {
             <GoBackButton />
 
             <Typography component='h5' variant='h6' textAlign='center'>
-              ${price}
+              ${1000}
             </Typography>
           </Box>
         </Grid>
 
         <Grid item xs={12} sm={6} md={8}>
           <Typography component='h3' textAlign='center' gutterBottom>
-            {title}
+            {'Chicken in Rough Pocket'}
           </Typography>
           <Divider />
 
@@ -77,7 +77,7 @@ export default function ProductDetails(product) {
           <Divider sx={{ mb: 2 }} />
 
           <Box display='flex' justifyContent={'center'} my>
-            {isInCart(id) ? (
+
               <Button
                 variant='contained'
                 color='error'
@@ -85,19 +85,12 @@ export default function ProductDetails(product) {
                 component={Link}
                 to='/cart'
               >
-                add to cart
-              </Button>
-            ) : stock > 0 ? (
-              <ItemCount stock={stock} onAdd={handleAddItemToCart} />
-            ) : (
-              <Typography variant='h6' color='textSecondary'>
-                    Currently unavailable
-              </Typography>
-            )}
+              Add to cart
+            </Button>
           </Box>
         </Grid>
       </Grid>
-      {showSuccessBar && (
+      {showSnackbar && (
         <SnackBar message={'Added item '} severity={'success'} />
       )}
     </>

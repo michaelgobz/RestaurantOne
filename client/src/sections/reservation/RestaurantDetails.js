@@ -29,7 +29,7 @@ ProductDetails.propTypes = {
 }
 
 
-export default function RestaurantDetails(product) {
+export default function RestaurantDetails() {
 
     return (
         <>
@@ -75,7 +75,7 @@ export default function RestaurantDetails(product) {
                             color='error'
                             startIcon={<AssignmentTurnedInIcon />}
                             component={Link}
-                            to='/customer/reservation'
+                            to='/customer/reservation/new'
                         >
                             Reserve
                         </Button>
