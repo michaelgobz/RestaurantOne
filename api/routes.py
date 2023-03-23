@@ -1177,7 +1177,7 @@ def checkout(user_id, order_id):
     db.get_session().add(payment)
     db.get_session().commit()
 
-    return jsonify({'message': 'Checkout procided successfully'})
+    return jsonify({'message': 'Checkout proceeded successfully'})
 
 
 # ------------------------------------- TRANSACTION ------------------------------------- #
