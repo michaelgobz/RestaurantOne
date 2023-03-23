@@ -8,8 +8,8 @@ from flask_jwt_extended import (create_access_token, get_jwt, get_jwt_identity,
 from sqlalchemy.exc import IntegrityError
 
 # models
-from api.db_models import (Address, Menu, MenuItem, Order, Reservation,
-                           Restaurant, Shipment, User)
+from api.db_models import (Address, Cart, CartItem, Menu, MenuItem, Order,
+                           OrderItem, Reservation, Restaurant, Shipment, User)
 from app import db
 
 # use blueprint to create a new routes
@@ -52,7 +52,8 @@ def signup():
                     password=password_hash,
                     first_name=data.get('first_name'),
                     last_name=data.get('last_name'),
-                    created_at=datetime.utcnow())
+                    created_at=datetime.utcnow(),
+                    updated_at=datetime.utcnow())
 
     # try to add user to database
     try:
@@ -94,7 +95,7 @@ def logout():
     return jsonify({'message': 'Successfully logged out'}), 200
 
 
-# ------------------------------------- DASHBOARD ------------------------------------- #
+# ------------------------------------- DASHBOARDS ------------------------------------- #
 
 
 # admin dashboard
@@ -786,14 +787,13 @@ def delete_menu_item(user_id, menu_id, item_id):
     return jsonify({'message': 'Menu item deleted successfully'}), 200
 
 
+# ------------------------------------- CART ------------------------------------- #
 
-# ------------------------------------- ORDER ------------------------------------- #
 
-
-# add an order
-@api.route('/dashboard/<int:user_id>/restaurant/<int:restaurant_id>/orders/add', methods=['POST'], strict_slashes=False)
+# add an cart
+@api.route('/dashboard/<int:user_id>/cart/add', methods=['POST'], strict_slashes=False)
 @jwt_required()
-def add_order(user_id, restaurant_id):
+def add_item_to_cart(user_id):
     # access the identity of the current user
     current_user = get_jwt_identity()
     # check if the user ID from the JWT token matches the requested user ID
@@ -801,29 +801,107 @@ def add_order(user_id, restaurant_id):
         return abort(401)
     # Parse the data from the request
     data = request.get_json()
+    menu_item_id = data.get('menu_item_id')
+    quantity = data.get("quantity")
 
-    # Create a new Order object
+    # retrieve the menu from the DB
+    menu_item = db.get_session().query(MenuItem).filter_by(id=menu_item_id).first()
+
+    if not menu_item :
+        return jsonify({'message': 'Menu item not found!'}), 404
+    if not quantity or quantity < 1:
+        return jsonify({'error': 'Invalid quantity'}), 400
+    
+    # retrieve the user's cart from the DB
+    cart = db.get_session().query(Cart).filter_by(user_id=current_user).first()
+
+    # if the user doesn't have a cart, create a cart
+    if not cart:
+        cart = Cart(
+            user_id=current_user,
+            created_at=datetime.utcnow(),
+            updated_at=datetime.utcnow()
+        )
+        db.get_session().add(cart)
+        db.get_session().commit()
+
+        # retrieve the user's cart from the DB
+        cart = db.get_session().query(Cart).filter_by(user_id=current_user).first()
+
+    # check if the menu item is already in the cart
+    cart_item = db.get_session().query(CartItem).filter_by(cart_id=cart.id, menu_item_id=menu_item_id).first()
+
+    if cart_item:
+        cart_item.quantity += quantity
+    else:
+        price = menu_item.price
+
+    # add the menu to the cart
+    cart_item = CartItem(
+        cart_id=cart.id,
+        menu_item_id=menu_item_id,
+        quantity=quantity,
+        price=price
+    )
+
+    db.get_session().add(cart_item)
+    db.get_session().commit()
+
+    return jsonify({'message': 'Item added to cart successfully!'}), 201
+
+
+
+# ------------------------------------- CHECKOUT ------------------------------------- #
+
+
+@api.route('/account/<int:user_id>/checkout', methods=['POST'], strict_slashes=False)
+@jwt_required()
+def checkout():
+    # Access the identity of the current user
+    current_user = get_jwt_identity()
+
+    # Parse the data from the request
+    data = request.get_json()
+
+    # Get the cart for the current user
+    cart = db.get_session().query(Cart).filter_by(user_id=current_user).first()
+
+    # Check if the cart is empty
+    if not cart.items:
+        return jsonify({'message': 'Your cart is empty!'}), 400
+
+    # Create a new order for the current user
     order = Order(
-        restaurant=data.get('restaurant'),
-        menus=data.get('menu'),
-        total_price=data.get('total_price'),
+        user_id=current_user,
+        restaurant_id=cart.items[0].menu_item.menu.restaurant.id,
         address=data.get('address'),
         shipment_method=data.get('shipment_method'),
         payment_method=data.get('payment_method'),
-        status=data.get('status'),
         notes=data.get('notes'),
         created_at=datetime.utcnow(),
-        updated_at=datetime.utcnow(),
-        user_id=current_user,
-        restaurant_id=restaurant_id
+        updated_at=datetime.utcnow()
     )
+
+    # Add the items from the cart to the order
+    for item in cart.items:
+        order_item = OrderItem(menu_item_id=item.menu_item_id, quantity=item.quantity, price=item.price)
+
+        db.get_session().add(order_item)
+        db.get_session().commit()
+
+    # Clear the cart
+    cart.clear()
 
     # Add the order to the DB
     db.get_session().add(order)
     db.get_session().commit()
 
-    # Return a success message to the user
-    return jsonify({'message': 'Order added successfully!'}), 201
+    return jsonify({'message': 'Order placed successfully!'}), 201
+
+
+
+# ------------------------------------- ORDER ------------------------------------- #
+
 
 # get orders
 @api.route('/account/<int:user_id>/orders', methods=['GET'], strict_slashes=False)
@@ -854,46 +932,6 @@ def get_order(user_id, order_id):
         return jsonify({'error': 'Order not found!'}), 404
     # return the order object as a JSON response
     return jsonify([element.serialize() for element in order]), 200
-
-# Update order
-@api.route('/dashboard/<int:user_id>/order/<int:order_id>/update', methods=['PUT'], strict_slashes=False)
-@jwt_required()
-def update_order(user_id, order_id):
-    # access the identity of the current user
-    current_user = get_jwt_identity()
-    # check if the user ID from the JWT token matches the requested user ID
-    if current_user != user_id:
-        return abort(401)
-    # retrieve the order to update from the database
-    order = db.get_session().query(Order).filter_by(id=order_id, user_id=current_user).first()
-    if not order:
-        return jsonify({'error': 'No order found'}), 404
-
-    # Parse the data from the request
-    data = request.get_json()
-
-    # Update the order object
-    if 'items' in data:
-        order.items = data['items']
-    if 'total_price' in data:
-        order.total_price = data['total_price']
-    if 'address' in data:
-        order.address = data['address']
-    if 'shipment_method' in data:
-        order.shipment_method = data['shipment_method']
-    if 'payment_method' in data:
-        order.payment_method = data['payment_method']
-    if 'status' in data:
-        order.status = data['status']
-    if 'notes' in data:
-        order.notes = data['notes']
-    order.updated_at = datetime.utcnow()
-
-    # Commit the changes to the DB
-    db.get_session().commit()
-
-    # Return a success message to the user
-    return jsonify({'message': 'Order updated successfully!'}), 200
 
 
 # Delete order
