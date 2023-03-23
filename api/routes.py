@@ -1,5 +1,6 @@
 from datetime import datetime
 from re import A
+from uuid import uuid4
 
 import bcrypt
 from flask import Blueprint, abort, jsonify, redirect, request, url_for
@@ -47,8 +48,13 @@ def signup():
     salt = bcrypt.gensalt()
     password_hash = bcrypt.hashpw(password.encode('utf-8'), salt)
 
+    # generate a UUID
+    user_id = uuid4()
+
     # create a new user object
-    new_user = User(email=data.get('email'),
+    new_user = User(
+                    id=user_id,
+                    email=data.get('email'),
                     password=password_hash,
                     first_name=data.get('first_name'),
                     last_name=data.get('last_name'),
@@ -787,10 +793,11 @@ def delete_menu_item(user_id, menu_id, item_id):
     return jsonify({'message': 'Menu item deleted successfully'}), 200
 
 
+
 # ------------------------------------- CART ------------------------------------- #
 
 
-# add an cart
+# add an item to cart
 @api.route('/dashboard/<int:user_id>/cart/add', methods=['POST'], strict_slashes=False)
 @jwt_required()
 def add_item_to_cart(user_id):
@@ -825,18 +832,20 @@ def add_item_to_cart(user_id):
         db.get_session().add(cart)
         db.get_session().commit()
 
-        # retrieve the user's cart from the DB
+        # retrieve the user's cart from the DB after its creation
         cart = db.get_session().query(Cart).filter_by(user_id=current_user).first()
 
     # check if the menu item is already in the cart
     cart_item = db.get_session().query(CartItem).filter_by(cart_id=cart.id, menu_item_id=menu_item_id).first()
 
+    # if the menu item is already in the cart, add the quantity
     if cart_item:
         cart_item.quantity += quantity
     else:
-        price = menu_item.price
+        # set a default price for the item if it's not already in the cart
+        price = menu_item.price if menu_item else 0.0
 
-    # add the menu to the cart
+    # add the menu item to the cart
     cart_item = CartItem(
         cart_id=cart.id,
         menu_item_id=menu_item_id,
@@ -856,10 +865,13 @@ def add_item_to_cart(user_id):
 
 @api.route('/account/<int:user_id>/checkout', methods=['POST'], strict_slashes=False)
 @jwt_required()
-def checkout():
+def checkout(user_id):
     # Access the identity of the current user
     current_user = get_jwt_identity()
-
+    # check if the user ID from the JWT token matches the requested user ID
+    if current_user != user_id:
+        return abort(401)
+    
     # Parse the data from the request
     data = request.get_json()
 
@@ -889,8 +901,15 @@ def checkout():
         db.get_session().add(order_item)
         db.get_session().commit()
 
+    # total price of the order
+    total_price = sum([item.menu_item.menu.price * item.quantity for item in cart.items])
+    order.total_price = total_price
+
     # Clear the cart
-    cart.clear()
+    for item in cart.items:
+        db.get_session().delete(item)
+
+    db.get_session().commit()
 
     # Add the order to the DB
     db.get_session().add(order)
