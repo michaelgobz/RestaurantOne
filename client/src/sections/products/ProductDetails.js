@@ -13,11 +13,10 @@ import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 // custom components
 import SnackBar from '../snackbar/SnackBar';
 // context
-import { CartContext } from '../contexts/CartContext';
-import { ItemCount } from '../ProductItemCount/ItemCount';
-import { GoBackBtn } from '../../utils/GoBackButton';
-import { ItemDescription } from './ProductDescription';
-
+import { CartContext } from '../../contexts/CartContext';
+import ItemCount from './ProductItemCount';
+import GoBackButton from '../../utils/GoBackButton';
+import ItemDescription from './ProductDescription';
 
 
 ProductDetails.propTypes = {
@@ -60,7 +59,7 @@ export default function ProductDetails(product) {
             mt={1}
             alignContent='center'
           >
-            <GoBackBtn />
+            <GoBackButton />
 
             <Typography component='h5' variant='h6' textAlign='center'>
               ${price}

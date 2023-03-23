@@ -14,7 +14,7 @@ import NewReservation from './sections/reservation/new/NewReservation';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ConfirmAccountPage from './pages/ConfirmAccountPage';
 import UpdatePasswordPage from './pages/UpdatePasswordPage'
-import ProductDetailPage from './pages/ProductDetailPage';
+import ProductDetailContainer from './pages/ProductDetailPage';
 
 
 
@@ -36,7 +36,7 @@ export default function Router() {
         },
         {
           path: 'customer/products/:productId',
-          element: <ProductDetailPage />
+          element: <ProductDetailContainer />
         },
         {
           path: 'customer/restaurants/:restaurantId',

@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-const GoBackBtn = () => {
+const GoBackButton = () => {
   const navigate = useNavigate();
   const handleReturn = () => navigate(-1);
 
@@ -12,4 +12,4 @@ const GoBackBtn = () => {
     </Button>
   );
 };
-export default GoBackBtn;
+export default GoBackButton;

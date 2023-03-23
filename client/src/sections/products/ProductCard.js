@@ -74,9 +74,9 @@ export default function ShopProductCard({ product }) {
           </Typography>
           <Stack direction="column" alignItems="center" justifyContent="space-between" mb={0.2} mt={0.2}>
             <Rating varient="small" value={2} disabled  sx={{ mb: 2, mt: 2 }} />
-            <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />}
+            <Button variant="small" startIcon={<Iconify icon="eva:plus-fill" />}
             sx={{ mb: 0.1, mt: 0.1 }}>
-                cart
+              view
           </Button>
           </Stack>
         </Stack>

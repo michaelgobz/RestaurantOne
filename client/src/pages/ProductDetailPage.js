@@ -30,3 +30,5 @@ const ProductDetailContainer = () => {
             : <LoadingSpinner />);
 
 };
+
+export default ProductDetailContainer;
