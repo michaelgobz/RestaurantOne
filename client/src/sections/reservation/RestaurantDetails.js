@@ -25,7 +25,7 @@ RestaurantDetails.propTypes = {
         description: PropTypes.object.isRequired,
         imgPath: PropTypes.string.isRequired,
         stock: PropTypes.number.isRequired,
-    }).isRequired
+    })
 }
 
 
