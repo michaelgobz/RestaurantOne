@@ -90,7 +90,8 @@ def signup():
         # store the verification token in the database
         user_verification_token = VerificationToken(id=str(uuid4()),
                                                     token=token,
-                                                    created_at=datetime.utcnow())
+                                                    created_at=datetime.utcnow(),
+                                                    user_id=new_user.id)
         db.get_session().add(user_verification_token)
         db.get_session().commit()
         return jsonify({'message': 'user created successfully',
@@ -278,72 +279,6 @@ def manager_dashboard(user_id):
         return jsonify(all_menus), 200
 
     return jsonify({'message': 'No restaurant to display'}), 404
-
-
-@api.route('/auth/reset_password', methods=['POST'], strict_slashes=False)
-def reset_password():
-    """Reset password for a user
-
-    Returns:
-        _type_: token
-    """
-    email = request.json.get('email')
-    user = db.get_session().query(User).filter_by(email=email).first()
-    # check for the email in the database
-    if email is None:
-        return jsonify({'error': 'Email is required'})
-    elif user is None:
-        return jsonify({'error': 'Email does not exist'})
-    elif user.email == email:
-        secret = os.environ.get('SECRET_KEY')
-        # generate token and send to the user email
-        token = encode({'set_password': 'true', 'user_id': user.id},
-                       secret, algorithm="HS256")
-        # store the password reset token in the database
-        user.password_reset_token = token
-        db.get_session().commit()
-        return jsonify({'message': 'token is sent to your email',
-                        'token': token
-                        })
-
-
-@api.route('/auth/reset_password/<token>', methods=['POST'], strict_slashes=False)
-def set_password(token):
-    payload = decode(token, os.environ.get('SECRET_KEY'), algorithms=['HS256'])
-    user_id = payload['user_id']
-    user = db.get_session().query(User).filter_by(id=user_id).first()
-    password = request.json.get('password')
-    # generate salt and hash the password
-    salt = bcrypt.gensalt()
-    password_hash = bcrypt.hashpw(password.encode('utf-8'), salt)
-    user.password = password_hash
-    db.get_session().commit()
-
-    return jsonify({'message': 'password reset successful',
-                    'details': 'login to continue'})
-
-
-@api.route('/auth/confirm_account/<token>', methods=['GET'], strict_slashes=False)
-def confirm_account(token):
-    """Confirm user account
-
-    Returns:
-        _type_: message
-    """
-    payload = decode(token, os.environ.get('SECRET_KEY'), algorithms=['HS256'])
-    email = payload['email']
-    user = db.get_session().query(User).filter_by(email=email).first()
-    if user:
-        user.is_verified = True
-        db.get_session().commit()
-        return jsonify({'message': 'Account confirmed successfully',
-                        'redirect': 'login', 
-                        'details': 'welcome to the Restaurant One'})
-    else:
-        return jsonify({'error': 'Account not found'})
-
-
-
 
 
 # ------------------------------------- USER PROFILE ------------------------------------- #
