@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 from re import A
 from uuid import uuid4
@@ -6,6 +7,7 @@ import bcrypt
 from flask import Blueprint, abort, jsonify, redirect, request, url_for
 from flask_jwt_extended import (create_access_token, get_jwt, get_jwt_identity,
                                 jwt_required)
+from jwt import decode, encode
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import contains_eager
 
@@ -51,13 +53,15 @@ def signup():
     password_hash = bcrypt.hashpw(password.encode('utf-8'), salt)
 
     # create a new user object
-    new_user = User(id=uuid4(),
+    new_user = User(id=str(uuid4()),
                     email=data.get('email'),
                     password=password_hash,
                     first_name=data.get('first_name'),
                     last_name=data.get('last_name'),
                     created_at=datetime.utcnow(),
                     updated_at=datetime.utcnow())
+    
+    verification_token = create_access_token(identity=new_user.id)
 
     # try to add user to database
     try:
@@ -97,6 +101,90 @@ def logout():
     
     # Return a response indicating success
     return jsonify({'message': 'Successfully logged out'}), 200
+
+@api.route('/auth/reset_password', methods=['POST'], strict_slashes=False)
+def reset_password():
+    """Reset password for a user
+    Returns:
+        _type_: token
+    """
+    email = request.json.get('email')
+    user = db.get_session().query(User).filter_by(email=email).first()
+    # check for the email in the database
+    if email is None:
+        return jsonify({'error': 'Email is required'})
+    elif user is None:
+        return jsonify({'error': 'Email does not exist'})
+    elif user.email == email:
+        secret = os.environ.get('SECRET_KEY')
+        # generate token and send to the user email
+        token = encode({'set_password': 'true', 'user_id': user.id},
+                       secret, algorithm="HS256")
+        # store the password reset token in the database
+        user.password_reset_token = token
+        db.get_session().commit()
+        return jsonify({'message': 'token is sent to your email',
+                        'token': token
+                        })
+
+
+@api.route('/auth/reset_password/<token>', methods=['POST'], strict_slashes=False)
+def set_password(token):
+    payload = decode(token, os.environ.get('SECRET_KEY'), algorithms=['HS256'])
+    user_id = payload['user_id']
+    user = db.get_session().query(User).filter_by(id=user_id).first()
+    password = request.json.get('password')
+    # generate salt and hash the password
+    salt = bcrypt.gensalt()
+    password_hash = bcrypt.hashpw(password.encode('utf-8'), salt)
+    user.password = password_hash
+    db.get_session().commit()
+
+    return jsonify({'message': 'password reset successful',
+                    'details': 'login to continue'})
+
+
+@api.route('/auth/confirm_account/<token>', methods=['GET'], strict_slashes=False)
+def confirm_account(token):
+    """Confirm user account
+    Returns:
+        _type_: message
+    """
+    payload = decode(token, os.environ.get('SECRET_KEY'), algorithms=['HS256'])
+    email = payload['email']
+    user = db.get_session().query(User).filter_by(email=email).first()
+    if user:
+        user.is_verified = True
+        db.get_session().commit()
+        return jsonify({'message': 'Account confirmed successfully',
+                        'redirect': 'login', 
+                        'details': 'welcome to the Restaurant One'})
+    else:
+        return jsonify({'error': 'Account not found'})
+    
+
+@api.route('/admin/<int:user_id>/verification', methods=['GET'], strict_slashes=False)
+@jwt_required()
+def verification(user_id):
+    # access the identity of the current user
+    current_user = get_jwt_identity()
+    # check if the user ID from the JWT token matches the requested user ID
+    if current_user != user_id:
+        return abort(401)
+    # get user from the DB
+    user = db.get_session().query(User).get_or_404(current_user)
+    
+    if user.role != 'admin':
+        return abort(403)
+    
+    data = request.get_json()
+
+    customer_id = data.get('user_id')
+
+    customer = db.get_session().query(User).get_or_404(customer_id)
+
+    customer = User(verified=True)
+
 
 
 # ------------------------------------- DASHBOARDS ------------------------------------- #
@@ -223,7 +311,8 @@ def add_address(user_id):
     data = request.get_json()
 
     # create a new address object and add it to the database
-    new_address = Address(address_one=data.get('address_one'),
+    new_address = Address(id=str(uuid4()),
+                          address_one=data.get('address_one'),
                           address_two=data.get('address_two'),
                           phone_number=data.get('phone_number'),
                           city=data.get('city'),
@@ -351,7 +440,6 @@ def add_restaurant(user_id):
     location = data.get('location')
     is_operational = data.get('is_operational')
     order_fulfilling = data.get('order_fulfilling')
-    payment_methods = data.get('payment_methods')
     offers = data.get('offers')
     suppliers = data.get('suppliers')
 
@@ -360,17 +448,15 @@ def add_restaurant(user_id):
         return jsonify({'error': 'Name and location are required'}), 400
     if not isinstance(is_operational, bool):
         return jsonify({'error': 'is_operational must be a boolean'}), 400
-    if not isinstance(payment_methods, list):
-        return jsonify({'error': 'payment_methods must be a list'}), 400
 
     # Create a new restaurant object
     restaurant = Restaurant(
+        id=str(uuid4()),
         name=name,
         description=description,
         location=location,
         is_operational=is_operational,
         order_fulfilling=order_fulfilling,
-        payment_methods=payment_methods,
         offers=offers,
         suppliers=suppliers,
         manager_id=current_user,
@@ -555,12 +641,15 @@ def add_menu(user_id, restaurant_id):
 
     # Create a new menu object
     menu = Menu(
+        id=str(uuid4()),
+        restaurant_id=restaurant_id,
         name=data.get('name'),
         description=data.get('description'),
         category=data.get('category'),
-        items=data.get('items'),
-        created_at=datetime.utcnow(),
-        restaurant_id=restaurant_id
+        price=data.get('price'),
+        is_available=data.get('is_available'),
+        is_deliverable=data.get('is_deliverable'),
+        created_at=datetime.utcnow()
     )
 
     # Add the new menu object to the session and commit
@@ -623,8 +712,12 @@ def update_menu(user_id, restaurant_id, menu_id):
         menu.description = data['description']
     if 'category' in data:
         menu.category = data['category']
-    if 'items' in data:
-        menu.items = data['items']
+    if 'price' in data:
+        menu.price = data['price']
+    if 'is_available' in data:
+        menu.is_available = data['is_available']
+    if 'is_deliverable' in data:
+        menu.is_deliverable = data['is_deliverable']
 
     # Commit changes to DB
 
@@ -691,15 +784,13 @@ def add_menu_item(user_id, menu_id):
     data = request.get_json()
 
     menu_item = MenuItem(
+        id=str(uuid4()),
+        menu_id=menu_id,
         name=data.get('name'),
         description=data.get('description'),
         category=data.get('category'),
-        price=data.get('price'),
         foods=data.get('foods'),
-        is_available=data.get('is_available'),
-        is_delivrable=data.get('is_delivrable'),
         duration_of_preparation=data.get('duration_of_preparation'),
-        menu_id=menu_id,
         created_at=datetime.utcnow(),
         updated_at=datetime.utcnow()
     )
@@ -757,14 +848,8 @@ def update_menu_item(user_id, menu_id, item_id):
         menu_item.description = data['description']
     if 'category' in data:
         menu_item.category = data['category']
-    if 'price' in data:
-        menu_item.price = data['price']
     if 'foods' in data:
         menu_item.foods = data['foods']
-    if 'is_available' in data:
-        menu_item.is_available = data['is_available']
-    if 'is_deliverable' in data:
-        menu_item.is_deliverable = data['is_deliverable']
     if 'duration_of_preparation' in data:
         menu_item.duration_of_preparation = data['duration_of_preparation']
 
@@ -819,14 +904,14 @@ def add_item_to_cart(user_id):
         return abort(401)
     # Parse the data from the request
     data = request.get_json()
-    menu_item_id = data.get('menu_item_id')
+    menu_id = data.get('menu_id')
     quantity = data.get("quantity")
 
     # retrieve the menu from the DB
-    menu_item = db.get_session().query(MenuItem).filter_by(id=menu_item_id).first()
+    menu = db.get_session().query(Menu).filter_by(id=menu_id).first()
 
-    if not menu_item :
-        return jsonify({'message': 'Menu item not found!'}), 404
+    if not menu :
+        return jsonify({'message': 'Menu not found!'}), 404
     if not quantity or quantity < 1:
         return jsonify({'error': 'Invalid quantity'}), 400
     
@@ -836,6 +921,7 @@ def add_item_to_cart(user_id):
     # if the user doesn't have a cart, create a cart
     if not cart:
         cart = Cart(
+            id=str(uuid4()),
             user_id=current_user,
             created_at=datetime.utcnow(),
             updated_at=datetime.utcnow()
@@ -846,20 +932,21 @@ def add_item_to_cart(user_id):
         # retrieve the user's cart from the DB after its creation
         cart = db.get_session().query(Cart).filter_by(user_id=current_user).first()
 
-    # check if the menu item is already in the cart
-    cart_item = db.get_session().query(CartItem).filter_by(cart_id=cart.id, menu_item_id=menu_item_id).first()
+    # check if the menu is already in the cart
+    cart_item = db.get_session().query(CartItem).filter_by(cart_id=cart.id, menu_id=menu_id).first()
 
-    # if the menu item is already in the cart, add the quantity
+    # if the menu is already in the cart, add the quantity
     if cart_item:
         cart_item.quantity += quantity
     else:
         # set a default price for the item if it's not already in the cart
-        price = menu_item.price if menu_item else 0.0
+        price = menu.price if menu else 0.0
 
-    # add the menu item to the cart
+    # add the menu to the cart
     cart_item = CartItem(
+        id=str(uuid4()),
         cart_id=cart.id,
-        menu_item_id=menu_item_id,
+        menu_id=menu_id,
         quantity=quantity,
         price=price
     )
@@ -896,6 +983,7 @@ def place_order(user_id):
 
     # Create a new order for the current user
     order = Order(
+        id=str(uuid4()),
         user_id=current_user,
         restaurant_id=cart.items[0].menu_item.menu.restaurant.id,
         address=data.get('address'),
@@ -908,13 +996,16 @@ def place_order(user_id):
 
     # Add the items from the cart to the order
     for item in cart.items:
-        order_item = OrderItem(menu_item_id=item.menu_item_id, quantity=item.quantity, price=item.price)
+        order_item = OrderItem(id=str(uuid4()), 
+                               menu_id=item.menu_id,
+                               quantity=item.quantity,
+                               price=item.price)
 
         db.get_session().add(order_item)
         db.get_session().commit()
 
     # total price of the order
-    total_price = sum([item.menu_item.price * item.quantity for item in cart.items])
+    total_price = sum([item.menu.price * item.quantity for item in cart.items])
     order.total_price = total_price
     order.status = 'succeeded'
 
@@ -1004,6 +1095,7 @@ def add_reservation(user_id, restaurant_id):
     restaurant = db.get_session().query(Restaurant).get_or_404(restaurant_id)
     # Create a new reservation object
     reservation = Reservation(
+        id=str(uuid4()),
         user_id=current_user,
         restaurant_id=restaurant.id,
         description=data.get('description'),
@@ -1011,7 +1103,7 @@ def add_reservation(user_id, restaurant_id):
         start=data.get('start'),
         end=data.get('end'),
         nb_of_person=data.get('nb_of_person'),
-        menu_item_id=data.get('menu_item_id'),
+        menu_id=data.get('menu_id'),
         additional_info=data.get('additional_info'),
         tables=data.get('tables'),
         price=data.get('price'),
@@ -1029,7 +1121,7 @@ def add_reservation(user_id, restaurant_id):
 
 
 # get reservations
-@api.route('/account/<int:user_id>/reservations', methods=['GET'], strict_slashes=False)
+@api.route('/customer/<int:user_id>/reservations', methods=['GET'], strict_slashes=False)
 @jwt_required()
 def get_reservations(user_id):
     # access the identity of the current user
@@ -1043,7 +1135,7 @@ def get_reservations(user_id):
     return jsonify([reservation.serialize() for reservation in reservations]), 200
 
 # get a reservation
-@api.route('/account/<int:user_id>/reservation/<int:reservation_id>', methods=['GET'], strict_slashes=False)
+@api.route('/customer/<int:user_id>/reservation/<int:reservation_id>', methods=['GET'], strict_slashes=False)
 @jwt_required()
 def get_reservation(user_id, reservation_id):
     # access the identity of the current user
@@ -1095,8 +1187,8 @@ def update_reservation(user_id, reservation_id):
         reservation.price = data['price']
     if 'tax' in data:
         reservation.tax = data['tax']
-    if 'menu_item_id' in data:
-        reservation.menu_item_id = data['menu_item_id']
+    if 'menu_id' in data:
+        reservation.menu_id = data['menu_id']
 
     reservation.updated_at = datetime.utcnow()
 
@@ -1133,7 +1225,7 @@ def delete_reservation(user_id, reservation_id):
 # ------------------------------------- CHECKOUT ------------------------------------- #
 
 
-@api.route('/account/<int:user_id>/order/<int:order_id>/checkout', methods=['POST'], strict_slashes=False)
+@api.route('/customer/<int:user_id>/order/<int:order_id>/checkout', methods=['POST'], strict_slashes=False)
 @jwt_required()
 def checkout(user_id, order_id):
     # Access the identity of the current user
@@ -1152,6 +1244,7 @@ def checkout(user_id, order_id):
     payment_method = db.get_session.query(PaymentMethod).filter_by(user_id=current_user).first()
     if not payment_method:
         payment_method = PaymentMethod(
+            id=str(uuid4()),
             user_id=current_user,
             type=data.get('type'),
             last4=data.get('last4'),
@@ -1165,6 +1258,7 @@ def checkout(user_id, order_id):
         payment_method = db.get_session.query(PaymentMethod).filter_by(user_id=current_user).first()
     
     payment = Payment(
+        id=str(uuid4()),
         order_id=order_id,
         payment_method_id=payment_method.id,
         amount=order.total_price,
@@ -1192,11 +1286,14 @@ def transaction(user_id, order_id):
     if current_user != user_id:
         return abort(401)
     
+    order = db.get_session().query(Order).get_or_404(order_id)
+    
     data = request.get_json()
 
-    payment = db.get_session.query(Payment).filter_by(order_id=order_id).first()
+    payment = db.get_session.query(Payment).filter_by(order_id=order.id).first()
 
     transaction = Transaction(
+        id=str(uuid4()),
         payment_id=payment.id,
         amount=payment.amount,
         currency=payment.currency,
