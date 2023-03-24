@@ -16,6 +16,7 @@ class User(db.Model):
     role = db.Column(db.String(10), nullable=True, default='customer')
     created_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow)
+    phone_number = db.Column(db.String(50), nullable=False)
     is_verified = db.Column(db.Boolean, nullable=False, default=False)
     password_reset_token = db.Column(db.String(255), nullable=True)
     updated_at = db.Column(db.DateTime, nullable=False,
@@ -26,8 +27,6 @@ class User(db.Model):
     orders = db.relationship("Order", backref="user")
     reservations = db.relationship('Reservation', backref='user')
     restaurants = db.relationship('Restaurant', backref='manager')
-    token_id = db.Column(
-        db.String(50), db.ForeignKey('verification_tokens.id', use_alter=True))
     orders = db.relationship("Order", backref="users")
     reservations = db.relationship('Reservation', backref='users')
 
@@ -207,7 +206,6 @@ class Reservation(db.Model):
     tables = db.Column(db.Integer, nullable=True)
     category = db.Column(db.String(50), nullable=True)
     price = db.Column(db.Float, nullable=True, default=0.0)
-    payment = db.relationship('Payment', backref='order', lazy=True)
     created_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, nullable=False,
@@ -237,7 +235,9 @@ class Payment(db.Model):
 
     id = db.Column(db.String(50), primary_key=True)
     order_id = db.Column(db.String(50), db.ForeignKey(
-        'orders.id'), nullable=False)
+        'orders.id'), nullable=True)
+    reservation_id = db.Column(db.String(50), db.ForeignKey(
+        'reservations.id'), nullable=True)
     payment_method_id = db.Column(db.String(50), db.ForeignKey('payment_methods.id'),
                                   nullable=False)
     amount = db.Column(db.Float)

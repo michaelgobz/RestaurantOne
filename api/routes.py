@@ -60,7 +60,6 @@ def signup():
 
     password = data.get('password')
 
-
     # generate salt and hash the password
     salt = bcrypt.gensalt()
     password_hash = bcrypt.hashpw(password.encode('utf-8'), salt)
@@ -79,13 +78,11 @@ def signup():
     try:
         db.get_session().add(new_user)
         db.get_session().commit()
+
         # generate verification token
-        new_user_created = db.get_session().query(User).\
-            filter_by(email=data.get('email')).first()
-        token = encode({'email': new_user_created.email},
+        token = encode({'email': new_user.email},
                        os.environ.get('SECRET_KEY'), algorithm="HS256")
         # send verification email
-
 
         # store the verification token in the database
         user_verification_token = VerificationToken(id=str(uuid4()),
@@ -93,7 +90,6 @@ def signup():
                                                     created_at=datetime.utcnow(),
                                                     user_id=new_user.id)
         db.get_session().add(user_verification_token)
-        new_user_created.token_id = user_verification_token.id
         db.get_session().commit()
         return jsonify({'message': 'user created successfully',
                         'redirect': 'login',
@@ -132,6 +128,7 @@ def logout():
 
     # Return a response indicating success
     return jsonify({'message': 'Successfully logged out'}), 200
+
 
 @api.route('/auth/reset_password', methods=['POST'], strict_slashes=False)
 def reset_password():
@@ -188,14 +185,14 @@ def confirm_account(token):
         user.is_verified = True
         db.get_session().commit()
         return jsonify({'message': 'Account confirmed successfully',
-                        'redirect': 'login', 
+                        'redirect': 'login',
                         'details': 'welcome to the Restaurant One'})
     else:
         return jsonify({'error': 'Account not found'})
-    
 
-@api.route('/admin/<int:user_id>/verification', methods=['GET'], strict_slashes=False)
-@jwt_required()
+
+@api.route('/admin/verification/<user_id>', methods=['GET'], strict_slashes=False)
+@jwt_required()  # needs jwt token based authentication in the authorization header
 def verification(user_id):
     # access the identity of the current user
     current_user = get_jwt_identity()
@@ -204,10 +201,10 @@ def verification(user_id):
         return abort(401)
     # get user from the DB
     user = db.get_session().query(User).get_or_404(current_user)
-    
+
     if user.role != 'admin':
         return abort(403)
-    
+
     data = request.get_json()
 
     customer_id = data.get('user_id')
@@ -215,7 +212,6 @@ def verification(user_id):
     customer = db.get_session().query(User).get_or_404(customer_id)
 
     customer = User(verified=True)
-
 
 
 # ------------------------------------- DASHBOARDS ------------------------------------- #
@@ -966,7 +962,7 @@ def add_item_to_cart(user_id):
     # retrieve the menu from the DB
     menu = db.get_session().query(Menu).filter_by(id=menu_id).first()
 
-    if not menu :
+    if not menu:
         return jsonify({'message': 'Menu not found!'}), 404
     if not quantity or quantity < 1:
         return jsonify({'error': 'Invalid quantity'}), 400
@@ -989,7 +985,8 @@ def add_item_to_cart(user_id):
         cart = db.get_session().query(Cart).filter_by(user_id=current_user).first()
 
     # check if the menu is already in the cart
-    cart_item = db.get_session().query(CartItem).filter_by(cart_id=cart.id, menu_id=menu_id).first()
+    cart_item = db.get_session().query(CartItem).filter_by(
+        cart_id=cart.id, menu_id=menu_id).first()
 
     # if the menu is already in the cart, add the quantity
     if cart_item:
@@ -1050,7 +1047,7 @@ def place_order(user_id):
 
     # Add the items from the cart to the order
     for item in cart.items:
-        order_item = OrderItem(id=str(uuid4()), 
+        order_item = OrderItem(id=str(uuid4()),
                                menu_id=item.menu_id,
                                quantity=item.quantity,
                                price=item.price)
@@ -1194,6 +1191,8 @@ def get_reservations(user_id):
     return jsonify([reservation.serialize() for reservation in reservations]), 200
 
 # get a reservation
+
+
 @api.route('/customer/<int:user_id>/reservation/<int:reservation_id>', methods=['GET'], strict_slashes=False)
 @jwt_required()
 def get_reservation(user_id, reservation_id):
@@ -1351,12 +1350,13 @@ def transaction(user_id, order_id):
     # check if the user ID from the JWT token matches the requested user ID
     if current_user != user_id:
         return abort(401)
-    
+
     order = db.get_session().query(Order).get_or_404(order_id)
-    
+
     data = request.get_json()
 
-    payment = db.get_session.query(Payment).filter_by(order_id=order.id).first()
+    payment = db.get_session.query(
+        Payment).filter_by(order_id=order.id).first()
 
     transaction = Transaction(
         id=str(uuid4()),
