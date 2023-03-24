@@ -88,7 +88,7 @@ def signup():
 
 
         # store the verification token in the database
-        user_verification_token = VerificationToken(id=str(uuid.uuid4()),
+        user_verification_token = VerificationToken(id=str(uuid4()),
                                                     token=token,
                                                     created_at=datetime.utcnow())
         db.get_session().add(user_verification_token)
