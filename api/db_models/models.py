@@ -236,16 +236,18 @@ class Payment(db.Model):
     id = db.Column(db.String(50), primary_key=True)
     order_id = db.Column(db.String(50), db.ForeignKey(
         'orders.id'), nullable=True)
-    reservation_id = db.Column(db.String(50), db.ForeignKey(
-        'reservations.id'), nullable=True)
+    transaction_id = db.Column(db.String(50), db.ForeignKey('transactions.id'),
+                               nullable=False)
     payment_method_id = db.Column(db.String(50), db.ForeignKey('payment_methods.id'),
                                   nullable=False)
-    amount = db.Column(db.Float)
-    currency = db.Column(db.String(10))
+    amount = db.Column(db.Float, default=0.0)
+    currency = db.Column(db.String(10), default='USD')
     status = db.Column(db.String(20), default='pending')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow)
     transactions = db.relationship('Transaction', backref='payment', lazy=True)
+    reservation_id = db.Column(db.String(50), db.ForeignKey(
+        'reservations.id'), nullable=True)
 
 
 class Transaction(db.Model):
@@ -260,7 +262,6 @@ class Transaction(db.Model):
     status = db.Column(db.String(20), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow)
-    
 
 class ShipmentMethod(db.Model):
     """Shipment method model"""
