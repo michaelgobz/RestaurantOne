@@ -86,7 +86,8 @@ class Restaurant(db.Model):
     updated_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow,
                            onupdate=datetime.utcnow)
-    manager_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    manager_id = db.Column(
+        db.String(50), db.ForeignKey('users.id'), nullable=False)
     menus = db.relationship("Menu",
                             backref="restaurants",
                             cascade="all, delete-orphan")
@@ -202,7 +203,8 @@ class Reservation(db.Model):
     start = db.Column(db.DateTime, nullable=True)
     end = db.Column(db.DateTime, nullable=True)
     nb_of_person = db.Column(db.Integer, nullable=False, default=0)
-    menu_item_id = db.Column(db.Integer, db.ForeignKey('menu_items.id'), nullable=False)
+    menu_item_id = db.Column(db.String(50), db.ForeignKey(
+        'menu_items.id'), nullable=False)
     additional_info = db.Column(db.String(200), nullable=True)
     tables = db.Column(db.Integer, nullable=True)
     category = db.Column(db.String(50), nullable=True)
