@@ -95,7 +95,8 @@ def signup():
         # store the verification token in the database
         user_verification_token = VerificationToken(id=str(uuid.uuid4()),
                                                     token=token,
-                                                    created_at=datetime.utcnow())
+                                                    created_at=datetime.utcnow(),
+                                                    user_id=new_user.id)
         db.get_session().add(user_verification_token)
         db.get_session().commit()
         return jsonify({'message': 'user created successfully',
