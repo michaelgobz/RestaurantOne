@@ -236,9 +236,8 @@ class Payment(db.Model):
     __tablename__ = 'payments'
 
     id = db.Column(db.String(50), primary_key=True)
-    order_id = db.Column(db.String(50), db.ForeignKey('orders.id'), nullable=False)
-    transaction_id = db.Column(db.String(50), db.ForeignKey('transactions.id'), 
-                               nullable=False)
+    order_id = db.Column(db.String(50), db.ForeignKey(
+        'orders.id'), nullable=False)
     payment_method_id = db.Column(db.String(50), db.ForeignKey('payment_methods.id'),
                                   nullable=False)
     amount = db.Column(db.Float)
