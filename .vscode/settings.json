@@ -17,6 +17,7 @@
         "hlen",
         "hset",
         "iconify",
+        "jsonify",
         "lastname",
         "nocheck",
         "noopener",

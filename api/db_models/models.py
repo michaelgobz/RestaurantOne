@@ -13,6 +13,7 @@ class User(db.Model):
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(255), nullable=False)
+    phone_number = db.Column(db.String(50), nullable=False)
     role = db.Column(db.String(10), nullable=False, default='customer')
     created_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow)
@@ -252,6 +253,9 @@ class Transaction(db.Model):
     status = db.Column(db.String(20))
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow)
+    order_id = db.Column(db.Integer, db.ForeignKey('orders.id'), nullable=True)
+    reservation_id = db.Column(db.Integer, db.ForeignKey(
+        'reservations.id'), nullable=True)
 
 
 class ShipmentMethod(db.Model):
