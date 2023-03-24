@@ -42,10 +42,11 @@ def home():
         "location": "Africa",
         "year": 2023,
         "month": "March",
-        "Country": "Uganda",
+        "Version": "1.0.0",
         "Project": "Alx-webstack project",
         "supervisor": "Alx-SE Mentors",
-        "api-prefix": "api/v1"
+        "api-prefix": "api/v1",
+        "authors": "@michaelGoboola and @jedBahena"
     })
 
 
@@ -80,9 +81,9 @@ def signup():
         db.get_session().add(new_user)
         db.get_session().commit()
         # generate verification token
-        new_user = db.get_session().query(User).\
+        new_user_created = db.get_session().query(User).\
             filter_by(email=data.get('email')).first()
-        token = encode({'email': new_user.email},
+        token = encode({'email': new_user_created.email},
                        os.environ.get('SECRET_KEY'), algorithm="HS256")
         # send verification email
 
@@ -93,6 +94,7 @@ def signup():
                                                     created_at=datetime.utcnow(),
                                                     user_id=new_user.id)
         db.get_session().add(user_verification_token)
+        new_user_created.token_id = user_verification_token.id
         db.get_session().commit()
         return jsonify({'message': 'user created successfully',
                         'redirect': 'login',
@@ -100,7 +102,8 @@ def signup():
                         'token': token})
     except IntegrityError:
         db.get_session().rollback()
-        return jsonify({'error': 'Email already registered  or server error or token error'})
+        return jsonify({'error':
+                        'Email already registered  or server error or token error'})
 
 
 @api.route('/auth/login', methods=['POST'], strict_slashes=False)
