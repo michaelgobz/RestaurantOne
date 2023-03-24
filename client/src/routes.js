@@ -4,13 +4,20 @@ import DefaultLayout from './layouts/dashboard';
 import SimpleLayout from './layouts/simple';
 // pages
 import RestaurantsPage from './pages/RestaurantPage';
-import UserPage from './pages/UserPage';
+import OrderPage from './pages/OrdersPage';
 import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/signupPage';
 import Page404 from './pages/Page404';
 import ProductsPage from './pages/ProductsPage';
 import Checkout from './sections/checkouts/Checkout'
 import NewReservation from './sections/reservation/new/NewReservation';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ConfirmAccountPage from './pages/ConfirmAccountPage';
+import UpdatePasswordPage from './pages/UpdatePasswordPage'
+import ProductDetailContainer from './pages/ProductDetailPage';
+import RestaurantsDetailsContainer from './pages/RestaurantDetailsPage';
+
+
 
 // ----------------------------------------------------------------------
 
@@ -29,15 +36,16 @@ export default function Router() {
           element: <ProductsPage />
         },
         {
+          path: 'customer/products/details',
+          element: <ProductDetailContainer />
+        },
+        {
+          path: 'customer/restaurants/',
+          element: <RestaurantsDetailsContainer />
+        },
+        {
           path: 'customer/checkout',
           element: <Checkout />,
-          children:
-            [
-              {
-                path: 'new/:id',
-                element: <ProductsPage />
-              }
-            ]
         },
         {
           path: 'customer/reservations',
@@ -51,11 +59,11 @@ export default function Router() {
 
         {
           path: 'customer/orders',
-          element: <UserPage />
+          element: <OrderPage />
         },
         {
           path: 'customer/account',
-          element: <UserPage />
+          element: <OrderPage />
         },
       ],
     },
@@ -68,11 +76,27 @@ export default function Router() {
       element: <LoginPage />
     },
     {
+      path: 'auth/confirm-account',
+      element : <ConfirmAccountPage/>
+    },
+    {
+      path: 'auth/update-password',
+      element: <UpdatePasswordPage />
+    },
+    {
+      path: 'auth/forgot-password',
+      element: <ForgotPasswordPage />
+    },
+    {
       element: <SimpleLayout />,
       children: [
         { path: '404', element: <Page404 /> },
       ],
     },
+    {
+      path: '*',
+      element: <Navigate to="/404" />
+    }
   ]);
 
   return routes;

@@ -1,6 +1,6 @@
 """application entry point"""
 from os import getenv
-
+from flask import Flask
 from dotenv import load_dotenv
 from flask import Flask
 from flask_cors import CORS

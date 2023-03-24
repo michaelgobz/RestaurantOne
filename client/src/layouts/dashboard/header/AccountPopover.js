@@ -13,32 +13,32 @@ const MENU_OPTIONS = [
   {
     label: 'Orders',
     icon: 'eva:order-list-fill',
-    path: 'customer/orders'
+    path: '/customer/orders'
   },
   {
     label: 'Reservations',
     icon: 'eva:calendar-fill',
-    path: 'customer/reservations'
+    path: '/customer/reservations'
   },
   {
     label: 'Account',
     icon: 'eva:person-fill',
-    path: 'account'
+    path: '/account/me'
   },
   {
     label: 'Reviews',
     icon: 'eva:review-fill',
-    path: 'customer/reviews'
+    path: '/customer/reviews'
   },
 ];
 const AUTH_OPTIONS = [
   {
     label: 'Login',
-    path: 'auth/login'
+    path: '/auth/login'
   },
   {
     label: 'Logout',
-    path: 'auth/login'
+    path: '/auth/login'
   }
 ]
 
@@ -85,8 +85,9 @@ export default function AccountPopover() {
     setOpen(null);
   };
 
-  const HandleNavigateAuth = () => {
-    console.log('navigate')
+  const HandleNavigateAuth = (path) => {
+    console.log(path)
+    navigator(path)
     handleClose()
   }
 
@@ -167,7 +168,7 @@ export default function AccountPopover() {
         <Stack sx={{ p: 1 }}>
           {auth ?
             MENU_OPTIONS.map((option) => (
-              <MenuItem key={option.label} onClick={HandleNavigateAuth}>
+              <MenuItem key={option.label} onClick={() => { HandleNavigateAuth(option.path) }}>
                 {option.label}
               </MenuItem>
             )) :

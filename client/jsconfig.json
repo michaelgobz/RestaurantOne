@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "jsx": "react",
-    "tsx": "react",
     "target": "es6",
     "module": "commonjs",
     "baseUrl": "."
