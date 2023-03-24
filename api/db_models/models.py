@@ -252,7 +252,7 @@ class Transaction(db.Model):
     amount = db.Column(db.Float, nullable=False)
     currency = db.Column(db.String(10), nullable=False)
     type = db.Column(db.String(20), nullable=False)
-    status = db.Column(db.String(20), False)
+    status = db.Column(db.String(20), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow)
     order_id = db.Column(db.String(50), db.ForeignKey('orders.id'), nullable=True)
