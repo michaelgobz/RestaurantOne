@@ -53,7 +53,7 @@ def signup():
     password_hash = bcrypt.hashpw(password.encode('utf-8'), salt)
 
     # create a new user object
-    new_user = User(id=int(uuid4()),
+    new_user = User(id=str(uuid4()),
                     email=data.get('email'),
                     password=password_hash,
                     first_name=data.get('first_name'),
