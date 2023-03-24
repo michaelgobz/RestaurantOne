@@ -66,7 +66,7 @@ export default function RestaurantPostCard({ post, index }) {
   const latestPost = index === 1 || index === 2;
 
   const HandleReservation = () => {
-    navigate('new')
+    navigate('/customer/restaurants')
   }
 
   const POST_INFO = [
@@ -178,9 +178,10 @@ export default function RestaurantPostCard({ post, index }) {
 
 <Stack direction="row" alignItems="center" justifyContent="space-between" mb={2} mt={2}>
          <Rating name="disabled" value={3} disabled  sx={{ mb: 2, mt: 2 }} />
-            <Button variant="contained" onClick={HandleReservation}
+            <Button variant="small"
+              onClick={HandleReservation}
             sx={{ mb: 2, mt: 2 }}>
-                Reserve
+              view
           </Button>
 </Stack>
         </CardContent>

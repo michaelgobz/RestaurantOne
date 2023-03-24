@@ -16,13 +16,20 @@ class User(db.Model):
     role = db.Column(db.String(10), nullable=True, default='customer')
     created_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow)
+    is_verified = db.Column(db.Boolean, nullable=False, default=False)
+    password_reset_token = db.Column(db.String(255), nullable=True)
     updated_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow,
                            onupdate=datetime.utcnow)
+
     payment_methods = db.relationship('PaymentMethod', backref='user', lazy=True)
     orders = db.relationship("Order", backref="user")
     reservations = db.relationship('Reservation', backref='user')
     restaurants = db.relationship('Restaurant', backref='manager')
+    token_id = db.Column(
+        db.String(50), db.ForeignKey('verification_tokens.id', use_alter=True))
+    orders = db.relationship("Order", backref="users")
+    reservations = db.relationship('Reservation', backref='users')
 
     # Define many-to-many relationship with Address model
     addresses = db.relationship("Address",
@@ -149,7 +156,6 @@ class CartItem(db.Model):
     price = db.Column(db.Float, nullable=False)
     quantity = db.Column(db.Integer, nullable=False, default=1)
 
-
 class Order(db.Model):
     """orders database model"""
     __tablename__ = 'orders'
@@ -165,7 +171,7 @@ class Order(db.Model):
     payment = db.relationship('Payment', backref='order', lazy=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow(), nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow(), onupdate=datetime.utcnow())
-
+    
 
 class OrderItem(db.Model):
     """OrderItem model"""
@@ -249,6 +255,9 @@ class Transaction(db.Model):
     status = db.Column(db.String(20), False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow)
+    order_id = db.Column(db.String(50), db.ForeignKey('orders.id'), nullable=True)
+    reservation_id = db.Column(db.String(50), db.ForeignKey(
+        'reservations.id'), nullable=True)
 
 
 class ShipmentMethod(db.Model):
@@ -305,3 +314,14 @@ class EventItem(db.Model):
     __tablename__ = 'event_items'
     id = db.Column(db.String(50), primary_key=True)
     event = db.Column(db.String(50), default="", nullable=True)
+
+
+class VerificationToken(db.Model):
+    """VerificationToken model"""
+    __tablename__ = 'verification_tokens'
+    id = db.Column(db.String(50), primary_key=True)
+    token = db.Column(db.String(255), nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False,
+                           default=datetime.utcnow)
+    user_id = db.Column(db.String(50), db.ForeignKey(
+        'users.id'), nullable=False)

@@ -6,24 +6,39 @@ import { LoadingButton } from '@mui/lab';
 // components
 import Iconify from '../../../components/iconify';
 
+
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
 
-  const url = process.env.api
+  const recoverPassword = `${process.env.REACT_APP_CLIENT}/auth/forgot-password`;
+
+  const login = '/auth/login'
+
+  const url = `${process.env.REACT_APP_API}${login}`;
+  console.log(url)
   const navigator = useNavigate()
 
   // get data from the form
-  const [email] = useState('');
-  const [password] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [data, setData] = useState({
     email: '',
     password: '',
   });
 
-  console.log(data)
-  const [showPassword, setShowPassword] = useState(false);
+  const HandleSetEmail = (e) => {
+    setEmail(e.target.email)
+  }
 
+  const HandleSetPassword = (e) => {
+    setPassword(e.target.password)
+  }
+  const form = {
+    email,
+    password
+  }
   const requestOptions = {
     method: 'POST',
     mode: 'cors',
@@ -32,25 +47,35 @@ export default function LoginForm() {
   };
 
   const HandleSubmit = () => {
-      if(sessionStorage.getItem('auth') !== 'true'){
-          console.log('clicked');
-          fetch(url, requestOptions)
-              .then((response) => {
-                  if (response.status === 200) {
-                      const session = response.json()
-                      console.log(session)
-                      sessionStorage.setItem(session.key, session.value)
-                      sessionStorage.setItem('auth', 'true')
-                      navigator('/customer/products')
-          } else {
-                      console.log('some error has happend')
-          }
-          }).catch((reason) => {
-          console.log(`This {reason} issue has happend`)
+    console.log(data)
+    if (sessionStorage.getItem('auth') !== 'true') {
+      console.log('clicked');
+      fetch(url, requestOptions)
+        .then((response) => {
+          response.json().then((data) => {
+            console.log(data)
+            if (response.status === 200) {
+              sessionStorage.setItem('auth', 'true')
+              sessionStorage.setItem('token', data.token)
+              sessionStorage.setItem('user', data.user)
+              navigator('/customer/products')
+            } else {
+              console.log('some error has happened')
+            }
           })
-      } else  {
-          navigator('/customer/products')
-      }
+        }).catch((reason) => {
+          console.log(`This ${reason} happened and caused the error in the fetch request`)
+        })
+    } else {
+      navigator('/customer/products')
+    }
+  };
+  const HandleChangeEmail = (e) => {
+    setData({ ...data, [e.target.name]: e.target.value });
+  };
+
+  const HandleChangePassword = (e) => {
+    setData({ ...data, [e.target.name]: e.target.value });
   };
 
   const HandleChange = (e) => {
@@ -60,13 +85,12 @@ export default function LoginForm() {
   return (
     <>
       <Stack spacing={3}>
-        <TextField name="email" value={email} onKeyDown={HandleChange} label="Email address" />
+        <TextField name="email" onChange={HandleChangeEmail} label="Email address" />
 
         <TextField
           name="password"
           label="Password"
-          value={password}
-          onKeyDown={HandleChange}
+          onChange={HandleChangePassword}
           type={showPassword ? 'text' : 'password'}
           InputProps={{
             endAdornment: (
@@ -83,7 +107,7 @@ export default function LoginForm() {
       <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ my: 2 }}>
         <Checkbox name="remember" label="Remember me" />
         <Typography variant='body5' sx={{ ml: -5 }}>Remember Me</Typography>
-        <Link variant="subtitle2" underline="hover">
+        <Link href={sessionStorage.getItem('signup') === 'true' ? recoverPassword : null} variant="subtitle2" underline="hover">
           Forgot password?
         </Link>
       </Stack>

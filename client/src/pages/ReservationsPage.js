@@ -41,9 +41,7 @@ export default function ReservationsPage() {
                         <ProductSort />
                     </Stack>
                 </Stack>
-
                 <ProductList products={PRODUCTS} />
-                <ProductCartWidget />
             </Container>
         </>
     );
