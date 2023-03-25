@@ -4,11 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cc01b4a9-eb1e-40a5-86da-9d45665425bc" name="Changes" comment="the fogotten mirgation">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/db_models/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/db_models/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/routes.py" afterDir="false" />
-    </list>
+    <list default="true" id="cc01b4a9-eb1e-40a5-86da-9d45665425bc" name="Changes" comment="refining the api and making logins work &#10;as expected" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -114,7 +110,7 @@
       <option name="presentableId" value="Default" />
       <updated>1679677370626</updated>
       <workItem from="1679677377936" duration="144000" />
-      <workItem from="1679724833044" duration="7180000" />
+      <workItem from="1679724833044" duration="7252000" />
     </task>
     <task id="LOCAL-00001" summary="password hashing strategy is messed up">
       <created>1679724890599</created>
@@ -130,7 +126,14 @@
       <option name="project" value="LOCAL" />
       <updated>1679724915023</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="refining the api and making logins work &#10;as expected">
+      <created>1679732158997</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1679732158997</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -139,7 +142,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="password hashing strategy is messed up" />
     <MESSAGE value="the fogotten mirgation" />
-    <option name="LAST_COMMIT_MESSAGE" value="the fogotten mirgation" />
+    <MESSAGE value="refining the api and making logins work &#10;as expected" />
+    <option name="LAST_COMMIT_MESSAGE" value="refining the api and making logins work &#10;as expected" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
