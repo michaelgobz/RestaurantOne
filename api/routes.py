@@ -862,7 +862,7 @@ def delete_menu(user_id, restaurant_id, menu_id):
 
 # ------------------------------------- MENU ITEM ------------------------------------- #
 
-
+"""Create a new menu item"""
 # Create menu item
 @api.route('/account/menu/menu_item/new/<user_id>/<menu_id>',
            methods=['POST'], strict_slashes=False)
@@ -903,7 +903,19 @@ def add_menu_item(user_id, menu_id):
     db.get_session().commit()
 
     # Return a JSON response
-    return jsonify({'Menu item created successfully'}), 200
+    return jsonify({'Menu item created successfully'
+                    'menu_item_id': menu_item.id}), 200
+
+# get menu items
+
+
+@api.route('/dashboard/menu_items',
+           methods=['GET'], strict_slashes=False)
+def get_menu_items():
+    menu_items = db.get_session().query(MenuItem).all()
+    return jsonify({'items': [element.serialize() for element in menu_items],
+                    'status': 'Successfully'}), 200
+
 
 
 # Read menu item
@@ -914,11 +926,12 @@ def menu_item(item_id):
     menu_item = db.get_session().query(MenuItem).get_or_404(item_id)
 
     # return a list of menu object as a JSON response
-    return jsonify([element.serialize() for element in menu_item]), 200
+    return jsonify({'elements': [element.serialize() for element in menu_item],
+                    'status': 'Successfully'}), 200
 
 
 # Update menu item
-@api.route('/account/<int:user_id>/menu/<int:menu_id>/menu_item<int:item_id>/update',
+@api.route('/account/menu/update/menu_item/<user_id>/<menu_id>/<item_id>',
            methods=['PUT'], strict_slashes=False)
 @jwt_required()
 def update_menu_item(user_id, menu_id, item_id):
@@ -938,7 +951,7 @@ def update_menu_item(user_id, menu_id, item_id):
     if not menu:
         return jsonify({'error': 'Menu not found'}), 404
 
-    # get the menu_item informations from the DB
+    # get the menu_item information from the DB
     menu_item = db.get_session().query(MenuItem).get_or_404(item_id)
 
     # get the menu_item info from the user and update them in the db
@@ -960,11 +973,12 @@ def update_menu_item(user_id, menu_id, item_id):
 
     # Commit the changes to DB
     db.get_session().commit()
-    return jsonify({'Menu item updated successfully'}), 200
+    return jsonify({'message': 'Menu item updated successfully',
+                    'menu_item_id': menu_item.id}), 200
 
 
 # Delete menu item
-@api.route('/account/<int:user_id>/menu/<int:menu_id>/menu_item<int:item_id>/delete',
+@api.route('/account/menu/menu_item/delete/<user_id>/<menu_id>/<item_id>',
            methods=['DELETE'], strict_slashes=False)
 @jwt_required()
 def delete_menu_item(user_id, menu_id, item_id):
@@ -1063,7 +1077,7 @@ def add_item_to_cart(user_id):
 # ------------------------------------- ORDER ------------------------------------- #
 
 
-@api.route('/account/<int:user_id>/order/add', methods=['POST'], strict_slashes=False)
+@api.route('/account/order/add/<user_id>', methods=['POST'], strict_slashes=False)
 @jwt_required()
 def place_order(user_id):
     # Access the identity of the current user
@@ -1124,7 +1138,7 @@ def place_order(user_id):
 
 
 # get orders
-@api.route('/account/<int:user_id>/orders', methods=['GET'], strict_slashes=False)
+@api.route('/account/orders/<user_id>', methods=['GET'], strict_slashes=False)
 @jwt_required()
 def get_orders(user_id):
     # access the identity of the current user
@@ -1141,7 +1155,7 @@ def get_orders(user_id):
 # get an order
 
 
-@api.route('/account/<int:user_id>/order/<int:order_id>', methods=['GET'], strict_slashes=False)
+@api.route('/account/order/<user_id>/<order_id>', methods=['GET'], strict_slashes=False)
 @jwt_required()
 def get_order(user_id, order_id):
     # access the identity of the current user
@@ -1186,7 +1200,7 @@ def delete_order(user_id, order_id):
 
 
 # add reservation
-@api.route('/dashboard/<int:user_id>/restaurant/<int:restaurant_id>reservation/add',
+@api.route('/dashboard/restaurant/reservation/add/<user_id>/<restaurant_id>',
            methods=['POST'], strict_slashes=False)
 @jwt_required()
 def add_reservation(user_id, restaurant_id):
@@ -1227,7 +1241,7 @@ def add_reservation(user_id, restaurant_id):
 
 
 # get reservations
-@api.route('/customer/<int:user_id>/reservations', methods=['GET'], strict_slashes=False)
+@api.route('/customer/reservations/<user_id>', methods=['GET'], strict_slashes=False)
 @jwt_required()
 def get_reservations(user_id):
     # access the identity of the current user
@@ -1245,7 +1259,7 @@ def get_reservations(user_id):
 # get a reservation
 
 
-@api.route('/customer/<int:user_id>/reservation/<int:reservation_id>', methods=['GET'], strict_slashes=False)
+@api.route('/customer/reservation/<user_id>/<reservation_id>', methods=['GET'], strict_slashes=False)
 @jwt_required()
 def get_reservation(user_id, reservation_id):
     # access the identity of the current user
@@ -1265,7 +1279,7 @@ def get_reservation(user_id, reservation_id):
 # Update reservation
 
 
-@api.route('/dashboard/<int:user_id>/reservation/<int:reservation_id>/update', methods=['PUT'], strict_slashes=False)
+@api.route('/dashboard/reservation/update/<user_id>/<reservation_id>', methods=['PUT'], strict_slashes=False)
 @jwt_required()
 def update_reservation(user_id, reservation_id):
     # access the identity of the current user
@@ -1314,8 +1328,11 @@ def update_reservation(user_id, reservation_id):
     return jsonify({'message': 'Reservation updated successfully!'}), 200
 
 
+"""delete reservation"""
 # Delete reservation
-@api.route('/dashboard/<int:user_id>/reservation/<int:reservation_id>/delete', methods=['DELETE'], strict_slashes=False)
+
+
+@api.route('/dashboard/reservation/delete/<user_id>/<reservation_id>', methods=['DELETE'], strict_slashes=False)
 @jwt_required()
 def delete_reservation(user_id, reservation_id):
     # access the identity of the current user
@@ -1341,7 +1358,7 @@ def delete_reservation(user_id, reservation_id):
 # ------------------------------------- CHECKOUT ------------------------------------- #
 
 
-@api.route('/customer/<int:user_id>/order/<int:order_id>/checkout', methods=['POST'], strict_slashes=False)
+@api.route('/customer/order/checkout/<user_id>/<order_id>', methods=['POST'], strict_slashes=False)
 @jwt_required()
 def checkout(user_id, order_id):
     # Access the identity of the current user
@@ -1353,11 +1370,11 @@ def checkout(user_id, order_id):
     # Parse the data from the request
     data = request.get_json()
 
-    order = db.get_session.query(Order).filter_by(id=order_id).first()
+    order = db.get_session().query(Order).filter_by(id=order_id).first()
     if not order:
         return jsonify({'message': 'No order found'}), 404
 
-    payment_method = db.get_session.query(
+    payment_method = db.get_session().query(
         PaymentMethod).filter_by(user_id=current_user).first()
     if not payment_method:
         payment_method = PaymentMethod(
@@ -1372,7 +1389,7 @@ def checkout(user_id, order_id):
         )
         db.get_session().add(payment_method)
         db.get_session().commit()
-        payment_method = db.get_session.query(
+        payment_method = db.get_session().query(
             PaymentMethod).filter_by(user_id=current_user).first()
 
     payment = Payment(
@@ -1389,13 +1406,14 @@ def checkout(user_id, order_id):
     db.get_session().add(payment)
     db.get_session().commit()
 
-    return jsonify({'message': 'Checkout proceeded successfully'})
+    return jsonify({'message': 'Checkout proceeded successfully',
+                    'checkout_id': payment.id}), 200
 
 
 # ------------------------------------- TRANSACTION ------------------------------------- #
 
 
-@api.route('/account/<int:user_id>/', methods=['POST'], strict_slashes=False)
+@api.route('/account/<user_id>/<order_id>', methods=['POST'], strict_slashes=False)
 @jwt_required()
 def transaction(user_id, order_id):
     # Access the identity of the current user
@@ -1408,7 +1426,7 @@ def transaction(user_id, order_id):
 
     data = request.get_json()
 
-    payment = db.get_session.query(
+    payment = db.get_session().query(
         Payment).filter_by(order_id=order.id).first()
 
     transaction = Transaction(
@@ -1425,4 +1443,5 @@ def transaction(user_id, order_id):
     db.get_session().add(transaction)
     db.get_session().commit()
 
-    return jsonify({'message': 'Transaction added successfully!'}), 200
+    return jsonify({'message': 'Transaction added successfully!',
+                    'transaction_id':transaction.id}), 200
