@@ -102,7 +102,7 @@ def signup():
     except IntegrityError:
         db.get_session().rollback()
         return jsonify({'error':
-                            'Email already registered  or server error or token error'})
+                        'Email already registered  or server error or token error'})
 
 
 @api.route('/auth/login', methods=['POST'], strict_slashes=False)
@@ -624,8 +624,8 @@ def get_restaurants():
     """Get all restaurants"""
     restaurants = db.get_session().query(Restaurant).all()
     db.get_session().commit()
-    return jsonify({'message':' restaurants returned',
-        'restaurants': [restaurant.to_dict() for restaurant in restaurants]})
+    return jsonify({'message': ' restaurants returned',
+                    'restaurants': [restaurant.to_dict() for restaurant in restaurants]})
 
 
 # Update restaurant
@@ -878,10 +878,12 @@ def delete_menu(user_id, restaurant_id, menu_id):
 @api.route('/dashboard/menu/menu_items/', methods=['GET'], strict_slashes=False)
 def get_menu_items():
     menu_items = db.get_session().query(MenuItem).all()
+    print(type(menu_items[0]))
     return jsonify({'message': 'Menu items retrieved successfully',
-                    'menu_items': [menu_item.serialize()
+                    'menu_items': [menu_item
                                    for menu_item in menu_items]}), 200
 # Create menu item
+
 
 @api.route('/account/menu/menu_item/new/<user_id>/<menu_id>',
            methods=['POST'], strict_slashes=False)
@@ -932,15 +934,6 @@ def add_menu_item(user_id, menu_id):
 
 
 # get menu items
-
-
-@api.route('/dashboard/menu_items',
-           methods=['GET'], strict_slashes=False)
-def get_menu_items():
-    menu_items = db.get_session().query(MenuItem).all()
-    return jsonify({'items': [element.serialize() for element in menu_items],
-                    'status': 'Successfully'}), 200
-
 
 # Read menu item
 @api.route('/dashboard/menu_item/<int:item_id>',
