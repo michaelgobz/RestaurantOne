@@ -872,7 +872,14 @@ def delete_menu(user_id, restaurant_id, menu_id):
 
 """Create a new menu item"""
 
+"""get all menu items"""
 
+
+@api.route('/dashboard/menu/menu_items/', methods=['GET'], strict_slashes=False)
+def get_menu_items():
+    menu_items = db.get_session().query(MenuItem).all()
+    return jsonify({'message': 'Menu items retrieved successfully',
+                    'menu_items': [menu_item.serialize() for menu_item in menu_items]}), 200
 # Create menu item
 
 @api.route('/account/menu/menu_item/new/<user_id>/<menu_id>',

@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cc01b4a9-eb1e-40a5-86da-9d45665425bc" name="Changes" comment="migrations">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/routes.py" afterDir="false" />
-    </list>
+    <list default="true" id="cc01b4a9-eb1e-40a5-86da-9d45665425bc" name="Changes" comment="refining the api" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -140,7 +137,7 @@
       <updated>1679677370626</updated>
       <workItem from="1679677377936" duration="144000" />
       <workItem from="1679724833044" duration="7252000" />
-      <workItem from="1679738837663" duration="20173000" />
+      <workItem from="1679738837663" duration="20277000" />
     </task>
     <task id="LOCAL-00001" summary="password hashing strategy is messed up">
       <created>1679724890599</created>
@@ -198,7 +195,14 @@
       <option name="project" value="LOCAL" />
       <updated>1679760100014</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="refining the api">
+      <created>1679760363397</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1679760363397</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -214,7 +218,8 @@
     <MESSAGE value="updated the migrations" />
     <MESSAGE value="so far so good" />
     <MESSAGE value="migrations" />
-    <option name="LAST_COMMIT_MESSAGE" value="migrations" />
+    <MESSAGE value="refining the api" />
+    <option name="LAST_COMMIT_MESSAGE" value="refining the api" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
