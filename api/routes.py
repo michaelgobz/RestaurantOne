@@ -857,13 +857,16 @@ def delete_menu(user_id, restaurant_id, menu_id):
 
     return jsonify({'message': 'Menu deleted successfully',
                     'menu_id': menu.id,
-                    'details':'menu with id you supplied is deleted'}), 200
+                    'details': 'menu with id you supplied is deleted'}), 200
 
 
 # ------------------------------------- MENU ITEM ------------------------------------- #
 
 """Create a new menu item"""
+
 # Create menu item
+
+
 @api.route('/account/menu/menu_item/new/<user_id>/<menu_id>',
            methods=['POST'], strict_slashes=False)
 @jwt_required()
@@ -915,7 +918,6 @@ def get_menu_items():
     menu_items = db.get_session().query(MenuItem).all()
     return jsonify({'items': [element.serialize() for element in menu_items],
                     'status': 'Successfully'}), 200
-
 
 
 # Read menu item
@@ -1134,7 +1136,8 @@ def place_order(user_id):
     db.get_session().add(order)
     db.get_session().commit()
 
-    return jsonify({'message': 'Order placed successfully!'}), 201
+    return jsonify({'message': 'Order placed successfully!',
+                    'order_id': order.id}), 201
 
 
 # get orders
@@ -1149,7 +1152,7 @@ def get_orders(user_id):
     # retrieve all orders for the user from the database
     orders = db.get_session().query(Order).filter_by(user_id=current_user).all()
     # return a list of order objects as a JSON response
-    return jsonify([order.serialize() for order in orders]), 200
+    return jsonify({'orders': [order.serialize() for order in orders]}), 200
 
 
 # get an order
@@ -1169,7 +1172,7 @@ def get_order(user_id, order_id):
     if not order:
         return jsonify({'error': 'Order not found!'}), 404
     # return the order object as a JSON response
-    return jsonify([element.serialize() for element in order]), 200
+    return jsonify({'elements': [element.serialize() for element in order]}), 200
 
 
 # Delete order
@@ -1444,4 +1447,4 @@ def transaction(user_id, order_id):
     db.get_session().commit()
 
     return jsonify({'message': 'Transaction added successfully!',
-                    'transaction_id':transaction.id}), 200
+                    'transaction_id': transaction.id}), 200
