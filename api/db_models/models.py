@@ -95,6 +95,26 @@ class Restaurant(db.Model):
     orders = db.relationship('Order', backref='restaurants')
     reservations = db.relationship('Reservation', backref='restaurants')
 
+    # json serialization
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'location': self.location,
+            'is_operational': self.is_operational,
+            'order_fulfilling': self.order_fulfilling,
+            'customers': self.customers,
+            'offers': self.offers,
+            'suppliers': self.suppliers,
+            'avatar': self.avatar,
+            'created_at': self.created_at,
+            'updated_at': self.updated_at,
+            'manager_id': self.manager_id
+        }
+
 
 class Menu(db.Model):
     """menus database model"""
@@ -139,6 +159,27 @@ class MenuItem(db.Model):
                            onupdate=datetime.utcnow)
     menu_id = db.Column(db.String(50), db.ForeignKey('menus.id'), nullable=False)
 
+    # json serialization
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'foods': self.foods,
+            'category': self.category,
+            'price': self.price,
+            'is_available': self.is_available,
+            'is_deliverable': self.is_deliverable,
+            'rating': self.rating,
+            'duration_of_preparation': self.duration_of_preparation,
+            'avatar': self.avatar,
+            'created_at': self.created_at,
+            'updated_at': self.updated_at,
+            'menu_id': self.menu_id
+        }
+
 
 class Cart(db.Model):
     """cart database model"""
@@ -148,7 +189,8 @@ class Cart(db.Model):
     user_id = db.Column(db.String(50), db.ForeignKey('users.id'), nullable=False)
     items = db.relationship('CartItem', backref='cart', lazy=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow())
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow(), onupdate=datetime.utcnow())
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow(),
+                           onupdate=datetime.utcnow())
 
 
 class CartItem(db.Model):
@@ -168,7 +210,8 @@ class Order(db.Model):
 
     id = db.Column(db.String(50), primary_key=True)
     user_id = db.Column(db.String(50), db.ForeignKey('users.id'), nullable=False)
-    restaurant_id = db.Column(db.String(50), db.ForeignKey('restaurants.id'), nullable=False)
+    restaurant_id = db.Column(db.String(50), db.ForeignKey('restaurants.id'),
+                              nullable=False)
     items = db.relationship('OrderItem', backref='order', lazy=True)
     total_price = db.Column(db.Float, default=0.0)
     address = db.Column(db.String(255), nullable=False)
