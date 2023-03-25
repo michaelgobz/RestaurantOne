@@ -76,7 +76,7 @@ class Restaurant(db.Model):
     is_operational = db.Column(db.Boolean, nullable=False)
     order_fulfilling = db.Column(db.Boolean, nullable=False)
     customers = db.Column(db.Integer, nullable=True, default=0)
-    offers = db.Column(db.String(50), nullable=True)
+    offers = db.Column(db.String(150), nullable=True)
     suppliers = db.Column(db.String(50), nullable=True)
     avatar = db.Column(db.String(3000), nullable=True)
     created_at = db.Column(db.DateTime, nullable=False,

@@ -503,7 +503,7 @@ def add_restaurant(user_id):
     # get user from the DB
     user = db.get_session().query(User).get_or_404(current_user)
     # check if user is manager
-    if user.role != 'customer':
+    if user.role != 'admin':
         abort(403)
     # Get restaurant info from request
     data = request.get_json()
@@ -719,7 +719,7 @@ def add_menu(user_id, restaurant_id):
     # get user from the DB
     user = db.get_session().query(User).get_or_404(current_user)
     # check if user is admin
-    if user.role != 'customer':
+    if user.role != 'admin':
         abort(403)
 
     # Retrieve the restaurant by id
@@ -887,7 +887,7 @@ def add_menu_item(user_id, menu_id):
     # get user from the DB
     user = db.get_session().query(User).get_or_404(current_user)
     # check if user is admin
-    if user.role != 'customer':
+    if user.role != 'admin':
         abort(403)
 
     # Retrieve the menu by id
