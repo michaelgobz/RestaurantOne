@@ -624,7 +624,8 @@ def get_restaurants():
     """Get all restaurants"""
     restaurants = db.get_session().query(Restaurant).all()
     db.get_session().commit()
-    return jsonify({'restaurants': [restaurant.to_dict() for restaurant in restaurants]})
+    return jsonify({'message':' restaurants returned',
+        'restaurants': [restaurant.to_dict() for restaurant in restaurants]})
 
 
 # Update restaurant
@@ -874,7 +875,6 @@ def delete_menu(user_id, restaurant_id, menu_id):
 
 # Create menu item
 
-
 @api.route('/account/menu/menu_item/new/<user_id>/<menu_id>',
            methods=['POST'], strict_slashes=False)
 @jwt_required()
@@ -919,7 +919,7 @@ def add_menu_item(user_id, menu_id):
     db.get_session().commit()
 
     # Return a JSON response
-    return jsonify({'Menu item created successfully'
+    return jsonify({'message': 'Menu item created successfully',
                     'menu_item_id': menu_item.id}), 200
 
 

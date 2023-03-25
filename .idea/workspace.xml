@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cc01b4a9-eb1e-40a5-86da-9d45665425bc" name="Changes" comment="updated the migrations">
-      <change afterPath="$PROJECT_DIR$/migrations/versions/49a9d6ea6810_.py" afterDir="false" />
+    <list default="true" id="cc01b4a9-eb1e-40a5-86da-9d45665425bc" name="Changes" comment="migrations">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/db_models/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/db_models/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/api/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/routes.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -142,7 +140,7 @@
       <updated>1679677370626</updated>
       <workItem from="1679677377936" duration="144000" />
       <workItem from="1679724833044" duration="7252000" />
-      <workItem from="1679738837663" duration="19789000" />
+      <workItem from="1679738837663" duration="20173000" />
     </task>
     <task id="LOCAL-00001" summary="password hashing strategy is messed up">
       <created>1679724890599</created>
@@ -186,7 +184,21 @@
       <option name="project" value="LOCAL" />
       <updated>1679756383318</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="so far so good">
+      <created>1679760060020</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1679760060020</updated>
+    </task>
+    <task id="LOCAL-00008" summary="migrations">
+      <created>1679760100014</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1679760100014</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -200,7 +212,9 @@
     <MESSAGE value="random data finished updated the models to include the avatars" />
     <MESSAGE value="fixing data model inconsistencies" />
     <MESSAGE value="updated the migrations" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated the migrations" />
+    <MESSAGE value="so far so good" />
+    <MESSAGE value="migrations" />
+    <option name="LAST_COMMIT_MESSAGE" value="migrations" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -347,37 +361,37 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/api/routes.py</url>
-          <line>714</line>
+          <line>715</line>
           <option name="timeStamp" value="30" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/api/routes.py</url>
-          <line>716</line>
+          <line>717</line>
           <option name="timeStamp" value="31" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/api/routes.py</url>
-          <line>719</line>
+          <line>720</line>
           <option name="timeStamp" value="32" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/api/routes.py</url>
-          <line>721</line>
+          <line>722</line>
           <option name="timeStamp" value="33" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/api/routes.py</url>
-          <line>725</line>
+          <line>726</line>
           <option name="timeStamp" value="34" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/api/routes.py</url>
-          <line>734</line>
+          <line>735</line>
           <option name="timeStamp" value="35" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/api/routes.py</url>
-          <line>745</line>
+          <line>746</line>
           <option name="timeStamp" value="36" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
