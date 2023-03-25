@@ -625,7 +625,7 @@ def get_restaurants():
     restaurants = db.get_session().query(Restaurant).all()
     db.get_session().commit()
     return jsonify({'message': ' restaurants returned',
-                    'restaurants': [restaurant.to_dict() for restaurant in restaurants]})
+                    'restaurants': [restaurant.serialize for restaurant in restaurants]})
 
 
 # Update restaurant
@@ -880,7 +880,7 @@ def get_menu_items():
     menu_items = db.get_session().query(MenuItem).all()
     print(type(menu_items[0]))
     return jsonify({'message': 'Menu items retrieved successfully',
-                    'menu_items': [menu_item
+                    'menu_items': [menu_item.serialize
                                    for menu_item in menu_items]}), 200
 # Create menu item
 
