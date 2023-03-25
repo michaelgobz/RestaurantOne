@@ -298,7 +298,26 @@ class Order(db.Model):
     notes = db.Column(db.String(255), nullable=True)
     payment = db.relationship('Payment', backref='order', lazy=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow(), nullable=False)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow(), onupdate=datetime.utcnow())
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow(), 
+                           onupdate=datetime.utcnow())
+    
+    # json serializer
+    @property
+    def serialize():
+        """returns json object"""
+        return {
+            "id":self.id,
+            "user_id":self.user_id,
+            "restaurant_id": self.restuarant_id,
+            "items":self.items,
+            "Total price": self.total_price,
+            "address": self.address,
+            "status": self.status,
+            "notes":self.notes,
+            "created_at": self.created_at,
+            "updated_at" : self.updated_at
+            
+        }
 
 
 class OrderItem(db.Model):
@@ -310,13 +329,21 @@ class OrderItem(db.Model):
     menu_id = db.Column(db.String(50), db.ForeignKey('menus.id'), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Float(precision=2), nullable=False)
+    
+    #json serializer
+    @property
+    def serialize():
+        return {
+            
+        }
 
 
 class Reservation(db.Model):
     """Reservations database model"""
     __tablename__ = 'reservations'
 
-    id = db.Column(db.String(50), primary_key=True)
+    id = db.Column(db.String(50), prima
+                   ry_key=True)
     user_id = db.Column(db.String(50),
                         db.ForeignKey('users.id'), nullable=False)
     restaurant_id = db.Column(db.String(50),
@@ -443,6 +470,9 @@ class EventItem(db.Model):
     __tablename__ = 'event_items'
     id = db.Column(db.String(50), primary_key=True)
     event = db.Column(db.String(50), default="", nullable=True)
+    
+    # json serialization
+    
 
 
 class VerificationToken(db.Model):
@@ -454,3 +484,13 @@ class VerificationToken(db.Model):
                            default=datetime.utcnow)
     user_id = db.Column(db.String(50), db.ForeignKey(
         'users.id'), nullable=False)
+    
+    #json serialization 
+    @property
+    def serialize():
+        """Return object data in easily serializeable format
+        """
+        return {
+            
+        }
+        
