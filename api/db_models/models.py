@@ -12,6 +12,7 @@ class User(db.Model):
     email = db.Column(db.String(50), nullable=False)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
+    salt = db.Column(db.String(255) , nullable=False)
     password = db.Column(db.String(255), nullable=False)
     role = db.Column(db.String(10), nullable=True, default='customer')
     created_at = db.Column(db.DateTime, nullable=False,
