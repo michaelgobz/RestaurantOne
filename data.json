@@ -1,23 +1,25 @@
 {
     "restaurant1": {
-        "name": "The Spicy Noodle",
+      "id": "a85e6300-f88b-457d-8877-baa5ea652f60",
+      "name": "The Spicy Noodle",
       "location": "kenya , Nairobi",
       "isOperational" : true,
       "isOrderFulfilling": true,
       "customers": 50,
       "offers":"None for now",
       "avatar": "https://drive.google.com/file/d/1ueEzsAoj0dRs2imaJ-Nn7FuQuccySrAV/view?usp=share_link",
-        "description": "The Spicy Noodle is a Chinese restaurant that offers a variety of noodle dishes, including lo mein, chow mein, and dan dan noodles. They are known for their spicy Sichuan-style dishes."
+      "description": "The Spicy Noodle is a Chinese restaurant that offers a variety of noodle dishes, including lo mein, chow mein, and dan dan noodles. They are known for their spicy Sichuan-style dishes."
     },
     "restaurant2": {
-        "name": "The Burger Joint",
+      "id": "04a317e4-672b-4a09-8a96-86e1e6403e79",
+      "name": "The Burger Joint",
       "location": "Nigeria , Legos",
       "isOperational" : true,
       "isOrderFulfilling": true,
       "customers": 30,
       "offers":"None for now",
       "avatar": "https://drive.google.com/file/d/1cxkfJMi1sWRpbhfvmIapBG8z-zuX5YOQ/view?usp=share_link",
-        "description": "The Burger Joint is a restaurant that specializes in burgers, fries, and milkshakes. They are known for their classic cheeseburgers that are made with fresh beef and topped with all the fixings."
+      "description": "The Burger Joint is a restaurant that specializes in burgers, fries, and milkshakes. They are known for their classic cheeseburgers that are made with fresh beef and topped with all the fixings."
     },
     "restaurant3": {
         "name": "The Pizza Place",
@@ -51,11 +53,13 @@
     },
 
   "Menu1": {
+    "id": "78124e18-fa79-4829-b4cc-e0ad141e240a",
     "name": "Break Fast À la carte menu",
     "description": " Offers the best in line with your morning routeen",
     "category": "À la carte menu"
   },
   "Menu2": {
+    "id": "51970c13-eb48-4942-bd32-8ee3ca6b4c1f",
     "name": "Daily Lunch Treat",
     "description": " Offers the best in line at the toop of the Day cravings",
     "category": "Fixed Menu"
@@ -132,6 +136,25 @@
     "durationOfPreparation": 30,
     "rating": 2,
     "avatar":"https://drive.google.com/file/d/1YUKpFCUnA9Z1Mr3NX5bGJnP81gsVcLLc/view?usp=share_link"
+  },
+  "user1": {
+    "email":"michael@gobz.tech",
+    "first_name":"Michael",
+    "last_name": "Goboola",
+    "role":"admin",
+    "password":"Leah@0949",
+    "phonenumber":"+256758591449"
+  },
+  "user2": {
+    "email":"michael@gobz.live",
+    "first_name":"Michael",
+    "last_name": "Goboola",
+    "role":"customer",
+    "password":"Leah@0949",
+    "phonenumber":"+256758591449"
+  },
+  "keys": {
+
   }
 
 }

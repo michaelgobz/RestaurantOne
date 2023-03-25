@@ -71,6 +71,7 @@ def signup():
                     password=password_hash.decode('utf-8'),
                     first_name=data.get('first_name'),
                     last_name=data.get('last_name'),
+                    role=data.get('role'),
                     salt=salt_to_string,
                     phone_number=data.get('phonenumber'),
                     created_at=datetime.utcnow(),
@@ -101,7 +102,7 @@ def signup():
     except IntegrityError:
         db.get_session().rollback()
         return jsonify({'error':
-                        'Email already registered  or server error or token error'})
+                            'Email already registered  or server error or token error'})
 
 
 @api.route('/auth/login', methods=['POST'], strict_slashes=False)
@@ -502,7 +503,7 @@ def add_restaurant(user_id):
     # get user from the DB
     user = db.get_session().query(User).get_or_404(current_user)
     # check if user is manager
-    if user.role != 'manager':
+    if user.role != 'customer':
         abort(403)
     # Get restaurant info from request
     data = request.get_json()
@@ -510,10 +511,12 @@ def add_restaurant(user_id):
     name = data.get('name')
     description = data.get('description')
     location = data.get('location')
-    is_operational = data.get('is_operational')
-    order_fulfilling = data.get('order_fulfilling')
+    is_operational = data.get('isOperational')
+    order_fulfilling = data.get('isOrderFulfilling')
     offers = data.get('offers')
     suppliers = data.get('suppliers')
+    avatar = data.get('avatar')
+    customers = data.get('customers')
 
     # Validate input data
     if not name or not location:
@@ -529,7 +532,9 @@ def add_restaurant(user_id):
         location=location,
         is_operational=is_operational,
         order_fulfilling=order_fulfilling,
+        avatar=avatar,
         offers=offers,
+        customers=customers,
         suppliers=suppliers,
         manager_id=current_user,
         created_at=datetime.utcnow()
@@ -541,7 +546,7 @@ def add_restaurant(user_id):
 
     # Return a JSON response with the ID of the newly created restaurant
     return jsonify({'message': 'Restaurant created successfully',
-                    'restaurant_id': restaurant.id}), 201
+                    'restaurant_id': restaurant.id}), 200
 
 
 # Read restaurant
@@ -609,6 +614,7 @@ def get_restaurant(restaurant_id):
             "offers": restaurant.offers,
             "menus": [menu.to_dict() for menu in restaurant.menus]
         })
+
 
 # get restaurants
 
@@ -713,7 +719,7 @@ def add_menu(user_id, restaurant_id):
     # get user from the DB
     user = db.get_session().query(User).get_or_404(current_user)
     # check if user is admin
-    if user.role != 'admin' or user.role != 'manager':
+    if user.role != 'customer':
         abort(403)
 
     # Retrieve the restaurant by id
@@ -732,10 +738,8 @@ def add_menu(user_id, restaurant_id):
         name=data.get('name'),
         description=data.get('description'),
         category=data.get('category'),
-        price=data.get('price'),
-        is_available=data.get('is_available'),
-        is_deliverable=data.get('is_deliverable'),
-        created_at=datetime.utcnow()
+        created_at=datetime.utcnow(),
+        updated_at=datetime.utcnow()
     )
 
     # Add the new menu object to the session and commit
@@ -743,7 +747,10 @@ def add_menu(user_id, restaurant_id):
     db.get_session().commit()
 
     # Return a JSON response
-    return jsonify({'message': 'Menu created successfully'}), 200
+    return jsonify({'message': 'Menu created successfully',
+                    'menu_id': menu.id
+                    }), 200
+
 
 # get menus
 
@@ -864,6 +871,7 @@ def delete_menu(user_id, restaurant_id, menu_id):
 
 """Create a new menu item"""
 
+
 # Create menu item
 
 
@@ -879,7 +887,7 @@ def add_menu_item(user_id, menu_id):
     # get user from the DB
     user = db.get_session().query(User).get_or_404(current_user)
     # check if user is admin
-    if user.role != 'admin' or user.role != 'manager':
+    if user.role != 'customer':
         abort(403)
 
     # Retrieve the menu by id
@@ -894,9 +902,14 @@ def add_menu_item(user_id, menu_id):
         menu_id=menu_id,
         name=data.get('name'),
         description=data.get('description'),
-        category=data.get('category'),
         foods=data.get('foods'),
-        duration_of_preparation=data.get('duration_of_preparation'),
+        category=menu.category,
+        is_available=data.get('isAvailable'),
+        is_deliverable=data.get('isDeliverable'),
+        price=data.get('price'),
+        duration_of_preparation=data.get('durationOfPreparation'),
+        rating=data.get('rating'),
+        avatar=data.get('avatar'),
         created_at=datetime.utcnow(),
         updated_at=datetime.utcnow()
     )
@@ -908,6 +921,7 @@ def add_menu_item(user_id, menu_id):
     # Return a JSON response
     return jsonify({'Menu item created successfully'
                     'menu_item_id': menu_item.id}), 200
+
 
 # get menu items
 
@@ -1332,6 +1346,8 @@ def update_reservation(user_id, reservation_id):
 
 
 """delete reservation"""
+
+
 # Delete reservation
 
 

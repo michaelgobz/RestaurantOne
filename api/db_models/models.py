@@ -12,7 +12,7 @@ class User(db.Model):
     email = db.Column(db.String(50), nullable=False)
     first_name = db.Column(db.String(50), nullable=False)
     last_name = db.Column(db.String(50), nullable=False)
-    salt = db.Column(db.String(255) , nullable=False)
+    salt = db.Column(db.String(255), nullable=False)
     password = db.Column(db.String(255), nullable=False)
     role = db.Column(db.String(10), nullable=True, default='customer')
     created_at = db.Column(db.DateTime, nullable=False,
@@ -125,11 +125,12 @@ class MenuItem(db.Model):
     name = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String(1024), nullable=True)
     foods = db.Column(db.String(50), nullable=False)
+    category = db.Column(db.String(50), nullable=False)
     price = db.Column(db.Float, nullable=False, default=0.0)
     is_available = db.Column(db.Boolean, nullable=False)
     is_deliverable = db.Column(db.Boolean, nullable=False)
     rating = db.Column(db.Integer(), nullable=False, default=0)
-    duration_of_preparation = db.Column(db.DateTime, nullable=True)
+    duration_of_preparation = db.Column(db.Integer(), nullable=False)
     avatar = db.Column(db.String(3000), nullable=True)
     created_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow)
@@ -160,6 +161,7 @@ class CartItem(db.Model):
     price = db.Column(db.Float, nullable=False)
     quantity = db.Column(db.Integer, nullable=False, default=1)
 
+
 class Order(db.Model):
     """orders database model"""
     __tablename__ = 'orders'
@@ -175,12 +177,12 @@ class Order(db.Model):
     payment = db.relationship('Payment', backref='order', lazy=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow(), nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow(), onupdate=datetime.utcnow())
-    
+
 
 class OrderItem(db.Model):
     """OrderItem model"""
     __tablename__ = 'order_items'
-    
+
     id = db.Column(db.String(50), primary_key=True)
     order_id = db.Column(db.String(50), db.ForeignKey('orders.id'), nullable=False)
     menu_id = db.Column(db.String(50), db.ForeignKey('menus.id'), nullable=False)
@@ -222,7 +224,7 @@ class PaymentMethod(db.Model):
 
     id = db.Column(db.String(50), primary_key=True)
     user_id = db.Column(db.String(50), db.ForeignKey('users.id'),
-                         nullable=False)
+                        nullable=False)
     type = db.Column(db.String(50), nullable=False)
     last4 = db.Column(db.String(4), nullable=True)
     exp_month = db.Column(db.Integer, nullable=True)
@@ -254,7 +256,7 @@ class Payment(db.Model):
 class Transaction(db.Model):
     """Transaction model"""
     __tablename__ = 'transactions'
-    
+
     id = db.Column(db.String(50), primary_key=True)
     payment_id = db.Column(db.String(50), db.ForeignKey('payments.id'), nullable=False)
     amount = db.Column(db.Float, nullable=False)
@@ -263,6 +265,7 @@ class Transaction(db.Model):
     status = db.Column(db.String(20), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow)
+
 
 class ShipmentMethod(db.Model):
     """Shipment method model"""
