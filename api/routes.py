@@ -62,7 +62,7 @@ def signup():
     password = data.get('password')
 
     # generate salt and hash the password
-    salt = bcrypt.gensalt()
+    # salt = bcrypt.gensalt(rounds=12, prefix=b'2zibra')
     password_hash = bcrypt.hashpw(password.encode('utf-8'), salt)
 
     # create a new user object
@@ -78,10 +78,8 @@ def signup():
     # try to add user to database
     try:
         db.get_session().add(new_user)
-        db.get_session().commit()
 
         # generate verification token
-        
         new_user_created = db.get_session().query(User).\
             filter_by(email=data.get('email')).first()
         token = encode({'email': new_user_created.email},
@@ -94,7 +92,6 @@ def signup():
                                                     created_at=datetime.utcnow(),
                                                     user_id=new_user.id)
         db.get_session().add(user_verification_token)
-        new_user_created.token_id = user_verification_token.id
         db.get_session().commit()
         return jsonify({'message': 'user created successfully',
                         'redirect': 'login',
@@ -114,19 +111,25 @@ def login():
 
     # query the user email and password
     user = db.get_session().query(User).filter_by(email=email).first()
+    # hash the password and compare with the password in the database
+    salt = bcrypt.gensalt()
+    hashed_password = bcrypt.hashpw(password.encode(
+        'utf-8'), salt)
 
-    if user and bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
+    if user and bcrypt.checkpw(str(hashed_password.decode('utf-8')), user.password):
         # generate a JWT token with user ID as the identity
         access_token = create_access_token(identity=user.id)
 
         # send the token back to the client
-        return jsonify(access_token=access_token)
+        return jsonify({'access_token': access_token,
+                        'message': 'Successfully logged in',
+                        'Session': 'generated token'})
     else:
         return jsonify({'error': 'Incorrect email or password'}), 401
 
 
 @api.route('/auth/logout', methods=['POST'], strict_slashes=False)
-@jwt_required()
+@jwt_required()  # uth headers should be set with the correct token
 def logout():
     # Blacklist the current access token so that it can no longer be used
     jti = get_jwt()['jti']
