@@ -78,6 +78,7 @@ class Restaurant(db.Model):
     customers = db.Column(db.Integer, nullable=True, default=0)
     offers = db.Column(db.String(50), nullable=True)
     suppliers = db.Column(db.String(50), nullable=True)
+    avatar = db.Column(db.String(3000), nullable=True)
     created_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow)
 
@@ -103,9 +104,6 @@ class Menu(db.Model):
     name = db.Column(db.String(50), unique=True, nullable=False)
     description = db.Column(db.String(1024), nullable=True)
     category = db.Column(db.String(50), nullable=True)
-    price = db.Column(db.Float, nullable=False, default=0.0)
-    is_available = db.Column(db.Boolean, nullable=False)
-    is_deliverable = db.Column(db.Boolean, nullable=False)
     created_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, nullable=False,
@@ -126,9 +124,13 @@ class MenuItem(db.Model):
     id = db.Column(db.String(50), primary_key=True)
     name = db.Column(db.String(50), nullable=False)
     description = db.Column(db.String(1024), nullable=True)
-    category = db.Column(db.String(50), nullable=True)
     foods = db.Column(db.String(50), nullable=False)
+    price = db.Column(db.Float, nullable=False, default=0.0)
+    is_available = db.Column(db.Boolean, nullable=False)
+    is_deliverable = db.Column(db.Boolean, nullable=False)
+    rating = db.Column(db.Integer(), nullable=False, default=0)
     duration_of_preparation = db.Column(db.DateTime, nullable=True)
+    avatar = db.Column(db.String(3000), nullable=True)
     created_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, nullable=False,
