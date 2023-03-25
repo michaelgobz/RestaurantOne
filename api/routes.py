@@ -101,7 +101,7 @@ def signup():
     except IntegrityError:
         db.get_session().rollback()
         return jsonify({'error':
-                            'Email already registered  or server error or token error'})
+                        'Email already registered  or server error or token error'})
 
 
 @api.route('/auth/login', methods=['POST'], strict_slashes=False)
@@ -610,11 +610,19 @@ def get_restaurant(restaurant_id):
             "menus": [menu.to_dict() for menu in restaurant.menus]
         })
 
-# get
+# get restaurants
+
+
+@api.route('/dashboard/restaurants', methods=['GET'], strict_slashes=False)
+def get_restaurants():
+    """Get all restaurants"""
+    restaurants = db.get_session().query(Restaurant).all()
+    db.get_session().commit()
+    return jsonify({'restaurants': [restaurant.to_dict() for restaurant in restaurants]})
 
 
 # Update restaurant
-@api.route('/account/<int:user_id>/restaurant/<int:restaurant_id>/update',
+@api.route('/account/restaurant/update/<user_id>/<restaurant_id>',
            methods=['PUT'], strict_slashes=False)
 @jwt_required()
 def update_restaurant(user_id, restaurant_id):
@@ -660,7 +668,7 @@ def update_restaurant(user_id, restaurant_id):
 
 
 # delete a restaurant
-@api.route('/dashboard/<int:user_id>/restaurant/<int:restaurant_id>/delete',
+@api.route('/dashboard/restaurant/delete/<user_id>/<restaurant_id>',
            methods=['DELETE'], strict_slashes=False)
 @jwt_required()
 def delete_restaurant(user_id, restaurant_id):
@@ -690,7 +698,10 @@ def delete_restaurant(user_id, restaurant_id):
 
 
 # Create Menu
-@api.route('/account/<int:user_id>/restaurant/<int:restaurant_id>/menu/new',
+"""Create a new menu for a restaurant"""
+
+
+@api.route('/account/restaurant/menu/new/<user_id>/<restaurant_id>',
            methods=['POST'], strict_slashes=False)
 @jwt_required()
 def add_menu(user_id, restaurant_id):
@@ -734,8 +745,10 @@ def add_menu(user_id, restaurant_id):
     # Return a JSON response
     return jsonify({'message': 'Menu created successfully'}), 200
 
-
 # get menus
+
+
+"""Get all menus available"""
 
 
 @api.route('/dashboard/menu/', methods=['GET'], strict_slashes=False)
@@ -749,7 +762,7 @@ def get_menus():
 # get a menu
 
 
-@api.route('/dashboard/menu/<int:menu_id>', methods=['GET'], strict_slashes=False)
+@api.route('/dashboard/menu/<menu_id>', methods=['GET'], strict_slashes=False)
 def get_menu(menu_id):
     # retrieve the specific menu for the user from the database
     menu = db.get_session().query(Menu).filter_by(id=menu_id).first()
@@ -761,8 +774,7 @@ def get_menu(menu_id):
 
 # Update menu
 
-
-@api.route('/account/<int:user_id>/restaurant/<int:restaurant_id>/menu/<int:menu_id>/update',
+@api.route('/account/restaurant/menu/update/<user_id>/<int:restaurant_id>/<menu_id>',
            methods=['PUT'], strict_slashes=False)
 @jwt_required()
 def update_menu(user_id, restaurant_id, menu_id):
@@ -809,13 +821,14 @@ def update_menu(user_id, restaurant_id, menu_id):
     db.get_session().commit()
 
     # Return a JSON response
-    return jsonify({'message': 'Menu updated successfully'}), 200
+    return jsonify({'message': 'Menu updated successfully',
+                    'menu_id': menu.id}), 200
 
 
-# Delete Menu
+"""Delete a menu"""
 
 
-@api.route('/account/<int:user_id>/restaurant/<int:restaurant_id>/menu/<int:menu_id>/delete',
+@api.route('/account/restaurant/menu/delete/<user_id>/<restaurant_id>/<menu_id>',
            methods=['DELETE'], strict_slashes=False)
 @jwt_required()
 def delete_menu(user_id, restaurant_id, menu_id):
@@ -842,14 +855,16 @@ def delete_menu(user_id, restaurant_id, menu_id):
     db.get_session().delete(menu)
     db.get_session().commit()
 
-    return jsonify({'message': 'Menu deleted successfully'}), 200
+    return jsonify({'message': 'Menu deleted successfully',
+                    'menu_id': menu.id,
+                    'details':'menu with id you supplied is deleted'}), 200
 
 
 # ------------------------------------- MENU ITEM ------------------------------------- #
 
 
 # Create menu item
-@api.route('/account/<int:user_id>/menu/<int:menu_id>/menu_item/new',
+@api.route('/account/menu/menu_item/new/<user_id>/<menu_id>',
            methods=['POST'], strict_slashes=False)
 @jwt_required()
 def add_menu_item(user_id, menu_id):
