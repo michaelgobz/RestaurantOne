@@ -35,6 +35,23 @@ class User(db.Model):
     addresses = db.relationship("Address",
                                 secondary="users_addresses",
                                 back_populates="users")
+    # json serialization
+
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'id': self.id,
+            'email': self.email,
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'role': self.role,
+            'created_at': self.created_at,
+            'phone_number': self.phone_number,
+            'is_verified': self.is_verified,
+            'password_reset_token': self.password_reset_token,
+            'updated_at': self.updated_at
+        }
 
 
 class Address(db.Model):
@@ -55,6 +72,21 @@ class Address(db.Model):
                             secondary="users_addresses",
                             back_populates="addresses")
 
+    # json serialization
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'id': self.id,
+            'address_one': self.address_one,
+            'address_two': self.address_two,
+            'phone_number': self.phone_number,
+            'city': self.city,
+            'city_area': self.city_area,
+            'country': self.country,
+            'country_area': self.country_area
+        }
+
 
 class UserAddress(db.Model):
     """Association table for many-to-many relationship"""
@@ -63,6 +95,16 @@ class UserAddress(db.Model):
     id = db.Column(db.String(50), primary_key=True)
     user_id = db.Column(db.String(50), db.ForeignKey('users.id'))
     address_id = db.Column(db.String(50), db.ForeignKey('addresses.id'))
+
+    # json serialization
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'address_id': self.address_id
+        }
 
 
 class Restaurant(db.Model):
@@ -136,6 +178,19 @@ class Menu(db.Model):
     carts = db.relationship('CartItem', backref='menu_item')
     reservations = db.relationship('Reservation', backref='menu_item')
 
+    # json serialization
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'id': self.id,
+            'name': self.name,
+            'description': self.description,
+            'category': self.category,
+            'created_at': self.created_at,
+            'updated_at': self.updated_at,
+            'restaurant_id': self.restaurant_id
+        }
+
 
 class MenuItem(db.Model):
     """menu items database model"""
@@ -192,6 +247,18 @@ class Cart(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.utcnow(),
                            onupdate=datetime.utcnow())
 
+    # json serialization
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'created_at': self.created_at,
+            'updated_at': self.updated_at
+        }
+
+
 
 class CartItem(db.Model):
     """cart items database model"""
@@ -202,6 +269,18 @@ class CartItem(db.Model):
     menu_id = db.Column(db.String(50), db.ForeignKey('menus.id'), nullable=False)
     price = db.Column(db.Float, nullable=False)
     quantity = db.Column(db.Integer, nullable=False, default=1)
+
+    # json serialization
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'id': self.id,
+            'cart_id': self.cart_id,
+            'menu_id': self.menu_id,
+            'price': self.price,
+            'quantity': self.quantity
+        }
 
 
 class Order(db.Model):
