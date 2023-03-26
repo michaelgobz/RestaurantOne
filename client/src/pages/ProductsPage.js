@@ -11,6 +11,21 @@ import ProductCartPopover from '../sections/products/ProductCartPopover';
 
 // ----------------------------------------------------------------------
 
+
+const api = `${process.env.REACT_APP_API}/dashboard/menus`;
+console.log(api);
+const requestOptions = {
+  method: 'GET',
+  headers: { 'Content-Type': 'application/json' },
+};
+
+fetch(api, requestOptions).then((response) => response.json())
+  .then((data) => {
+    console.log(data);
+  }).catch((error) => {
+    console.log(error);
+  });
+
 export default function ProductsPage() {
 
   sessionStorage.setItem('signup', 'true')
@@ -45,9 +60,11 @@ export default function ProductsPage() {
             <ProductSort />
           </Stack>
         </Stack>
-
+        <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
+          Coco Tails
+        </Typography>
         <ProductList products={PRODUCTS} />
-        <Typography variant="h4" sx={{ mb: 5 , mt: 5}}>
+        <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
           Coco Tails
         </Typography>
         <ProductList products={PRODUCTS} />

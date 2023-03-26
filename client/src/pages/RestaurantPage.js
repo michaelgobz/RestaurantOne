@@ -8,6 +8,23 @@ import POSTS from '../_mock/blog';
 
 // ----------------------------------------------------------------------
 
+const api = `${process.env.REACT_APP_API}/dashboard/restaurants`;
+console.log(api);
+const requestOptions = {
+  method: 'GET',
+  headers: { 'Content-Type': 'application/json' },
+};
+
+fetch(api, requestOptions).then((response) => response.json())
+  .then((data) => {
+    console.log(data);
+  }).catch((error) => {
+    console.log(error);
+  });
+
+
+// ----------------------------------------------------------------------
+
 const SORT_OPTIONS = [
   { value: 'latest', label: 'Latest' },
   { value: 'popular', label: 'Popular' },

@@ -4,16 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cc01b4a9-eb1e-40a5-86da-9d45665425bc" name="Changes" comment="refining the api">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/937aa313-f08a-463b-af06-875f111b0011.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/937aa313-f08a-463b-af06-875f111b0011.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/937aa313-f08a-463b-af06-875f111b0011/storage_v2/_src_/database/OpenRestaurant.R0VLHQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/937aa313-f08a-463b-af06-875f111b0011/storage_v2/_src_/database/OpenRestaurant.R0VLHQ/schema/information_schema.FNRwLQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/937aa313-f08a-463b-af06-875f111b0011/storage_v2/_src_/database/OpenRestaurant.R0VLHQ/schema/pg_catalog.0S1ZNQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/937aa313-f08a-463b-af06-875f111b0011/storage_v2/_src_/database/OpenRestaurant.R0VLHQ/schema/public.abK9xQ.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/db_models/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/db_models/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/api/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/api/routes.py" afterDir="false" />
-    </list>
+    <list default="true" id="cc01b4a9-eb1e-40a5-86da-9d45665425bc" name="Changes" comment="last migrations on the block" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -147,7 +138,7 @@
       <workItem from="1679677377936" duration="144000" />
       <workItem from="1679724833044" duration="7252000" />
       <workItem from="1679738837663" duration="20277000" />
-      <workItem from="1679807662191" duration="3127000" />
+      <workItem from="1679807662191" duration="3458000" />
     </task>
     <task id="LOCAL-00001" summary="password hashing strategy is messed up">
       <created>1679724890599</created>
@@ -212,7 +203,21 @@
       <option name="project" value="LOCAL" />
       <updated>1679760363397</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="serialisation complete for all models seem to be consistent">
+      <created>1679811107366</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1679811107366</updated>
+    </task>
+    <task id="LOCAL-00011" summary="last migrations on the block">
+      <created>1679811134031</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1679811134031</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -229,7 +234,9 @@
     <MESSAGE value="so far so good" />
     <MESSAGE value="migrations" />
     <MESSAGE value="refining the api" />
-    <option name="LAST_COMMIT_MESSAGE" value="refining the api" />
+    <MESSAGE value="serialisation complete for all models seem to be consistent" />
+    <MESSAGE value="last migrations on the block" />
+    <option name="LAST_COMMIT_MESSAGE" value="last migrations on the block" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
