@@ -332,7 +332,7 @@ class Order(db.Model):
             'created_at': self.created_at,
             'updated_at': self.updated_at,
             'items': [item.serialize for item in self.items],
-            'payment': [payment.serialize for payment in self.payment] '
+            'payment': [payment.serialize for payment in self.payment]
         }
 
 
