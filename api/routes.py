@@ -102,7 +102,7 @@ def signup():
     except IntegrityError:
         db.get_session().rollback()
         return jsonify({'error':
-                        'Email already registered  or server error or token error'})
+                            'Email already registered  or server error or token error'})
 
 
 @api.route('/auth/login', methods=['POST'], strict_slashes=False)
@@ -624,9 +624,8 @@ def get_restaurants():
     """Get all restaurants"""
     restaurants = db.get_session().query(Restaurant).all()
     db.get_session().commit()
-    return jsonify({'message': ' restaurants returned',
-                    'restaurants':
-                        [restaurant.serialize for restaurant in restaurants]})
+    return jsonify({'message': ' restaurants returned successfully',
+                    'restaurants': [restaurant.serialize for restaurant in restaurants]})
 
 
 # Update restaurant
@@ -765,7 +764,8 @@ def get_menus():
     # retrieve all menus from the database
     menus = db.get_session().query(Menu).all()
     # return a list of menu objects as a JSON response
-    return jsonify([menu.serialize() for menu in menus]), 200
+    return jsonify({'message': 'menus retrieved successfully',
+                    'menus': [menu.serialize for menu in menus]}), 200
 
 
 # get a menu
@@ -883,6 +883,8 @@ def get_menu_items():
     return jsonify({'message': 'Menu items retrieved successfully',
                     'menu_items': [menu_item.serialize
                                    for menu_item in menu_items]}), 200
+
+
 # Create menu item
 
 
