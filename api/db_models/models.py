@@ -301,6 +301,23 @@ class Order(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.utcnow(),
                            onupdate=datetime.utcnow())
 
+    # json serializer
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'restaurant_id': self.restaurant_id,
+            'total_price': self.total_price,
+            'address': self.address,
+            'status': self.status,
+            'notes': self.notes,
+            'created_at': self.created_at,
+            'updated_at': self.updated_at
+        }
+
+
 
 class OrderItem(db.Model):
     """OrderItem model"""
@@ -314,8 +331,14 @@ class OrderItem(db.Model):
     
     #json serializer
     @property
-    def serialize():
+    def serialize(self):
+        """Return object data in easily serializeable format"""
         return {
+            'id': self.id,
+            'order_id': self.order_id,
+            'menu_id': self.menu_id,
+            'quantity': self.quantity,
+            'price': self.price
             
         }
 
@@ -324,8 +347,7 @@ class Reservation(db.Model):
     """Reservations database model"""
     __tablename__ = 'reservations'
 
-    id = db.Column(db.String(50), prima
-                   ry_key=True)
+    id = db.Column(db.String(50), primary_key=True)
     user_id = db.Column(db.String(50),
                         db.ForeignKey('users.id'), nullable=False)
     restaurant_id = db.Column(db.String(50),
@@ -348,6 +370,29 @@ class Reservation(db.Model):
                            default=datetime.utcnow,
                            onupdate=datetime.utcnow)
 
+    # json serializer
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'restaurant_id': self.restaurant_id,
+            'menu_id': self.menu_id,
+            'description': self.description,
+            'duration': self.duration,
+            'start': self.start,
+            'end': self.end,
+            'nb_of_person': self.nb_of_person,
+            'menu_item_id': self.menu_item_id,
+            'additional_info': self.additional_info,
+            'tables': self.tables,
+            'category': self.category,
+            'price': self.price,
+            'created_at': self.created_at,
+            'updated_at': self.updated_at
+        }
+
 
 class PaymentMethod(db.Model):
     """PaymentMethod model"""
@@ -363,6 +408,21 @@ class PaymentMethod(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=True)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow)
     payments = db.relationship('Payment', backref='payment_method', lazy=True)
+
+    # json serializer
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'type': self.type,
+            'last4': self.last4,
+            'exp_month': self.exp_month,
+            'exp_year': self.exp_year,
+            'created_at': self.created_at,
+            'updated_at': self.updated_at
+        }
 
 
 class Payment(db.Model):
@@ -383,6 +443,23 @@ class Payment(db.Model):
     reservation_id = db.Column(db.String(50), db.ForeignKey(
         'reservations.id'), nullable=True)
 
+    # json serializer
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'id': self.id,
+            'order_id': self.order_id,
+            'payment_method_id': self.payment_method_id,
+            'amount': self.amount,
+            'currency': self.currency,
+            'status': self.status,
+            'created_at': self.created_at,
+            'updated_at': self.updated_at,
+            'reservation_id': self.reservation_id
+        }
+
+
 
 class Transaction(db.Model):
     """Transaction model"""
@@ -397,11 +474,34 @@ class Transaction(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow)
 
+    # json serializer
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'id': self.id,
+            'payment_id': self.payment_id,
+            'amount': self.amount,
+            'currency': self.currency,
+            'type': self.type,
+            'status': self.status,
+            'created_at': self.created_at,
+            'updated_at': self.updated_at
+        }
+
 
 class ShipmentMethod(db.Model):
     """Shipment method model"""
     __tablename__ = 'shipment_methods'
     id = db.Column(db.String(50), primary_key=True)
+
+    # json serializer
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'id': self.id
+        }
 
 
 class Shipment(db.Model):
@@ -410,41 +510,98 @@ class Shipment(db.Model):
     id = db.Column(db.String(50), primary_key=True)
     restaurant_id = db.Column(db.String(50), db.ForeignKey('restaurants.id'))
 
+    # json serializer
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'id': self.id,
+            'restaurant_id': self.restaurant_id
+        }
+
 
 class Invoice(db.Model):
     """ Invoice model"""
     __tablename__ = 'invoices'
     id = db.Column(db.String(50), primary_key=True)
 
+    # json serializer
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'id': self.id
+        }
+
 
 class InvoiceItem(db.Model):
     """InvoiceItem model"""
     __tablename__ = 'invoice_items'
     id = db.Column(db.String(50), primary_key=True)
+    
+    #json serialization
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'id': self.id
+        }
 
 
 class Information(db.Model):
     """information model"""
     __tablename__ = 'information'
     id = db.Column(db.String(50), primary_key=True)
+    
+    #json serialization
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'id': self.id
+        }
 
 
 class Review(db.Model):
     """Review model"""
     __tablename__ = 'reviews'
     id = db.Column(db.String(50), primary_key=True)
+    
+    # json serialization
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'id': self.id
+        }
 
 
 class ReviewItem(db.Model):
     """ReviewItem model"""
     __tablename__ = 'review_items'
     id = db.Column(db.String(50), primary_key=True)
+    
+    #json serialization
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'id': self.id
+        }
 
 
 class Event(db.Model):
     """Event model"""
     __tablename__ = 'events'
     id = db.Column(db.String(50), primary_key=True)
+    
+    # json serialization
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'id': self.id
+        }
 
 
 class EventItem(db.Model):
@@ -454,6 +611,13 @@ class EventItem(db.Model):
     event = db.Column(db.String(50), default="", nullable=True)
     
     # json serialization
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+            'id': self.id,
+            'event': self.event
+        }
     
 
 
@@ -469,10 +633,14 @@ class VerificationToken(db.Model):
     
     #json serialization 
     @property
-    def serialize():
+    def serialize(self):
         """Return object data in easily serializeable format
         """
         return {
+            'id': self.id,
+            'token': self.token,
+            'created_at': self.created_at,
+            'user_id': self.user_id
             
         }
         
