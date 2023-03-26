@@ -298,7 +298,8 @@ class Order(db.Model):
     notes = db.Column(db.String(255), nullable=True)
     payment = db.relationship('Payment', backref='order', lazy=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow(), nullable=False)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow(), onupdate=datetime.utcnow())
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow(),
+                           onupdate=datetime.utcnow())
 
 
 class OrderItem(db.Model):
