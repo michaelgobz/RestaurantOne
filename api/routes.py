@@ -625,7 +625,8 @@ def get_restaurants():
     restaurants = db.get_session().query(Restaurant).all()
     db.get_session().commit()
     return jsonify({'message': ' restaurants returned',
-                    'restaurants': [restaurant.serialize for restaurant in restaurants]})
+                    'restaurants':
+                        [restaurant.serialize for restaurant in restaurants]})
 
 
 # Update restaurant

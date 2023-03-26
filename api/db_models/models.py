@@ -50,7 +50,14 @@ class User(db.Model):
             'phone_number': self.phone_number,
             'is_verified': self.is_verified,
             'password_reset_token': self.password_reset_token,
-            'updated_at': self.updated_at
+            'updated_at': self.updated_at,
+            'payment_methods': [payment_method.serialize
+                                for payment_method in self.payment_methods],
+            'orders': [order.serialize for order in self.orders],
+            'reservations': [reservation.serialize for reservation in self.reservations],
+            'restaurants': [restaurant.serialize for restaurant in self.restaurants],
+            'addresses': [address.serialize for address in self.addresses],
+            'orders': [order.serialize for order in self.orders],
         }
 
 
@@ -84,7 +91,8 @@ class Address(db.Model):
             'city': self.city,
             'city_area': self.city_area,
             'country': self.country,
-            'country_area': self.country_area
+            'country_area': self.country_area,
+            'users': [user.serialize for user in self.users]
         }
 
 
@@ -154,7 +162,11 @@ class Restaurant(db.Model):
             'avatar': self.avatar,
             'created_at': self.created_at,
             'updated_at': self.updated_at,
-            'manager_id': self.manager_id
+            'manager_id': self.manager_id,
+            'menus': [menu.serialize for menu in self.menus],
+            'shipments': [shipment.serialize for shipment in self.shipments],
+            'orders': [order.serialize for order in self.orders],
+            'reservations': [reservation.serialize for reservation in self.reservations]
         }
 
 
@@ -188,7 +200,10 @@ class Menu(db.Model):
             'category': self.category,
             'created_at': self.created_at,
             'updated_at': self.updated_at,
-            'restaurant_id': self.restaurant_id
+            'restaurant_id': self.restaurant_id,
+            'items': [item.serialize for item in self.items],
+            'carts': [cart.serialize for cart in self.carts],
+            'reservations': [reservation.serialize for reservation in self.reservations]
         }
 
 
@@ -255,7 +270,8 @@ class Cart(db.Model):
             'id': self.id,
             'user_id': self.user_id,
             'created_at': self.created_at,
-            'updated_at': self.updated_at
+            'updated_at': self.updated_at,
+            'items': [item.serialize for item in self.items]
         }
 
 
@@ -314,7 +330,9 @@ class Order(db.Model):
             'status': self.status,
             'notes': self.notes,
             'created_at': self.created_at,
-            'updated_at': self.updated_at
+            'updated_at': self.updated_at,
+            'items': [item.serialize for item in self.items],
+            'payment': [payment.serialize for payment in self.payment] '
         }
 
 
@@ -421,7 +439,8 @@ class PaymentMethod(db.Model):
             'exp_month': self.exp_month,
             'exp_year': self.exp_year,
             'created_at': self.created_at,
-            'updated_at': self.updated_at
+            'updated_at': self.updated_at,
+            'payments': [payment.serialize for payment in self.payments]
         }
 
 
@@ -456,7 +475,8 @@ class Payment(db.Model):
             'status': self.status,
             'created_at': self.created_at,
             'updated_at': self.updated_at,
-            'reservation_id': self.reservation_id
+            'reservation_id': self.reservation_id,
+            'transactions': [t.serialize for t in self.transactions]
         }
 
 
