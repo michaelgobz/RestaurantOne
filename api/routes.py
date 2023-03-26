@@ -760,7 +760,7 @@ def add_menu(user_id, restaurant_id):
 """Get all menus available"""
 
 
-@api.route('/dashboard/menu/', methods=['GET'], strict_slashes=False)
+@api.route('/dashboard/menus/', methods=['GET'], strict_slashes=False)
 def get_menus():
     # retrieve all menus from the database
     menus = db.get_session().query(Menu).all()
