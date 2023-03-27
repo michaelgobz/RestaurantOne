@@ -19,7 +19,7 @@ export default function ProductsPage() {
   const api = `${process.env.REACT_APP_API}/dashboard/menus`;
   console.log(api);
   // menus state
-  const [menus, setMenus] = useState([]);
+  const [menus, setMenus] = useState();
   // request options
   const requestOptions = {
     method: 'GET',
@@ -52,38 +52,37 @@ export default function ProductsPage() {
       <Helmet>
         <title> Your Cravings | Open Restaurant </title>
       </Helmet>
+      {
+        menus ?
+          <Container>
 
-      <Container>
-        <Typography variant="h4" sx={{ mb: 5 }}>
-          Your Cravings Solved
-        </Typography>
-        {
-          menus ?
-            <>
-              <Stack direction="row" flexWrap="wrap-reverse" alignItems="center" justifyContent="flex-end" sx={{ mb: 5 }}>
-                <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
-                  <ProductFilterSidebar
-                    openFilter={openFilter}
-                    onOpenFilter={handleOpenFilter}
-                    onCloseFilter={handleCloseFilter}
-                  />
-                  <ProductSort />
-                </Stack>
+            <Typography variant="h4" sx={{ mb: 5 }}>
+              Your Cravings Solved
+            </Typography>
+            <Stack direction="row" flexWrap="wrap-reverse" alignItems="center" justifyContent="flex-end" sx={{ mb: 5 }}>
+              <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
+                <ProductFilterSidebar
+                  openFilter={openFilter}
+                  onOpenFilter={handleOpenFilter}
+                  onCloseFilter={handleCloseFilter}
+                />
+                <ProductSort />
               </Stack>
-              {
-                menus.map((menu) => (
-                  <>
-                    <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
-                      {menu.name}
-                    </Typography>
-                    <ProductList products={menu.items} />
-                  </>
-                ))
-              }
-            </>
-            : <LoadingSpinner />
-        }
-      </Container>
+            </Stack>
+            {
+              menus.map((menu) => (
+                <>
+                  <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
+                    {menu.name}
+                  </Typography>
+                  <ProductList products={menu.items} />
+                </>
+              ))
+            }
+          </Container>
+          :
+          <LoadingSpinner />
+      }
     </>
   );
 }

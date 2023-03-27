@@ -31,7 +31,7 @@ export default function RestaurantsPage() {
     headers: { 'Content-Type': 'application/json' },
   };
 
-  const [restaurants, setRestaurants] = useState([]);
+  const [restaurants, setRestaurants] = useState();
 
   useEffect(() => {
     fetch(api, requestOptions).then((response) => response.json())
@@ -58,27 +58,22 @@ export default function RestaurantsPage() {
         </Stack>
         {
           restaurants ?
+
             <>
               <Stack mb={5} direction="row" alignItems="center" justifyContent="space-between">
                 <RestaurantPostsSort options={SORT_OPTIONS} />
               </Stack>
 
               <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
-                Top Cuisines near Legos
+                Top Cuisines 
               </Typography>
+
               <Grid container spacing={3}>
-                {POSTS.map((post, index) => (
-                  <RestaurantPostCard key={post.id} post={post} index={index} />
+                {restaurants.map((restaurant) => (
+                  <RestaurantPostCard key={restaurant.id} restaurant={restaurant} />
                 ))}
               </Grid>
-              <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
-                Experiences Trending near kigali
-              </Typography>
-              <Grid container spacing={3}>
-                {POSTS.map((post, index) => (
-                  <RestaurantPostCard key={post.id} post={post} index={index} />
-                ))}
-              </Grid>
+
             </>
             :
             <LoadingSpinner />
