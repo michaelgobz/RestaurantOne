@@ -1,106 +1,122 @@
 import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import { MenuItem } from '@mui/material';
+import { oc } from 'date-fns/locale';
 
 export default function FindTable() {
+  const [time, setTime] = React.useState('');
+  const [selectedDate, setSelectedDate] = React.useState(new Date());
+  const [occasion, setOccasion] = React.useState('');
+  const [noOfPeople, setNoOfPeople] = React.useState(0);
+
+  const handleChange = (event) => {
+    setTime(event.target.value);
+  };
+
   return (
     <>
-      <Typography variant="h6" gutterBottom>
+      <Typography variant="h6" gutterBottom sx={{ my: 10 }}>
         Choose an Experience
       </Typography>
-      <Grid container spacing={3}>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            id="firstName"
-            name="firstName"
-            label="First name"
-            fullWidth
-            autoComplete="given-name"
-            variant="standard"
-          />
+      <Grid container spacing={6}>
+        <Grid item xs={6} sm={6}>
+
+          <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+            <InputLabel id="demo-select-small">Choose a Time</InputLabel>
+            <Select
+              labelId="demo-select-small"
+              id="demo-select-small"
+              value={time}
+              label="Choose a Time"
+              onChange={handleChange}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value={'11:30'}>11:30</MenuItem>
+              <MenuItem value={'13:30'}>13:30</MenuItem>
+              <MenuItem value={'18:00'}>18:00</MenuItem>
+              <MenuItem value={'20:00'}>20:00</MenuItem>
+            </Select>
+          </FormControl>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            id="lastName"
-            name="lastName"
-            label="Last name"
-            fullWidth
-            autoComplete="family-name"
-            variant="standard"
+          <DatePicker
+            label={'Choose a Date'}
+            views={['year', 'month', 'day']}
+            value={selectedDate}
+            onChange={(newValue) => {
+              setSelectedDate(newValue);
+            }}
           />
         </Grid>
         <Grid item xs={12}>
-          <TextField
-            required
-            id="address1"
-            name="address1"
-            label="Address line 1"
-            fullWidth
-            autoComplete="shipping address-line1"
-            variant="standard"
-          />
+          <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+            <InputLabel id="demo-select-small">Choose Occasion</InputLabel>
+            <Select
+              labelId="demo-select-small"
+              id="demo-select-small"
+              value={occasion}
+              label="Choose Occasion"
+              onChange={(event) => {
+                setOccasion(event.target.value);
+              }
+              }
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value={'break fast'}>Break fast</MenuItem>
+              <MenuItem value={'dinner'}>Dinner</MenuItem>
+              <MenuItem value={'date'}>Date</MenuItem>
+              <MenuItem value={'lunch'}>Lunch</MenuItem>
+              <MenuItem value={'family hangout'}>Family Hangout</MenuItem>
+              <MenuItem value={'birthday'}>Birthday</MenuItem>
+              <MenuItem value={'anniversary'}>Anniversary</MenuItem>
+              <MenuItem value={'other'}>Other</MenuItem>
+            </Select>
+          </FormControl>
         </Grid>
         <Grid item xs={12}>
-          <TextField
-            id="address2"
-            name="address2"
-            label="Address line 2"
-            fullWidth
-            autoComplete="shipping address-line2"
-            variant="standard"
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            id="city"
-            name="city"
-            label="City"
-            fullWidth
-            autoComplete="shipping address-level2"
-            variant="standard"
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            id="state"
-            name="state"
-            label="State/Province/Region"
-            fullWidth
-            variant="standard"
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            id="zip"
-            name="zip"
-            label="Zip / Postal code"
-            fullWidth
-            autoComplete="shipping postal-code"
-            variant="standard"
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            id="country"
-            name="country"
-            label="Country"
-            fullWidth
-            autoComplete="shipping country"
-            variant="standard"
-          />
+          <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+            <InputLabel id="demo-select-small">Set number of people</InputLabel>
+            <Select
+              labelId="demo-select-small"
+              id="demo-select-small"
+              value={noOfPeople}
+              label="No of People"
+              onChange={(event) => {
+                setNoOfPeople(event.target.value)
+              }}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value={2}>2</MenuItem>
+              <MenuItem value={3}>3</MenuItem>
+              <MenuItem value={4}>3</MenuItem>
+              <MenuItem value={5}>3</MenuItem>
+              <MenuItem value={6}>6</MenuItem>
+              <MenuItem value={7}>7</MenuItem>
+              <MenuItem value={8}>8</MenuItem>
+              <MenuItem value={9}>9</MenuItem>
+              <MenuItem value={10}>10</MenuItem>
+              <MenuItem value={11}>11</MenuItem>
+              <MenuItem value={12}>12</MenuItem>
+            </Select>
+          </FormControl>
         </Grid>
         <Grid item xs={12}>
           <FormControlLabel
-            control={<Checkbox color="secondary" name="saveAddress" value="yes" />}
-            label="Use this address for payment details"
+            control={<Checkbox color="secondary" name="saveDetails" value="yes" />}
+            label="I confirm the reservation details are correct"
           />
         </Grid>
       </Grid>

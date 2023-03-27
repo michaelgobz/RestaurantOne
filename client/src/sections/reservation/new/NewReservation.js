@@ -34,14 +34,14 @@ function Copyright() {
 
 const steps = ['Choose a Table','Add your details','Choose a Menu','Payment details', 'Review'];
 
-function getStepContent(step) {
+function getStepContent(step, menuItems) {
   switch (step) {
     case 0:
       return <FindTable />;
     case 1:
       return <ContactDetails />;
     case 2:
-      return <SelectMenu />;
+      return <SelectMenu menuItems={menuItems} />;
     case 3:
       return <PaymentForm />;
     case 4:
@@ -53,13 +53,47 @@ function getStepContent(step) {
 
 const theme = createTheme();
 
+localStorage.setItem('newReservation', JSON.stringify([]))
+
 export default function NewReservation() {
 
+  //get restaurant menu items
+  const [menuItems, setMenuItems] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState(null);
+
+  const api = `${process.env.REACT_APP_API}/dashboard/restaurants/${restaurantId}`;
+
+  const requestOptions = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+
+    },
+  };
+
+  // fetch restaurant menu items
+  React.useEffect(() => {
+    fetch(api, requestOptions).then((response) => {
+      response.json().then((data) => {
+        console.log(data.menus.items)
+        setMenuItems(data.menus.items);
+        setLoading(false);
+      }
+      ).catch((error) => {
+        setError(error);
+        setLoading(false);
+        console.log(error)
+      });
+    });
+  }, []);
+
   const [activeStep, setActiveStep] = React.useState(0);
+  const restaurantId = useParams().restaurantId;
 
   const navigate = useNavigate()
   const HandleClick = () => {
-    navigate('/')
+    navigate('/customers/restaurants/')
   }
 
   const handleNext = () => {
@@ -72,10 +106,10 @@ export default function NewReservation() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="lg" maxLength="lg" sx={{ mb: 4 }}>
+      <Container component="main" maxWidth="lm" maxLength="lm" sx={{ mb: 4 }}>
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
           <Typography component="h1" variant="h4" align="center">
-            Reserve
+            Reserve A Table
           </Typography>
           <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
             {steps.map((label) => (
@@ -87,30 +121,29 @@ export default function NewReservation() {
           {activeStep === steps.length ? (
             <>
               <Typography variant="h5" gutterBottom>
-                Thank you for your order.
+                Your Reservation Has been Made
               </Typography>
               <Typography variant="subtitle1">
-                Your order number is #2001539. We have emailed your order
-                confirmation, and will send you an update when your order has
-                shipped.
+                Thank you for your reservation. We will contact you shortly to confirm your reservation.
               </Typography>
               <Button
                   variant="contained"
                   onClick={HandleClick}
                   sx={{ mt: 3, ml: 1 }}
                 >
-            Get More
+                Make another reservation
+
                 </Button>
             </>
           ) : (
             <>
-              {getStepContent(activeStep)}
-              <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                {activeStep !== 0 && (
-                  <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
-                    Back
-                  </Button>
-                )}
+                {getStepContent(activeStep, menuItems)}
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  {activeStep !== 0 && (
+                    <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
+                      Back
+                    </Button>
+                  )}
 
                 <Button
                   variant="contained"
@@ -127,4 +160,4 @@ export default function NewReservation() {
       </Container>
     </ThemeProvider>
   );
-}
+} 
