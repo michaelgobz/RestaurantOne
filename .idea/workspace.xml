@@ -4,7 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cc01b4a9-eb1e-40a5-86da-9d45665425bc" name="Changes" comment="last migrations on the block" />
+    <list default="true" id="cc01b4a9-eb1e-40a5-86da-9d45665425bc" name="Changes" comment="last migrations on the block">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/sections/reservation/new/FindTable.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/sections/reservation/new/FindTable.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/src/sections/reservation/new/NewReservation.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/src/sections/reservation/new/NewReservation.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -139,6 +145,7 @@
       <workItem from="1679724833044" duration="7252000" />
       <workItem from="1679738837663" duration="20277000" />
       <workItem from="1679807662191" duration="3458000" />
+      <workItem from="1679921951986" duration="285000" />
     </task>
     <task id="LOCAL-00001" summary="password hashing strategy is messed up">
       <created>1679724890599</created>
@@ -348,22 +355,22 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/api/routes.py</url>
-          <line>625</line>
+          <line>557</line>
           <option name="timeStamp" value="47" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/api/routes.py</url>
-          <line>626</line>
+          <line>558</line>
           <option name="timeStamp" value="48" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/api/routes.py</url>
-          <line>627</line>
+          <line>559</line>
           <option name="timeStamp" value="49" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/api/routes.py</url>
-          <line>766</line>
+          <line>711</line>
           <option name="timeStamp" value="50" />
         </line-breakpoint>
       </breakpoints>
