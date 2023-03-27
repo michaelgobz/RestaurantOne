@@ -74,6 +74,14 @@ export default function AccountPopover() {
 
   const api = `${process.env.REACT_APP_API}/me/account/profile`
   const logout = `${process.env.REACT_APP_API}/auth/logout`
+
+  const logoutOptions = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+    }
+  }
   const requestOptions = {
     method: 'GET',
     headers: {
@@ -136,7 +144,7 @@ export default function AccountPopover() {
   }
 
   const HandleLogout = () => {
-    fetch(logout, requestOptions).then((response) => response.json().then((data) => {
+    fetch(logout, logoutOptions).then((response) => response.json().then((data) => {
       if (response.status === 200) {
         console.log(logout)
         console.log(data)

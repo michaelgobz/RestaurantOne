@@ -1201,7 +1201,7 @@ def add_reservation(user_id, restaurant_id):
     db.get_session().commit()
 
     # Return a success message to the user
-    return jsonify({'message': 'Reservation added successfully!'}), 201
+    return jsonify({'message': 'Reservation added successfully!'}), 200
 
 
 # get reservations
