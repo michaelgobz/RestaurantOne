@@ -71,7 +71,7 @@ def signup():
                     password=password_hash.decode('utf-8'),
                     first_name=data.get('first_name'),
                     last_name=data.get('last_name'),
-                    role=data.get('role'),
+                    role='customer',
                     salt=salt_to_string,
                     phone_number=data.get('phonenumber'),
                     created_at=datetime.utcnow(),

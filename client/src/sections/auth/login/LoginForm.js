@@ -3,6 +3,10 @@ import { useNavigate } from 'react-router';
 // @mui
 import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import Modal from '@mui/joy/Modal';
+import ModalClose from '@mui/joy/ModalClose';
+import ModalDialog from '@mui/joy/ModalDialog';
+
 // components
 import Iconify from '../../../components/iconify';
 
@@ -27,6 +31,9 @@ export default function LoginForm() {
     email: '',
     password: '',
   });
+
+  const [variant, setVariant] = useState('soft');
+  const [open, setOpen] = useState(false);
 
   const HandleSetEmail = (e) => {
     setEmail(e.target.email)
@@ -56,8 +63,24 @@ export default function LoginForm() {
               sessionStorage.setItem('token', data.access_token)
               sessionStorage.setItem('user', data.user_id)
               navigator('/customer/products')
-            } else {
-              console.log('some error has happened')
+            } else if (response === 401) {
+              // show model to the user that the login was not successful
+
+              <Modal open={open} onClose={() => setVariant(undefined)}>
+                <ModalDialog
+                  aria-labelledby="variant-modal-title"
+                  aria-describedby="variant-modal-description"
+                  variant={variant}
+                >
+                  <ModalClose />
+                  <Typography id="variant-modal-title" component="h2" level="inherit">
+                    Login Error
+                  </Typography>
+                  <Typography id="variant-modal-description" textColor="inherit">
+                    'some error has happened check you internet connection'
+                  </Typography>
+                </ModalDialog>
+              </Modal>
             }
           })
         }).catch((reason) => {

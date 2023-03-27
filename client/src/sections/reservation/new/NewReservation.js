@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { useNavigate, useParams, useEffect } from 'react-router';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
@@ -61,12 +61,12 @@ localStorage.setItem('newReservation', JSON.stringify([]))
 
 export default function NewReservation() {
 
-  const [menuItems, setMenuItems] = React.useState([]);
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState(null);
-  const [activeStep, setActiveStep] = React.useState(0);
-  const [open, setOpen] = React.useState(false);
-  const [variant, setVariant] = React.useState('soft');
+  const [menuItems, setMenuItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [activeStep, setActiveStep] = useState(0);
+  const [open, setOpen] = useState(false);
+  const [variant, setVariant] = useState('soft');
   const restaurantId = useParams().restaurantId;
 
   const handleClose = () => {
@@ -85,7 +85,7 @@ export default function NewReservation() {
   };
 
   // fetch restaurant menu items
-  React.useEffect(() => {
+  useEffect(() => {
     fetch(api, requestOptions).then((response) => {
       response.json().then((data) => {
         console.log(data.menus.items)
@@ -130,8 +130,8 @@ export default function NewReservation() {
           if (response.status === 200) {
             console.log(data.message)
             // display a model to show the user that the reservation was successful
-            return (
-              <Model open={open} onClose={() => setVariant(undefined)}>
+            if (data.message === 'Reservation created successfully') {
+              <Modal open={open} onClose={() => setVariant(undefined)}>
                 <ModalDialog
                   aria-labelledby="variant-modal-title"
                   aria-describedby="variant-modal-description"
@@ -145,8 +145,9 @@ export default function NewReservation() {
                     {data.message}
                   </Typography>
                 </ModalDialog>
-              </Model>
-            )
+              </Modal>
+
+            }
           } else {
             console.log('some thing went wrong')
           }

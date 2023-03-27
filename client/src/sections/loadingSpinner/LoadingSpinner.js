@@ -7,7 +7,7 @@ const LoadingSpinner = ({ text = 'loading...' }) => {
         <>
             <Box display='flex' flexDirection='column' alignItems='center' mt={10}>
                 <CircularProgress />
-                <Typography variant='overline'>{text}</Typography>
+                <Typography variant='overline' sx={{ my: 2 }}>{text}</Typography>
             </Box>
         </>
 
