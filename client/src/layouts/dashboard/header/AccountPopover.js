@@ -70,7 +70,32 @@ const SNACK_BAR_OPTIONS = [
 
 export default function AccountPopover() {
 
-  const auth = true;
+  const [user, setUser] = useState({})
+
+  const api = `${process.env.REACT_APP_API}/me/account/profile`
+  const requestOptions = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
+    },
+  }
+  // get user from session storage
+  useEffect(() => {
+    fetch(api, requestOptions).then((response) => response.json().then((data) => {
+      if (response.status === 200) {
+        console.log(api)
+        console.log(data.user)
+        setUser(data.user)
+      } else {
+        console.log('some error has happened')
+      }
+    })).catch((error) => {
+      console.log(error);
+    }).finally(() => {
+      console.log('user', user)
+    });
+  }, []);
 
   const navigator = useNavigate()
 
@@ -97,8 +122,8 @@ export default function AccountPopover() {
   }
   const HandleAuth = () => {
 
-    if (!sessionStorage.get('auth') === 'true') {
-      navigator('auth/login')
+    if (sessionStorage.getItem('auth') === 'true') {
+      navigator('auth/lo')
       handleClose()
 
     } else {
@@ -151,10 +176,10 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {account.displayName}
+            {sessionStorage.getItem('auth') === 'true' ? user.firstname : 'Guest'}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {account.email}
+            {sessionStorage.getItem('auth') === 'true' ? user.email : ""}
           </Typography>
         </Box>
         {

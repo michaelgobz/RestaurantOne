@@ -74,7 +74,7 @@ export default function NewReservation() {
   };
 
   // fetch restaurant menu items
-  React.useEffect(() => {
+  React.useEffect((api, requestOptions) => {
     fetch(api, requestOptions).then((response) => {
       response.json().then((data) => {
         console.log(data.menus.items)

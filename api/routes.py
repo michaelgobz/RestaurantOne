@@ -295,20 +295,18 @@ def manager_dashboard(user_id):
 
 
 # get profile
-@api.route('/me/account/profile/<user_id>', methods=['GET'], strict_slashes=False)
+@api.route('/me/account/profile', methods=['GET'], strict_slashes=False)
 @jwt_required()
-def profile(user_id):
+def profile():
     # access the identity of the current user
     current_user = get_jwt_identity()
-    # check if the user ID from the JWT token matches the requested user ID
-    if current_user != user_id:
-        return abort(401)
     # get the user profile information form DB
     user_profile = db.get_session().query(User).get_or_404(current_user)
     if not profile:
         return jsonify({'error': 'No profile found'}), 404
     # return a list of user objects as a JSON response
-    return jsonify([element.serialize() for element in user_profile]), 200
+    return jsonify({"Message": "current user details",
+                    'user': user_profile.serialize}), 200
 
 
 # update profile

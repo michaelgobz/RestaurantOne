@@ -11,7 +11,7 @@ import Iconify from '../../../components/iconify';
 
 export default function LoginForm() {
 
-  const recoverPassword = `${process.env.REACT_APP_CLIENT}/auth/forgot-password`;
+  const recoverPassword = `${process.env.REACT_APP_CLIENT}/auth/forgot_password`;
 
   const login = '/auth/login'
 
@@ -35,10 +35,7 @@ export default function LoginForm() {
   const HandleSetPassword = (e) => {
     setPassword(e.target.password)
   }
-  const form = {
-    email,
-    password
-  }
+
   const requestOptions = {
     method: 'POST',
     mode: 'cors',
