@@ -57,7 +57,6 @@ localStorage.setItem('newReservation', JSON.stringify([]))
 
 export default function NewReservation() {
 
-  //get restaurant menu items
   const [menuItems, setMenuItems] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(null);
