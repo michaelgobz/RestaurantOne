@@ -1,10 +1,12 @@
 import { Helmet } from 'react-helmet-async';
+import { useState } from 'react';
 // @mui
 import { Grid, Button, Container, Stack, Typography } from '@mui/material';
 // components
 import { RestaurantPostCard, RestaurantPostsSort, RestaurantSearch ,ReservationCard } from '../sections/reservation';
 // mock
 import POSTS from '../_mock/blog';
+import LoadingSpinner from '../sections/loadingSpinner/LoadingSpinner';
 
 // ----------------------------------------------------------------------
 
@@ -29,9 +31,12 @@ export default function RestaurantsPage() {
     headers: { 'Content-Type': 'application/json' },
   };
 
+  const [restaurants, setRestaurants] = useState([]);
+
   fetch(api, requestOptions).then((response) => response.json())
     .then((data) => {
-      console.log(data);
+      console.log(data.restaurants);
+      setRestaurants(data.restaurants);
     }).catch((error) => {
       console.log(error);
     });
@@ -51,7 +56,7 @@ export default function RestaurantsPage() {
           </Typography>
         </Stack>
         {
-          data ?
+          restaurants ?
             <>
               <Stack mb={5} direction="row" alignItems="center" justifyContent="space-between">
                 <RestaurantSearch posts={POSTS} />

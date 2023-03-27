@@ -158,7 +158,7 @@ export default function AccountPopover() {
           </Typography>
         </Box>
         {
-          sessionStorage.get('auth') === 'true' ?
+          sessionStorage.getItem('auth') === 'true' ?
             <Divider sx={{ borderStyle: 'dashed' }} />
             :
             <Divider sx={{ borderStyle: 'dashed', borderColor: 'white' }} />
@@ -166,7 +166,7 @@ export default function AccountPopover() {
 
 
         <Stack sx={{ p: 1 }}>
-          {sessionStorage.get('auth') === 'true' ?
+          {sessionStorage.getItem('auth') === 'true' ?
             MENU_OPTIONS.map((option) => (
               <MenuItem key={option.label} onClick={() => { HandleNavigateAuth(option.path) }}>
                 {option.label}
@@ -182,13 +182,13 @@ export default function AccountPopover() {
         </Stack>
 
         {
-          sessionStorage.get('auth') === 'true' ?
+          sessionStorage.getItem('auth') === 'true' ?
             <Divider sx={{ borderStyle: 'dashed' }} />
             :
             <Divider sx={{ borderStyle: 'dashed', borderColor: 'white' }} />
         }
         {
-          sessionStorage.get('auth') === 'true' ?
+          sessionStorage.getItem('auth') === 'true' ?
             <MenuItem key={AUTH_OPTIONS[1].path} onClick={() => { HandleAuth(); ShowSnackBar(); }} sx={{ m: 1 }} >
               {AUTH_OPTIONS[1].label}
               {showComponent ? <SnackBar message={SNACK_BAR_OPTIONS[1].label} severity={SNACK_BAR_OPTIONS[1].severity} /> : null}

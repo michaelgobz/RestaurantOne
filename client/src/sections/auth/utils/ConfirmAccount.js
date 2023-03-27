@@ -39,10 +39,7 @@ export default function ConfirmAccount() {
                 .then((response) => {
                     if (response.status === 200) {
                         const session = response.json()
-                        console.log(session)
-                        sessionStorage.setItem(session.key, session.value)
-                        sessionStorage.setItem('auth', 'true')
-                        navigator('/customer/products')
+                        navigator('/auth/login')
                     } else {
                         console.log('some error has happened')
                     }
