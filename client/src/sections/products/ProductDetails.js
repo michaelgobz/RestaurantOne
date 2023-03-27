@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Link } from 'react-router-dom';
 // mui components
@@ -21,11 +21,14 @@ import ProductDetailsDescription from "./ProductDescription";
 ProductDetails.propTypes = {
   Product: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
     description: PropTypes.object.isRequired,
-    imgPath: PropTypes.string.isRequired,
-    stock: PropTypes.number.isRequired,
+    avatar: PropTypes.string.isRequired,
+    duration: PropTypes.number.isRequired,
+    category: PropTypes.string.isRequired,
+    foods: PropTypes.string.isRequired,
+    rating: PropTypes.number.isRequired,
   })
 };
 
@@ -34,8 +37,14 @@ ProductDetails.propTypes = {
 export default function ProductDetails({ Product }) {
 
   // const { addItemToCart, isInCart } = useContext(CartContext);
-  const { name, details } = Product;
+  const { name, price, description, duration, avatar, rating, foods, category, id } = Product;
   const { showSnackbar, setShowSnackbar } = useState(false)
+  const [data, setData] = useState({});
+
+  useEffect(() => {
+    setData({ description, duration, rating, foods, category })
+  }, [])
+
 
   return (
     <>
@@ -63,7 +72,7 @@ export default function ProductDetails({ Product }) {
             <GoBackButton sx={{ my: 5 }} />
 
             <Typography component='h5' variant='h6' textAlign='center' sx={{ my: 5 }}>
-              ${1000}
+              {price}
             </Typography>
           </Box>
         </Grid>
@@ -74,21 +83,21 @@ export default function ProductDetails({ Product }) {
             textAlign: 'center',
             fontSize: '1.5rem',
           }} gutterBottom>
-            Chicken in Rough Pocket
+            {name}
           </Typography>
           <Divider sx={{ my: 5 }} />
 
-          <ProductDetailsDescription />
+          <ProductDetailsDescription data={data} />
           <Divider sx={{ mb: 2 }} />
 
           <Box display='flex' justifyContent={'center'} my>
 
               <Button
               variant='contained'
-                startIcon={<AssignmentTurnedInIcon />}
+              startIcon={<AssignmentTurnedInIcon />}
               component={Link}
               sx={{ my: 5 }}
-              to='/customer/checkout'
+              to={`/customer/checkout/${id}`}
               >
               Add to cart
             </Button>

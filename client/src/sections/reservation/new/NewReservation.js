@@ -60,6 +60,8 @@ export default function NewReservation() {
   const [menuItems, setMenuItems] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState(null);
+  const [activeStep, setActiveStep] = React.useState(0);
+  const restaurantId = useParams().restaurantId;
 
   const api = `${process.env.REACT_APP_API}/dashboard/restaurants/${restaurantId}`;
 
@@ -87,8 +89,6 @@ export default function NewReservation() {
     });
   }, []);
 
-  const [activeStep, setActiveStep] = React.useState(0);
-  const restaurantId = useParams().restaurantId;
 
   const navigate = useNavigate()
   const HandleClick = () => {
@@ -105,12 +105,12 @@ export default function NewReservation() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="lm" maxLength="lm" sx={{ mb: 4 }}>
+      <Container component="main" maxWidth="ls" maxLength="ls" sx={{ mb: 4 }}>
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
           <Typography component="h1" variant="h4" align="center">
             Reserve A Table
           </Typography>
-          <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
+          <Stepper activeStep={activeStep} sx={{ pt: 2, pb: 1 }}>
             {steps.map((label) => (
               <Step key={label}>
                 <StepLabel>{label}</StepLabel>

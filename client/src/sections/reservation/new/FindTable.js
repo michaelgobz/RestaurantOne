@@ -1,15 +1,14 @@
 import * as React from 'react';
-import {useParams} from "react-router-dom";
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import { MenuItem } from '@mui/material';
 import { oc } from 'date-fns/locale';
+import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+
 
 export default function FindTable() {
   const [time, setTime] = React.useState('');
@@ -26,10 +25,10 @@ export default function FindTable() {
       <Typography variant="h6" gutterBottom sx={{ my: 10 }}>
         Choose an Experience
       </Typography>
-      <Grid container spacing={6}>
+      <Grid container spacing={3}>
         <Grid item xs={6} sm={6}>
 
-          <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+          <FormControl sx={{ m: 1, minWidth: 400 }} size="large">
             <InputLabel id="demo-select-small">Choose a Time</InputLabel>
             <Select
               labelId="demo-select-small"
@@ -49,17 +48,15 @@ export default function FindTable() {
           </FormControl>
         </Grid>
         <Grid item xs={12} sm={6}>
-          <DatePicker
-            label={'Choose a Date'}
-            views={['year', 'month', 'day']}
-            value={selectedDate}
-            onChange={(newValue) => {
-              setSelectedDate(newValue);
-            }}
-          />
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              label={'Choose a Date'}
+              views={['year', 'month', 'day']}
+            />
+          </LocalizationProvider>
         </Grid>
         <Grid item xs={12}>
-          <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+          <FormControl sx={{ m: 1, minWidth: 400 }} size="large">
             <InputLabel id="demo-select-small">Choose Occasion</InputLabel>
             <Select
               labelId="demo-select-small"
@@ -86,7 +83,7 @@ export default function FindTable() {
           </FormControl>
         </Grid>
         <Grid item xs={12}>
-          <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+          <FormControl sx={{ m: 1, minWidth: 400 }} size="large">
             <InputLabel id="demo-select-small">Set number of people</InputLabel>
             <Select
               labelId="demo-select-small"

@@ -10,8 +10,6 @@ import TabUnstyled, { tabUnstyledClasses } from '@mui/base/TabUnstyled';
 import DisplayMenu from './DisplayMenu';
 import DisplayDescription from './DisplayDescription';
 
-const theme = useTheme();
-
 
 const blue = {
     50: '#F0F7FF',
@@ -55,7 +53,7 @@ const Tab = styled(TabUnstyled)`
   justify-content: center;
 
   &:hover {
-    background-color: ${blue[400]};
+    background-color: ${blue[100]};
   }
 
   &:focus {

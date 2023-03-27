@@ -31,7 +31,7 @@ const ProductDetailContainer = () => {
 
 
     return (
-        item ? <ProductDetails />
+        item ? <ProductDetails Product={item} />
             : <LoadingSpinner />);
 
 };
