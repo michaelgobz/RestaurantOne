@@ -33,15 +33,16 @@ export default function RestaurantsPage() {
 
   const [restaurants, setRestaurants] = useState([]);
 
-  fetch(api, requestOptions).then((response) => response.json())
-    .then((data) => {
-      console.log(data.restaurants);
-      setRestaurants(data.restaurants);
-    }).catch((error) => {
-      console.log(error);
-    });
+  useEffect(() => {
+    fetch(api, requestOptions).then((response) => response.json())
+      .then((data) => {
+        console.log(data.restaurants);
+        setRestaurants(data.restaurants);
+      }).catch((error) => {
+        console.log(error);
+      });
 
-
+  }, []);
 
   return (
     <>
@@ -59,7 +60,6 @@ export default function RestaurantsPage() {
           restaurants ?
             <>
               <Stack mb={5} direction="row" alignItems="center" justifyContent="space-between">
-                <RestaurantSearch posts={POSTS} />
                 <RestaurantPostsSort options={SORT_OPTIONS} />
               </Stack>
 
