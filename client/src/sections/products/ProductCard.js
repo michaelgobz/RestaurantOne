@@ -25,7 +25,7 @@ ShopProductCard.propTypes = {
 };
 
 export default function ShopProductCard({ product }) {
-  const { name, avatar, price, description, rating, duration } = product;
+  const { name, avatar, price, description, rating, duration, id } = product;
 
   return (
     <Card>
@@ -73,7 +73,7 @@ export default function ShopProductCard({ product }) {
 
           <Stack direction="column" alignItems="center" justifyContent="space-between" mb={0.2} mt={0.2}>
             <Rating variant="small" value={rating} disabled sx={{ mb: 2, mt: 2 }} />
-            <Button variant="small" component={Link} to='/customer/products/details'
+            <Button variant="small" component={Link} to={`/customer/products/details/${id}`}
               sx={{ mb: 0.1, mt: 0.1 }}>
               view
             </Button>

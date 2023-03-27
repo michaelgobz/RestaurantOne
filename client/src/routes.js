@@ -36,11 +36,11 @@ export default function Router() {
           element: <ProductsPage />
         },
         {
-          path: 'customer/products/details',
+          path: 'customer/products/details/:itemId',
           element: <ProductDetailContainer />
         },
         {
-          path: 'customer/restaurants/',
+          path: 'customer/restaurants/:restaurantId',
           element: <RestaurantsDetailsContainer />
         },
         {
@@ -52,7 +52,7 @@ export default function Router() {
           element: <RestaurantsPage />,
         },
         {
-          path: "/customer/reservations/new",
+          path: "/customer/reservations/new/:restaurantId",
           element: <NewReservation />
         }
         ,

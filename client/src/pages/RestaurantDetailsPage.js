@@ -7,7 +7,7 @@ import LoadingSpinner from '../sections/loadingSpinner/LoadingSpinner';
 
 const RestaurantDetailContainer = () => {
     const [item, setItem] = useState(null);
-    const { itemId } = useParams();
+    const { restaurantId } = useParams();
     const [loading, setLoading] = useState(true);
 
     const requestOptions = {
@@ -17,11 +17,23 @@ const RestaurantDetailContainer = () => {
         },
     };
 
-    const url = `${process.env.REACT_APP_API}/restaurants/${itemId}`;
+    const url = `${process.env.REACT_APP_API}/dashboard/restaurants/${restaurantId}`;
+
+    // fetch the data
+    useEffect(() => {
+        fetch(url, requestOptions).then((response) => response.json())
+
+            .then((data) => {
+                setItem(data.restaurant);
+            }).catch((error) => {
+                console.log(error);
+            });
+    }, []);
+
 
     return (
         // needs to be changed to restaurant details
-        item ? <RestaurantDetails />
+        item ? <RestaurantDetails Restaurant={item} />
             : <LoadingSpinner />);
 
 };

@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
 // @mui
 import { alpha, styled } from '@mui/material/styles';
-import { Box, Link, Card, Grid, Avatar, Typography, CardContent, Rating, Button, Stack, avatarClasses } from '@mui/material';
+import { Box, Card, Grid, Avatar, Typography, CardContent, Rating, Button, Stack, avatarClasses } from '@mui/material';
 // utils
 import { fDate } from '../../utils/formatTime';
 import { fShortenNumber } from '../../utils/formatNumber';
@@ -143,7 +144,8 @@ export default function RestaurantPostCard({ restaurant }) {
 <Stack direction="row" alignItems="center" justifyContent="space-between" mb={2} mt={2}>
          <Rating name="disabled" value={3} disabled  sx={{ mb: 2, mt: 2 }} />
             <Button variant="small"
-              onClick={HandleReservation}
+              component={Link}
+              to={`/customer/restaurants/${restaurant.id}`}
             sx={{ mb: 2, mt: 2 }}>
               view
           </Button>

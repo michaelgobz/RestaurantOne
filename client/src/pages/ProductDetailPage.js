@@ -17,7 +17,18 @@ const ProductDetailContainer = () => {
         },
     };
 
-    const url = `${process.env.REACT_APP_API}/products/${itemId}`;
+    const url = `${process.env.REACT_APP_API}/dashboard/menu_item/${itemId}`;
+
+    // fetch the data
+    useEffect(() => {
+        fetch(url, requestOptions).then((response) => response.json())
+            .then((data) => {
+                setItem(data.elements);
+            }).catch((error) => {
+                console.log(error);
+            });
+    }, []);
+
 
     return (
         item ? <ProductDetails />

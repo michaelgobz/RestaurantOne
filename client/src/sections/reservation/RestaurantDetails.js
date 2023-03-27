@@ -17,36 +17,19 @@ import GoBackButton from '../../utils/GoBackButton';
 import RestaurantDetailsDescription from "./RestaurantDescription";
 
 
-/**
- * RestaurantDetails.propTypes = {
-    Product: PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        title: PropTypes.string.isRequired,
-        price: PropTypes.number.isRequired,
-        description: PropTypes.object.isRequired,
-        imgPath: PropTypes.string.isRequired,
-        stock: PropTypes.number.isRequired,
-    })
-}
- * 
- * 
- * 
- * 
- */
-
 RestaurantDetails.propTypes = {
-    Product: PropTypes.shape({
+    Restaurant: PropTypes.shape({
         id: PropTypes.string.isRequired,
-        title: PropTypes.string.isRequired,
-        price: PropTypes.number.isRequired,
+        name: PropTypes.string.isRequired,
         description: PropTypes.object.isRequired,
-        imgPath: PropTypes.string.isRequired,
-        stock: PropTypes.number.isRequired,
+        avatar: PropTypes.string.isRequired,
+        customers: PropTypes.number.isRequired,
+        menus: PropTypes.array.isRequired,
     })
 }
 
 
-export default function RestaurantDetails() {
+export default function RestaurantDetails({ Restaurant }) {
 
     return (
         <>
@@ -63,7 +46,7 @@ export default function RestaurantDetails() {
                     className='animate__animated animate__fadeInLeft'
                 >
                     <Card raised>
-                        <CardMedia component='img' image={`/assets/images/products/product_${5}.jpg`} alt={'id'} />
+                        <CardMedia component='img' image={`/assets/images/products/product_${5}.jpg`} alt={Restaurant} />
                     </Card>
                     <Box
                         display='flex'
@@ -76,7 +59,7 @@ export default function RestaurantDetails() {
                         <Typography component='h5' variant='h6' textAlign='center'
                             sx={{ my: 5 }}
                         >
-                            ${1000}
+                            ${Restaurant.customers}
                         </Typography>
                     </Box>
                 </Grid>
@@ -88,20 +71,21 @@ export default function RestaurantDetails() {
                         textAlign: 'center',
                         fontSize: '1.5rem',
                     }} gutterBottom>
-                        Nile Restaurant
+                        {Restaurant.name}
                     </Typography>
                     <Divider sx={{ my: 5 }} />
 
-                    <RestaurantDetailsDescription sx={{ my: 5 }} />
+                    <RestaurantDetailsDescription sx={{ my: 5 }}
+                        description={Restaurant.description} menus={Restaurant.menus} />
 
                     <Divider sx={{ mb: 2 }} />
 
                     <Box display='flex' justifyContent={'center'} my>
                         <Button
-                            variant='contained'                 
+                            variant='contained'
                             startIcon={<AssignmentTurnedInIcon />}
                             component={Link}
-                            to='/customer/reservations/new'
+                            to={`/customer/reservations/new/${Restaurant.id}`}
                         >
                             Reserve
                         </Button>

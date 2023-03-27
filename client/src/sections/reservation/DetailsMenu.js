@@ -8,6 +8,7 @@ import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import DisplayMenu from './DisplayMenu';
+import DisplayDescription from './DisplayDescription';
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -42,7 +43,12 @@ function a11yProps(index) {
     };
 }
 
-export default function RestaurantDetailsMenu() {
+RestaurantDetailsMenu.propTypes = {
+    description: PropTypes.string.isRequired,
+    menus: PropTypes.array.isRequired,
+}
+
+export default function RestaurantDetailsMenu({ description, menus }) {
     const theme = useTheme();
     const [value, setValue] = React.useState(0);
 
@@ -77,13 +83,13 @@ export default function RestaurantDetailsMenu() {
                     onChangeIndex={handleChangeIndex}
                 >
                     <TabPanel value={value} index={0} dir={theme.direction}>
-                        <DisplayMenu />
+                        <DisplayDescription description={description} />
                     </TabPanel>
                     <TabPanel value={value} index={1} dir={theme.direction}>
-                        <DisplayMenu />
+                        <DisplayMenu menus={menus} />
                     </TabPanel>
                     <TabPanel value={value} index={2} dir={theme.direction}>
-                        <DisplayMenu />
+                        <DisplayDescription description={description} />
                     </TabPanel>
                 </SwipeableViews>
             </Box>

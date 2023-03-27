@@ -18,8 +18,7 @@ import ItemCount from './ProductItemCount';
 import GoBackButton from '../../utils/GoBackButton';
 import ProductDetailsDescription from "./ProductDescription";
 
-/**
- * ProductDetails.propTypes = {
+ProductDetails.propTypes = {
   Product: PropTypes.shape({
     id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
@@ -28,15 +27,14 @@ import ProductDetailsDescription from "./ProductDescription";
     imgPath: PropTypes.string.isRequired,
     stock: PropTypes.number.isRequired,
   })
- * 
- * 
- */
+};
 
 
 
-export default function ProductDetails() {
+export default function ProductDetails({ Product }) {
 
   // const { addItemToCart, isInCart } = useContext(CartContext);
+  const { name, details } = Product;
   const { showSnackbar, setShowSnackbar } = useState(false)
 
   return (

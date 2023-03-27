@@ -549,75 +549,7 @@ def add_restaurant(user_id):
                     'restaurant_id': restaurant.id}), 200
 
 
-# Read restaurant
-@api.route('/dashboard/restaurant/<int:restaurant_id>',
-           methods=['GET'], strict_slashes=False)
-def get_restaurant(restaurant_id):
-    # access the identity of the current user
-    current_user = get_jwt_identity()
-    # get user from the DB
-    user = db.get_session().query(User).get_or_404(current_user)
-
-    # check whether the user is admin or manager
-    if user.role == 'admin' or user.role == 'manager':
-        # get the restaurant from the DB with related tables
-        restaurant = db.get_session().query(Restaurant) \
-            .join(Menu, Restaurant.menus) \
-            .join(Order, Restaurant.orders) \
-            .join(Shipment, Restaurant.shipments) \
-            .join(Reservation, Restaurant.reservations) \
-            .options(
-            contains_eager(Restaurant.menus),
-            contains_eager(Restaurant.orders),
-            contains_eager(Restaurant.shipments),
-            contains_eager(Restaurant.reservations)
-        ) \
-            .filter(Restaurant.id == restaurant_id,
-                    Restaurant.manager_id == current_user).one_or_none()
-
-        if restaurant is None:
-            abort(404, description="Restaurant not found")
-
-        # return informations to the manager
-        return jsonify({
-            "id": restaurant.id,
-            "name": restaurant.name,
-            "description": restaurant.description,
-            "location": restaurant.location,
-            "is_operational": restaurant.is_operational,
-            "offers": restaurant.offers,
-            "menus": [menu.to_dict() for menu in restaurant.menus],
-            "orders": [order.to_dict() for order in restaurant.orders],
-            "shipments": [shipment.to_dict() for shipment in restaurant.shipments],
-            "reservations": [reservation.to_dict() for reservation in restaurant.reservations],
-            "created_at": restaurant.created_at,
-            "updated_at": restaurant.updated_at
-        })
-
-    else:
-        # get the restaurant from the DB
-        restaurant = db.get_session().query(Restaurant) \
-            .join(Menu, Restaurant.menus) \
-            .options(
-            contains_eager(Restaurant.menus),
-        ) \
-            .filter(Restaurant.id == restaurant_id).one_or_none()
-        # get only public information for the restaurant
-        return jsonify({
-            "id": restaurant.id,
-            "name": restaurant.name,
-            "description": restaurant.description,
-            "location": restaurant.location,
-            "is_operational": restaurant.is_operational,
-            "order_fulfilling": restaurant.order_fulfilling,
-            "payment_methods": restaurant.payment_methods,
-            "offers": restaurant.offers,
-            "menus": [menu.to_dict() for menu in restaurant.menus]
-        })
-
-
-# get restaurants
-
+# simple get all restaurants
 
 @api.route('/dashboard/restaurants', methods=['GET'], strict_slashes=False)
 def get_restaurants():
@@ -626,6 +558,19 @@ def get_restaurants():
     db.get_session().commit()
     return jsonify({'message': ' restaurants returned successfully',
                     'restaurants': [restaurant.serialize for restaurant in restaurants]})
+
+# simple get restaurant by id
+
+
+@api.route('/dashboard/restaurants/<restaurant_id>', methods=['GET'],
+           strict_slashes=False)
+def get_restaurant_by_id(restaurant_id):
+    """Get a restaurant by id"""
+    restaurant = db.get_session().query(Restaurant).get_or_404(restaurant_id)
+    db.get_session().commit()
+    return jsonify({'message': ' restaurant returned successfully',
+                    'restaurant': restaurant.serialize})
+
 
 
 # Update restaurant
@@ -778,7 +723,7 @@ def get_menu(menu_id):
     if not menu:
         return jsonify({'error': 'No menu found'}), 404
     # return a list of menu object as a JSON response
-    return jsonify([element.serialize() for element in menu]), 200
+    return jsonify([element.serialize for element in menu]), 200
 
 
 # Update menu
@@ -939,14 +884,14 @@ def add_menu_item(user_id, menu_id):
 # get menu items
 
 # Read menu item
-@api.route('/dashboard/menu_item/<int:item_id>',
+@api.route('/dashboard/menu_item/<item_id>',
            methods=['GET'], strict_slashes=False)
 def menu_item(item_id):
     # get the menu_item from the DB
     menu_item = db.get_session().query(MenuItem).get_or_404(item_id)
 
     # return a list of menu object as a JSON response
-    return jsonify({'elements': [element.serialize() for element in menu_item],
+    return jsonify({'elements': menu_item.serialize,
                     'status': 'Successfully'}), 200
 
 
