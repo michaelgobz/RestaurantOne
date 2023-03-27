@@ -73,6 +73,7 @@ export default function AccountPopover() {
   const [user, setUser] = useState({})
 
   const api = `${process.env.REACT_APP_API}/me/account/profile`
+  const logout = `${process.env.REACT_APP_API}/auth/logout`
   const requestOptions = {
     method: 'GET',
     headers: {
@@ -123,7 +124,8 @@ export default function AccountPopover() {
   const HandleAuth = () => {
 
     if (sessionStorage.getItem('auth') === 'true') {
-      navigator('auth/lo')
+      HandleLogout()
+      navigator('auth/login')
       handleClose()
 
     } else {
@@ -133,6 +135,22 @@ export default function AccountPopover() {
 
   }
 
+  const HandleLogout = () => {
+    fetch(logout, requestOptions).then((response) => response.json().then((data) => {
+      if (response.status === 200) {
+        console.log(logout)
+        console.log(data)
+        sessionStorage.setItem('auth', 'false')
+        sessionStorage.setItem('token', '')
+        sessionStorage.setItem('user', '')
+      } else {
+        console.log('some error has happened')
+      }
+    })).catch((error) => {
+      console.log(error);
+    }).finally(() => {
+    });
+  }
   return (
     <>
       <IconButton
@@ -224,7 +242,6 @@ export default function AccountPopover() {
               {showComponent ? <SnackBar message={SNACK_BAR_OPTIONS[0].label} severity={SNACK_BAR_OPTIONS[0].severity} /> : null}
 
             </MenuItem>
-
         }
       </Popover>
     </>
