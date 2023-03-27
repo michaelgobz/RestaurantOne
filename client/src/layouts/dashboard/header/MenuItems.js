@@ -6,7 +6,7 @@ export function MenuItems() {
 
     const navigator = useNavigate();
 
-    const [value , setValue] = useState();
+    const [value, setValue] = useState('one');
 
     const handleChange = () => {
         setValue(value)

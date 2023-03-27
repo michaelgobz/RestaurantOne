@@ -46,3 +46,11 @@ This document capture the changes to any components in the project
  - updated menu model
  - updated and added routes for orders (CRUD)
  - updated and added routes for reservations (CRUD)
+
+   ### 20/03/2022
+ - set up configurations to load environment variables
+ - updated models(User, Address, Restaurant, Menu, MenuItems, Order, Reservation, Shipment)
+
+   ### 21/03/2022
+ - updated routes with jwt
+ - added dashboards routes

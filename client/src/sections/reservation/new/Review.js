@@ -6,6 +6,10 @@ import ListItemText from '@mui/material/ListItemText';
 import Grid from '@mui/material/Grid';
 
 
+
+// reservation summary goes here
+
+const reservation = localStorage.getItem('NewReservation');
 const products = [
   {
     name: 'Product 1',

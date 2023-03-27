@@ -13,32 +13,32 @@ const MENU_OPTIONS = [
   {
     label: 'Orders',
     icon: 'eva:order-list-fill',
-    path: 'customer/orders'
+    path: '/customer/orders'
   },
   {
     label: 'Reservations',
     icon: 'eva:calendar-fill',
-    path: 'customer/reservations'
+    path: '/customer/reservations'
   },
   {
     label: 'Account',
     icon: 'eva:person-fill',
-    path: 'account'
+    path: '/account/me'
   },
   {
     label: 'Reviews',
     icon: 'eva:review-fill',
-    path: 'customer/reviews'
+    path: '/customer/reviews'
   },
 ];
 const AUTH_OPTIONS = [
   {
     label: 'Login',
-    path: 'auth/login'
+    path: '/auth/login'
   },
   {
     label: 'Logout',
-    path: 'auth/login'
+    path: '/auth/login'
   }
 ]
 
@@ -70,7 +70,41 @@ const SNACK_BAR_OPTIONS = [
 
 export default function AccountPopover() {
 
-  const auth = true;
+  const [user, setUser] = useState({})
+
+  const api = `${process.env.REACT_APP_API}/me/account/profile`
+  const logout = `${process.env.REACT_APP_API}/auth/logout`
+
+  const logoutOptions = {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+    }
+  }
+  const requestOptions = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
+    },
+  }
+  // get user from session storage
+  useEffect(() => {
+    fetch(api, requestOptions).then((response) => response.json().then((data) => {
+      if (response.status === 200) {
+        console.log(api)
+        console.log(data.user)
+        setUser(data.user)
+      } else {
+        console.log('some error has happened')
+      }
+    })).catch((error) => {
+      console.log(error);
+    }).finally(() => {
+      console.log('user', user)
+    });
+  }, []);
 
   const navigator = useNavigate()
 
@@ -85,8 +119,9 @@ export default function AccountPopover() {
     setOpen(null);
   };
 
-  const HandleNavigateAuth = () => {
-    console.log('navigate')
+  const HandleNavigateAuth = (path) => {
+    console.log(path)
+    navigator(path)
     handleClose()
   }
 
@@ -96,7 +131,8 @@ export default function AccountPopover() {
   }
   const HandleAuth = () => {
 
-    if ( !auth ){
+    if (sessionStorage.getItem('auth') === 'true') {
+      HandleLogout()
       navigator('auth/login')
       handleClose()
 
@@ -107,6 +143,22 @@ export default function AccountPopover() {
 
   }
 
+  const HandleLogout = () => {
+    fetch(logout, logoutOptions).then((response) => response.json().then((data) => {
+      if (response.status === 200) {
+        console.log(logout)
+        console.log(data)
+        sessionStorage.setItem('auth', 'false')
+        sessionStorage.setItem('token', '')
+        sessionStorage.setItem('user', '')
+      } else {
+        console.log('some error has happened')
+      }
+    })).catch((error) => {
+      console.log(error);
+    }).finally(() => {
+    });
+  }
   return (
     <>
       <IconButton
@@ -150,14 +202,14 @@ export default function AccountPopover() {
       >
         <Box sx={{ my: 1.5, px: 2.5 }}>
           <Typography variant="subtitle2" noWrap>
-            {account.displayName}
+            {sessionStorage.getItem('auth') === 'true' ? user.firstname : 'Guest'}
           </Typography>
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-            {account.email}
+            {sessionStorage.getItem('auth') === 'true' ? user.email : ""}
           </Typography>
         </Box>
         {
-          auth ?
+          sessionStorage.getItem('auth') === 'true' ?
             <Divider sx={{ borderStyle: 'dashed' }} />
             :
             <Divider sx={{ borderStyle: 'dashed', borderColor: 'white' }} />
@@ -165,9 +217,9 @@ export default function AccountPopover() {
 
 
         <Stack sx={{ p: 1 }}>
-          {auth ?
+          {sessionStorage.getItem('auth') === 'true' ?
             MENU_OPTIONS.map((option) => (
-              <MenuItem key={option.label} onClick={HandleNavigateAuth}>
+              <MenuItem key={option.label} onClick={() => { HandleNavigateAuth(option.path) }}>
                 {option.label}
               </MenuItem>
             )) :
@@ -181,13 +233,13 @@ export default function AccountPopover() {
         </Stack>
 
         {
-          auth ?
+          sessionStorage.getItem('auth') === 'true' ?
             <Divider sx={{ borderStyle: 'dashed' }} />
             :
             <Divider sx={{ borderStyle: 'dashed', borderColor: 'white' }} />
         }
         {
-          auth ?
+          sessionStorage.getItem('auth') === 'true' ?
             <MenuItem key={AUTH_OPTIONS[1].path} onClick={() => { HandleAuth(); ShowSnackBar(); }} sx={{ m: 1 }} >
               {AUTH_OPTIONS[1].label}
               {showComponent ? <SnackBar message={SNACK_BAR_OPTIONS[1].label} severity={SNACK_BAR_OPTIONS[1].severity} /> : null}
@@ -198,7 +250,6 @@ export default function AccountPopover() {
               {showComponent ? <SnackBar message={SNACK_BAR_OPTIONS[0].label} severity={SNACK_BAR_OPTIONS[0].severity} /> : null}
 
             </MenuItem>
-
         }
       </Popover>
     </>
