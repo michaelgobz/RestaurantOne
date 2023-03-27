@@ -11,9 +11,9 @@ import Iconify from '../../../components/iconify';
 
 export default function ConfirmAccount() {
 
-    const confirm = '/auth/confirm-account'
+    const confirm = '/auth/confirm_account'
 
-    const url = `${process.env.REACT_APP_API}${confirm}`;
+    const url = `${process.env.REACT_APP_API}${confirm}${sessionStorage.getItem('verification_token')}`;
     console.log(url)
     const navigator = useNavigate()
 
@@ -25,7 +25,7 @@ export default function ConfirmAccount() {
     });
 
     const requestOptions = {
-        method: 'POST',
+        method: 'GET',
         mode: 'cors',
         body: JSON.stringify(data),
         headers: { 'Content-Type': 'application/json' },
@@ -61,7 +61,7 @@ export default function ConfirmAccount() {
     return (
         <>
             <Stack spacing={3}>
-                <TextField name="Token" value={token} onChangeCapture={HandleChange} label="Token" sx={{ my: 5 }} />
+                <TextField name="Token" value={token} onChange={HandleChange} label="Token" sx={{ my: 5 }} />
 
             </Stack>
 

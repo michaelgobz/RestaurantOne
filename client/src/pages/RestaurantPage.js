@@ -8,19 +8,6 @@ import POSTS from '../_mock/blog';
 
 // ----------------------------------------------------------------------
 
-const api = `${process.env.REACT_APP_API}/dashboard/restaurants`;
-console.log(api);
-const requestOptions = {
-  method: 'GET',
-  headers: { 'Content-Type': 'application/json' },
-};
-
-fetch(api, requestOptions).then((response) => response.json())
-  .then((data) => {
-    console.log(data);
-  }).catch((error) => {
-    console.log(error);
-  });
 
 
 // ----------------------------------------------------------------------
@@ -34,6 +21,23 @@ const SORT_OPTIONS = [
 // ----------------------------------------------------------------------
 
 export default function RestaurantsPage() {
+
+  const api = `${process.env.REACT_APP_API}/dashboard/restaurants`;
+  console.log(api);
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+
+  fetch(api, requestOptions).then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+    }).catch((error) => {
+      console.log(error);
+    });
+
+
+
   return (
     <>
       <Helmet>
@@ -46,36 +50,34 @@ export default function RestaurantsPage() {
            Find your Table for any Treat
           </Typography>
         </Stack>
+        {
+          data ?
+            <>
+              <Stack mb={5} direction="row" alignItems="center" justifyContent="space-between">
+                <RestaurantSearch posts={POSTS} />
+                <RestaurantPostsSort options={SORT_OPTIONS} />
+              </Stack>
 
-        <Stack mb={5} direction="row" alignItems="center" justifyContent="space-between">
-          <RestaurantSearch posts={POSTS} />
-          <RestaurantPostsSort options={SORT_OPTIONS} />
-        </Stack>
-
-        <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
-          Top Cuisines near Legos
-        </Typography>
-        <Grid container spacing={3}>
-          {POSTS.map((post, index) => (
-            <RestaurantPostCard key={post.id} post={post} index={index} />
-          ))}
-        </Grid>
-        <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
-          Experiences Trending near kigali
-        </Typography>
-        <Grid container spacing={3}>
-          {POSTS.map((post, index) => (
-            <RestaurantPostCard key={post.id} post={post} index={index} />
-          ))}
-        </Grid>
-        <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
-          Popular Restaurants Lome'
-        </Typography>
-        <Grid container spacing={3}>
-          {POSTS.map((post, index) => (
-            <RestaurantPostCard key={post.id} post={post} index={index} />
-          ))}
-        </Grid>
+              <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
+                Top Cuisines near Legos
+              </Typography>
+              <Grid container spacing={3}>
+                {POSTS.map((post, index) => (
+                  <RestaurantPostCard key={post.id} post={post} index={index} />
+                ))}
+              </Grid>
+              <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
+                Experiences Trending near kigali
+              </Typography>
+              <Grid container spacing={3}>
+                {POSTS.map((post, index) => (
+                  <RestaurantPostCard key={post.id} post={post} index={index} />
+                ))}
+              </Grid>
+            </>
+            :
+            <LoadingSpinner />
+        }
       </Container>
     </>
   );

@@ -22,7 +22,7 @@ const RestaurantDetailContainer = () => {
     return (
         // needs to be changed to restaurant details
         item ? <RestaurantDetails />
-            : <RestaurantDetails />);
+            : <LoadingSpinner />);
 
 };
 

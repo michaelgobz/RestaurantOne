@@ -8,25 +8,27 @@ import { ProductSort, ProductList, ProductFilterSidebar } from '../sections/prod
 // we should provide an array of product categories
 import PRODUCTS from '../_mock/products';
 import ProductCartPopover from '../sections/products/ProductCartPopover';
+import LoadingSpinner from 'src/sections/loadingSpinner/LoadingSpinner';
 
 // ----------------------------------------------------------------------
 
 
-const api = `${process.env.REACT_APP_API}/dashboard/menus`;
-console.log(api);
-const requestOptions = {
-  method: 'GET',
-  headers: { 'Content-Type': 'application/json' },
-};
-
-fetch(api, requestOptions).then((response) => response.json())
-  .then((data) => {
-    console.log(data);
-  }).catch((error) => {
-    console.log(error);
-  });
-
 export default function ProductsPage() {
+
+  // get the data 
+  const api = `${process.env.REACT_APP_API}/dashboard/menus`;
+  console.log(api);
+  const requestOptions = {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' },
+  };
+
+  fetch(api, requestOptions).then((response) => response.json())
+    .then((data) => {
+      console.log(data);
+    }).catch((error) => {
+      console.log(error);
+    });
 
   sessionStorage.setItem('signup', 'true')
   const [openFilter, setOpenFilter] = useState(false);
@@ -49,46 +51,38 @@ export default function ProductsPage() {
         <Typography variant="h4" sx={{ mb: 5 }}>
           Your Cravings Solved
         </Typography>
+        {
+          data ?
+            <>
+              <Stack direction="row" flexWrap="wrap-reverse" alignItems="center" justifyContent="flex-end" sx={{ mb: 5 }}>
+                <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
+                  <ProductFilterSidebar
+                    openFilter={openFilter}
+                    onOpenFilter={handleOpenFilter}
+                    onCloseFilter={handleCloseFilter}
+                  />
+                  <ProductSort />
+                </Stack>
+              </Stack>
 
-        <Stack direction="row" flexWrap="wrap-reverse" alignItems="center" justifyContent="flex-end" sx={{ mb: 5 }}>
-          <Stack direction="row" spacing={1} flexShrink={0} sx={{ my: 1 }}>
-            <ProductFilterSidebar
-              openFilter={openFilter}
-              onOpenFilter={handleOpenFilter}
-              onCloseFilter={handleCloseFilter}
-            />
-            <ProductSort />
-          </Stack>
-        </Stack>
-        <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
-          Coco Tails
-        </Typography>
-        <ProductList products={PRODUCTS} />
-        <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
-          Coco Tails
-        </Typography>
-        <ProductList products={PRODUCTS} />
-        <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
-        Take Away
-        </Typography>
-        <ProductList products={PRODUCTS} />
-        <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
-        Barques 
-        </Typography>
-        <ProductList products={PRODUCTS} />
-        <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
-        Burgers
-        </Typography>
-        <ProductList products={PRODUCTS} />
-        <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
-        Cakes
-        </Typography>
-        <ProductList products={PRODUCTS} />
-        <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
-        Ice cream
-        </Typography>
-        <ProductList products={PRODUCTS} />
-        <ProductCartPopover />
+              <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
+                Coco Tails
+              </Typography>
+              <ProductList products={PRODUCTS} />
+              <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
+                Coco Tails
+              </Typography>
+              <ProductList products={PRODUCTS} />
+              <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
+                Take Away
+              </Typography>
+              <ProductList products={PRODUCTS} />
+              <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
+                Barques
+              </Typography>
+            </>
+            : <LoadingSpinner />
+        }
       </Container>
     </>
   );

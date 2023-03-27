@@ -43,10 +43,9 @@ export default function SignUpForm() {
         response.json().then((data) => {
           console.log(data)
           if (response.status === 200) {
-            const session = response.body
-            console.log(session)
+            console.log(data.token)
             // we need to get varification token form the response
-            sessionStorage.setItem(session.key, session.value)
+            sessionStorage.setItem('verification_token', session.value)
             sessionStorage.setItem('auth', 'true')
             navigator('/auth/confirm-account')
             // need to verify the user

@@ -56,8 +56,8 @@ export default function LoginForm() {
             console.log(data)
             if (response.status === 200) {
               sessionStorage.setItem('auth', 'true')
-              sessionStorage.setItem('token', data.token)
-              sessionStorage.setItem('user', data.user)
+              sessionStorage.setItem('token', data.access_token)
+              sessionStorage.setItem('user', data.user_id)
               navigator('/customer/products')
             } else {
               console.log('some error has happened')
