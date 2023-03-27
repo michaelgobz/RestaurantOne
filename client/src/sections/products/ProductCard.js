@@ -45,7 +45,7 @@ export default function ShopProductCard({ product }) {
             {`delivered ${duration} mins`}
           </Label>
         )}
-        <StyledProductImg alt={name} src={avatar} />
+        <StyledProductImg alt={name} src='/assets/restaurants/menu_times/chicken_2.jpg' />
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>
