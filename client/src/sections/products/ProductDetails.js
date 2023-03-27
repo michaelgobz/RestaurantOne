@@ -72,7 +72,7 @@ export default function ProductDetails({ Product }) {
             <GoBackButton sx={{ my: 5 }} />
 
             <Typography component='h5' variant='h6' textAlign='center' sx={{ my: 5 }}>
-              {price}
+              {`$ ${price}`}
             </Typography>
           </Box>
         </Grid>
