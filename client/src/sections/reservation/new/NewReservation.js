@@ -69,6 +69,8 @@ export default function NewReservation() {
   const [variant, setVariant] = useState('soft');
   const restaurantId = useParams().restaurantId;
 
+  localStorage.setItem('newReservation', JSON.stringify({}))
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -83,23 +85,6 @@ export default function NewReservation() {
 
     },
   };
-
-  // fetch restaurant menu items
-  useEffect(() => {
-    fetch(api, requestOptions).then((response) => {
-      response.json().then((data) => {
-        console.log(data.restaurant.menus)
-        setMenuItems(data.restaurant.menus);
-        setLoading(false);
-      }
-      ).catch((error) => {
-        setError(error);
-        setLoading(false);
-        console.log(error)
-      });
-    });
-  }, []);
-
 
   const navigate = useNavigate()
 

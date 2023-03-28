@@ -44,7 +44,7 @@ export default function Router() {
           element: <RestaurantsDetailsContainer />
         },
         {
-          path: 'customer/checkout',
+          path: 'customer/checkout/:productId',
           element: <Checkout />,
         },
         {
