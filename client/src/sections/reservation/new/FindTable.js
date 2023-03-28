@@ -6,7 +6,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import { oc } from 'date-fns/locale';
 import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
 
@@ -15,6 +14,7 @@ export default function FindTable() {
   const [selectedDate, setSelectedDate] = React.useState(new Date());
   const [occasion, setOccasion] = React.useState('');
   const [noOfPeople, setNoOfPeople] = React.useState(0);
+  const [TableEnvironment, setTableEnvironment] = React.useState('');
 
   const handleChange = (event) => {
     setTime(event.target.value);
@@ -89,7 +89,7 @@ export default function FindTable() {
               labelId="demo-select-small"
               id="demo-select-small"
               value={noOfPeople}
-              label="No of People"
+              label="Set number of people"
               onChange={(event) => {
                 setNoOfPeople(event.target.value)
               }}
@@ -108,6 +108,27 @@ export default function FindTable() {
               <MenuItem value={10}>10</MenuItem>
               <MenuItem value={11}>11</MenuItem>
               <MenuItem value={12}>12</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid item xs={12}>
+          <FormControl sx={{ m: 1, minWidth: 400 }} size="large">
+            <InputLabel id="demo-select-small">Choose table environment</InputLabel>
+            <Select
+              labelId="demo-select-small"
+              id="demo-select-small"
+              value={TableEnvironment}
+              label="Choose table environment"
+              onChange={(event) => {
+                setTableEnvironment(event.target.value)
+              }}
+            >
+              <MenuItem value="">
+                <em>None</em>
+              </MenuItem>
+              <MenuItem value={'OutDoor'}>OutDoor</MenuItem>
+              <MenuItem value={'InDoor'}>InDoor</MenuItem>
+              <MenuItem value={'Window Adjustment'}>Window Adjustment</MenuItem>
             </Select>
           </FormControl>
         </Grid>
