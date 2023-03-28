@@ -37,9 +37,6 @@ export default function FindTable() {
               label="Choose a Time"
               onChange={handleChange}
             >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
               <MenuItem value={'11:30'}>11:30</MenuItem>
               <MenuItem value={'13:30'}>13:30</MenuItem>
               <MenuItem value={'18:00'}>18:00</MenuItem>
@@ -68,9 +65,6 @@ export default function FindTable() {
               }
               }
             >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
               <MenuItem value={'break fast'}>Break fast</MenuItem>
               <MenuItem value={'dinner'}>Dinner</MenuItem>
               <MenuItem value={'date'}>Date</MenuItem>
@@ -94,9 +88,6 @@ export default function FindTable() {
                 setNoOfPeople(event.target.value)
               }}
             >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
               <MenuItem value={2}>2</MenuItem>
               <MenuItem value={3}>3</MenuItem>
               <MenuItem value={4}>3</MenuItem>
@@ -123,9 +114,6 @@ export default function FindTable() {
                 setTableEnvironment(event.target.value)
               }}
             >
-              <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
               <MenuItem value={'OutDoor'}>OutDoor</MenuItem>
               <MenuItem value={'InDoor'}>InDoor</MenuItem>
               <MenuItem value={'Window Adjustment'}>Window Adjustment</MenuItem>

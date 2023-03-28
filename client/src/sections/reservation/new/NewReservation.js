@@ -88,8 +88,8 @@ export default function NewReservation() {
   useEffect(() => {
     fetch(api, requestOptions).then((response) => {
       response.json().then((data) => {
-        console.log(data.menus.items)
-        setMenuItems(data.menus.items);
+        console.log(data.restaurant.menus)
+        setMenuItems(data.restaurant.menus);
         setLoading(false);
       }
       ).catch((error) => {
