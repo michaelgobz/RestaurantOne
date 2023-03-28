@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
 import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
 // @mui
 import { alpha, styled } from '@mui/material/styles';
-import {Box, Link, Card, Grid, Avatar, Typography, CardContent, Rating, Button , Stack} from '@mui/material';
+import { Box, Card, Grid, Avatar, Typography, CardContent, Rating, Button, Stack, avatarClasses } from '@mui/material';
 // utils
 import { fDate } from '../../utils/formatTime';
 import { fShortenNumber } from '../../utils/formatNumber';
@@ -54,49 +55,32 @@ const StyledCover = styled('img')({
 // ----------------------------------------------------------------------
 
 RestaurantPostCard.propTypes = {
-  post: PropTypes.object.isRequired,
-  index: PropTypes.number,
+  restaurant: PropTypes.object.isRequired,
 };
 
-export default function RestaurantPostCard({ post, index }) {
+export default function RestaurantPostCard({ restaurant }) {
 
   const navigate = useNavigate()
-  const { cover, title, view, comment, share, author, createdAt } = post;
-  const latestPostLarge = index === 0;
-  const latestPost = index === 1 || index === 2;
+  const { avatar, name, location, description } = restaurant;
 
   const HandleReservation = () => {
-    navigate('new')
+    navigate('/customer/restaurants')
   }
 
   const POST_INFO = [
-    { number: comment, icon: 'eva:message-circle-fill' },
-    { number: view, icon: 'eva:eye-fill' },
-    { number: share, icon: 'eva:share-fill' },
+    { number: 1, icon: 'eva:message-circle-fill' },
+    { number: 3, icon: 'eva:eye-fill' },
+    { number: 5, icon: 'eva:share-fill' },
   ];
 
   return (
-    <Grid item xs={12} sm={latestPostLarge ? 12 : 6} md={latestPostLarge ? 6 : 3}>
+    <Grid item xs={12} sm={6} md={3}>
       <Card sx={{ position: 'relative' }}>
         <StyledCardMedia
           sx={{
-            ...((latestPostLarge || latestPost) && {
-              pt: 'calc(100% * 4 / 3)',
-              '&:after': {
-                top: 0,
-                content: "''",
-                width: '100%',
-                height: '100%',
-                position: 'absolute',
-                bgcolor: (theme) => alpha(theme.palette.grey[900], 0.72),
-              },
-            }),
-            ...(latestPostLarge && {
-              pt: {
-                xs: 'calc(100% * 4 / 3)',
-                sm: 'calc(100% * 3 / 4.66)',
-              },
-            }),
+            bgcolor: (theme) => alpha(theme.palette.grey[900], 0.72),
+            pt: 'calc(100% * 3 / 4)',
+
           }}
         >
           <SvgColor
@@ -109,52 +93,35 @@ export default function RestaurantPostCard({ post, index }) {
               bottom: -15,
               position: 'absolute',
               color: 'background.paper',
-              ...((latestPostLarge || latestPost) && { display: 'none' }),
-            }}
-          />
-          <StyledAvatar
-            alt={author.name}
-            src={author.avatarUrl}
-            sx={{
-              ...((latestPostLarge || latestPost) && {
-                zIndex: 9,
-                top: 24,
-                left: 24,
-                width: 40,
-                height: 40,
-              }),
             }}
           />
 
-          <StyledCover alt={title} src={cover} />
+          <StyledCover alt={name} src={avatar} />
         </StyledCardMedia>
 
         <CardContent
           sx={{
             pt: 4,
-            ...((latestPostLarge || latestPost) && {
-              bottom: 0,
-              width: '100%',
-              position: 'absolute',
-            }),
           }}
         >
           <Typography gutterBottom variant="caption" sx={{ color: 'text.disabled', display: 'block' }}>
-            {fDate(createdAt)}
+            {location}
           </Typography>
 
           <StyledTitle
             color="inherit"
             variant="subtitle2"
             underline="hover"
-            sx={{
-              ...(latestPostLarge && { typography: 'h5', height: 60 }),
-              ...((latestPostLarge || latestPost) && {
-                color: 'common.white',
-              }),
-            }}
           >
-            {title}
+            {name}
+          </StyledTitle>
+
+          <StyledTitle
+            color="inherit"
+            variant="subtitle2"
+            underline="hover"
+          >
+            {description}
           </StyledTitle>
 
           <StyledInfo>
@@ -165,9 +132,7 @@ export default function RestaurantPostCard({ post, index }) {
                   display: 'flex',
                   alignItems: 'center',
                   ml: index === 0 ? 0 : 1.5,
-                  ...((latestPostLarge || latestPost) && {
-                    color: 'grey.500',
-                  }),
+
                 }}
               >
                 <Iconify icon={info.icon} sx={{ width: 16, height: 16, mr: 0.5 }} />
@@ -178,9 +143,11 @@ export default function RestaurantPostCard({ post, index }) {
 
 <Stack direction="row" alignItems="center" justifyContent="space-between" mb={2} mt={2}>
          <Rating name="disabled" value={3} disabled  sx={{ mb: 2, mt: 2 }} />
-            <Button variant="contained" onClick={HandleReservation}
+            <Button variant="small"
+              component={Link}
+              to={`/customer/restaurants/${restaurant.id}`}
             sx={{ mb: 2, mt: 2 }}>
-                Reserve
+              view
           </Button>
 </Stack>
         </CardContent>
