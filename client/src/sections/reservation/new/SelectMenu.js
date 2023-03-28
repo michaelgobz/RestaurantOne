@@ -10,7 +10,6 @@ import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
 
 import Typography from '@mui/material/Typography';
-import { constant } from 'lodash';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -46,37 +45,6 @@ SelectMenu.propTypes = {
 export default function SelectMenu({ MenuItems }) {
 
   const [itemName, setItemName] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [setMenuItems] = useState([]);
-
-  const restaurantId = useParams().restaurantId;
-  const url = `${process.env.REACT_APP_API}/dashboard/restaurants/${restaurantId}`
-  const requestOptions = {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  };
-
-  // get menu items from restaurantId
-  // const [MenuItems, setMenuItems] = React.useState([]);
-  useEffect(() => {
-    fetch(url, requestOptions).then((response) => {
-      response.json().then((data) => {
-        console.log(data.restaurant.menus)
-        setMenuItems(data.restaurant.menus);
-        setLoading(false);
-      }
-      ).catch((error) => {
-        setError(error);
-        setLoading(false);
-        console.log(error)
-      });
-    });
-
-  }, []);
-
 
   const handleChange = (event) => {
     const {
@@ -91,14 +59,14 @@ export default function SelectMenu({ MenuItems }) {
 
   return (
     <>
-      <Typography variant="h6" gutterBottom>
+      <Typography variant="h6" gutterBottom sx={{ my: 10 }}>
         Choose Menu
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6}>
           <div>
             <FormControl sx={{ m: 1, width: 400 }}>
-              <InputLabel id="demo-multiple-checkbox-label">Tag</InputLabel>
+              <InputLabel id="demo-multiple-checkbox-label">Menus</InputLabel>
               <Select
                 labelId="demo-multiple-checkbox-label"
                 id="demo-multiple-checkbox"
@@ -106,9 +74,8 @@ export default function SelectMenu({ MenuItems }) {
                 label="Select Menu Item"
                 value={itemName}
                 onChange={handleChange}
-                input={<OutlinedInput label="Tag" />}
-                renderValue={(selected) => selected.join(', ')}
-                MenuProps={MenuProps}
+                input={<OutlinedInput label="Menus" />}
+                renderValue={(selected) => selected}
               >
                 {MenuItems.map((item) => (
                   <MenuItem key={item} value={item}>
