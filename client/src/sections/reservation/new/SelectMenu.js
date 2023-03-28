@@ -1,6 +1,5 @@
+import * as React from 'react';
 import { useParams } from 'react-router';
-import { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import Grid from '@mui/material/Grid';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
@@ -8,8 +7,9 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
-
+import Checkbox from '@mui/material/Checkbox';
 import Typography from '@mui/material/Typography';
+
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -22,9 +22,9 @@ const MenuProps = {
   },
 };
 
-// menu items go here 
+// menu items go here
 
-const MenuItems = [
+const names = [
   'Oliver Hansen',
   'Van Henry',
   'April Tucker',
@@ -37,49 +37,90 @@ const MenuItems = [
   'Kelly Snyder',
 ];
 
-SelectMenu.propTypes = {
-  MenuItems: PropTypes.array.isRequired,
-};
+
+export default function SelectMenu() {
+  const [name, setName] = React.useState([]);
+  const { restaurantId } = useParams('restaurantId');
+  const [menuNames, setMenuNames] = React.useState([]);
+  
+
+  const api = `${process.env.REACT_APP_API}/dashboard/restaurants/${restaurantId}`;
+
+  const requestOptions = {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+
+    },
+  };
 
 
-export default function SelectMenu({ MenuItems }) {
+  React.useEffect(() => {
+    let menuItems = [];
+    fetch(api, requestOptions).then((response) => {
+      response.json().then((data) => {
+        console.log(data.restaurant.menus)
+        menuItems = (data.restaurant.menus);
 
-  const [itemName, setItemName] = useState('');
+        const items = menuItems.map((item) => {
+          return item.items
+        })
+        console.log(items)
+
+        const menuNames = items.map((item) => {
+          return item.map((item) => {
+            return item.name
+          })
+        })
+        const flattened = menuNames.flat()
+        setMenuNames(flattened)
+      }
+      ).catch((error) => {
+        console.log(error)
+      });
+    });
+  }, []);
+
+
+
+
 
   const handleChange = (event) => {
     const {
       target: { value },
     } = event;
-    setItemName(
+    setName(
       // On autofill we get a stringified value.
-      typeof value === 'string' ? value : '',
+      typeof value === 'string' ? value.split(',') : value,
     );
   };
 
 
   return (
     <>
-      <Typography variant="h6" gutterBottom sx={{ my: 10 }}>
+      <Typography variant="h6" gutterBottom>
         Choose Menu
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6}>
           <div>
-            <FormControl sx={{ m: 1, width: 400 }}>
+            <FormControl sx={{ m: 1, width: 300 }}>
               <InputLabel id="demo-multiple-checkbox-label">Menus</InputLabel>
               <Select
                 labelId="demo-multiple-checkbox-label"
                 id="demo-multiple-checkbox"
                 multiple
                 label="Select Menu Item"
-                value={itemName}
+                value={name}
                 onChange={handleChange}
-                input={<OutlinedInput label="Menus" />}
-                renderValue={(selected) => selected}
+                input={<OutlinedInput label="Tag" />}
+                renderValue={(selected) => selected.join(', ')}
+                MenuProps={MenuProps}
               >
-                {MenuItems.map((item) => (
-                  <MenuItem key={item} value={item}>
-                    <ListItemText primary={item} />
+                {menuNames.map((name) => (
+                  <MenuItem key={Math.random(10)} value={name}>
+                    <Checkbox checked={menuNames.indexOf(name) > 1} />
+                    <ListItemText primary={name} />
                   </MenuItem>
                 ))}
               </Select>

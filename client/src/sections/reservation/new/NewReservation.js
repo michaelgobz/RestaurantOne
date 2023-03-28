@@ -36,14 +36,14 @@ function Copyright() {
 
 const steps = ['Choose a Table', 'Add your details', 'Choose a Menu', 'Payment details', 'Review'];
 
-function getStepContent(step, menuItems) {
+function getStepContent(step) {
   switch (step) {
     case 0:
       return <FindTable />;
     case 1:
       return <ContactDetails />;
     case 2:
-      return <SelectMenu menuItems={menuItems} />;
+      return <SelectMenu />;
     case 3:
       return <PaymentForm />;
     case 4:
@@ -200,7 +200,7 @@ export default function NewReservation() {
             </>
           ) : (
             <>
-                {getStepContent(activeStep, menuItems)}
+                {getStepContent(activeStep)}
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                   {activeStep !== 0 && (
                     <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
