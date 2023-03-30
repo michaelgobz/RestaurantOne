@@ -8,7 +8,6 @@ import LoadingSpinner from '../sections/loadingSpinner/LoadingSpinner';
 const RestaurantDetailContainer = () => {
     const [item, setItem] = useState(null);
     const { restaurantId } = useParams();
-    const [loading, setLoading] = useState(true);
 
     const requestOptions = {
         method: 'GET',
@@ -28,7 +27,7 @@ const RestaurantDetailContainer = () => {
             }).catch((error) => {
                 console.log(error);
             });
-    }, []);
+    }, [url, , requestOptions]);
 
 
     return (

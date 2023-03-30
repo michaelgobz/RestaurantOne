@@ -9,7 +9,6 @@ import {
     Stack,
     Paper,
     Avatar,
-    Button,
     Popover,
     Checkbox,
     TableRow,
@@ -27,7 +26,7 @@ import Label from '../components/label';
 import Iconify from '../components/iconify';
 import Scrollbar from '../components/scrollbar';
 // sections
-import { UserListHead, UserListToolbar } from '../sections/user';
+import { UserListHead } from '../sections/user';
 // mock
 import USERLIST from '../_mock/user';
 
@@ -133,11 +132,6 @@ export default function OrdersPage() {
     const handleChangeRowsPerPage = (event) => {
         setPage(0);
         setRowsPerPage(parseInt(event.target.value, 10));
-    };
-
-    const handleFilterByName = (event) => {
-        setPage(0);
-        setFilterName(event.target.value);
     };
 
     const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - USERLIST.length) : 0;

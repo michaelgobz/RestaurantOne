@@ -8,7 +8,6 @@ import ProductDetails from '../sections/products/ProductDetails';
 const ProductDetailContainer = () => {
     const [item, setItem] = useState(null);
     const { itemId } = useParams();
-    const [loading, setLoading] = useState(true);
 
     const requestOptions = {
         method: 'GET',
@@ -27,7 +26,7 @@ const ProductDetailContainer = () => {
             }).catch((error) => {
                 console.log(error);
             });
-    }, []);
+    }, [api, requestOptions]);
 
 
     return (

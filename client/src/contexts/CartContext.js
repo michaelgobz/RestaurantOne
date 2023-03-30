@@ -2,6 +2,11 @@ import { useState, createContext } from 'react';
 
 export const CartContext = createContext();
 
+CartProvider.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
+
 export const CartProvider = ({ children }) => {
 
   const [cart, setCart] = useState(

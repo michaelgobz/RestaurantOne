@@ -104,7 +104,7 @@ export default function AccountPopover() {
     }).finally(() => {
       console.log('user', user)
     });
-  }, []);
+  }, [api, requestOptions]);
 
   const navigator = useNavigate()
 

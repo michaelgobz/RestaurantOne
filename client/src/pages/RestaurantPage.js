@@ -1,11 +1,10 @@
 import { Helmet } from 'react-helmet-async';
 import { useState, useEffect } from 'react';
 // @mui
-import { Grid, Button, Container, Stack, Typography } from '@mui/material';
+import { Grid, Container, Stack, Typography } from '@mui/material';
 // components
-import { RestaurantPostCard, RestaurantPostsSort, RestaurantSearch ,ReservationCard } from '../sections/reservation';
+import { RestaurantPostCard, RestaurantPostsSort } from '../sections/reservation';
 // mock
-import POSTS from '../_mock/blog';
 import LoadingSpinner from '../sections/loadingSpinner/LoadingSpinner';
 
 // ----------------------------------------------------------------------
@@ -25,7 +24,6 @@ const SORT_OPTIONS = [
 export default function RestaurantsPage() {
 
   const api = `${process.env.REACT_APP_API}/dashboard/restaurants`;
-  console.log(api);
   const requestOptions = {
     method: 'GET',
     headers: { 'Content-Type': 'application/json' },
@@ -42,7 +40,7 @@ export default function RestaurantsPage() {
         console.log(error);
       });
 
-  }, []);
+  }, [api, requestOptions]);
 
   return (
     <>

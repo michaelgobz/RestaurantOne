@@ -24,8 +24,6 @@ export default function LoginForm() {
   const navigator = useNavigate()
 
   // get data from the form
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [data, setData] = useState({
     email: '',
@@ -35,13 +33,6 @@ export default function LoginForm() {
   const [variant, setVariant] = useState('soft');
   const [open, setOpen] = useState(false);
 
-  const HandleSetEmail = (e) => {
-    setEmail(e.target.email)
-  }
-
-  const HandleSetPassword = (e) => {
-    setPassword(e.target.password)
-  }
 
   const requestOptions = {
     method: 'POST',
@@ -98,9 +89,6 @@ export default function LoginForm() {
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
-  const HandleChange = (e) => {
-    setData({ ...data, [e.target.name]: e.target.value });
-  };
 
   return (
     <>

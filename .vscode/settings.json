@@ -35,6 +35,7 @@
         "Reataurant",
         "sadd",
         "scard",
+        "Selecteds",
         "setdata",
         "simplebar",
         "sismember",

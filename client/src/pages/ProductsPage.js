@@ -5,9 +5,6 @@ import { Container, Stack, Typography } from '@mui/material';
 import LoadingSpinner from '../sections/loadingSpinner/LoadingSpinner';
 // components
 import { ProductSort, ProductList, ProductFilterSidebar } from '../sections/products';
-// mock
-// we should provide an array of product categories
-import PRODUCTS from '../_mock/products';
 
 
 // ----------------------------------------------------------------------
