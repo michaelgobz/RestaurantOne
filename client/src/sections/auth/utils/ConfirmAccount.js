@@ -13,7 +13,7 @@ export default function ConfirmAccount() {
 
     const confirm = '/auth/confirm_account'
 
-    const url = `${process.env.REACT_APP_API}${confirm}${sessionStorage.getItem('verification_token')}`;
+    const url = `${process.env.REACT_APP_API}${confirm}/${sessionStorage.getItem('verification_token')}`;
     console.log(url)
     const navigator = useNavigate()
 
@@ -27,7 +27,6 @@ export default function ConfirmAccount() {
     const requestOptions = {
         method: 'GET',
         mode: 'cors',
-        body: JSON.stringify(data),
         headers: { 'Content-Type': 'application/json' },
     };
 

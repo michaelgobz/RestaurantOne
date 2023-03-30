@@ -46,7 +46,6 @@ export default function SignUpForm() {
             console.log(data.token)
             // we need to get varification token form the response
             sessionStorage.setItem('verification_token', data.token)
-            sessionStorage.setItem('auth', 'true')
             navigator('/auth/confirm-account')
             // need to verify the user
           } else {

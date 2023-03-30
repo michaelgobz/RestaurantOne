@@ -73,7 +73,7 @@ def signup():
                     last_name=data.get('lastname'),
                     role='customer',
                     salt=salt_to_string,
-                    phone_number=data.get('phonenumber'),
+                    phone_number=data.get('Phonenumber'),
                     created_at=datetime.utcnow(),
                     updated_at=datetime.utcnow())
 
