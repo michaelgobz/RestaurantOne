@@ -39,7 +39,7 @@ jobs:
       
     - name: Change the Directory
       run: |
-        cd ./client
+        cd /home/runner/work/RestaurantOne/RestaurantOne/client
 
     - name: Set up Node.js
       uses: actions/setup-node@v3
