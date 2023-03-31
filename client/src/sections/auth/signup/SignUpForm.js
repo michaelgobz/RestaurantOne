@@ -14,12 +14,6 @@ export default function SignUpForm() {
 
   const navigator = useNavigate()
   const [showPassword, setShowPassword] = useState(false);
-  const [firstname, setFirstname] = useState('')
-  const [lastname, setLastname] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [retypePassword, setRetypePassword] = useState('')
-  const [phoneNumber, setPhoneNumber] = useState('')
 
   const [data, setData] = useState({
     firstname: '', lastname: '', email: '', password: '', retypePassword: '',

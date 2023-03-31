@@ -82,15 +82,18 @@ export default function AccountPopover() {
       'Authorization': `Bearer ${sessionStorage.getItem('token')}`
     }
   }
-  const requestOptions = {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
-    },
-  }
+
   // get user from session storage
   useEffect(() => {
+
+    const requestOptions = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
+      },
+    }
+
     fetch(api, requestOptions).then((response) => response.json().then((data) => {
       if (response.status === 200) {
         console.log(api)
@@ -104,7 +107,7 @@ export default function AccountPopover() {
     }).finally(() => {
       console.log('user', user)
     });
-  }, [api, requestOptions]);
+  }, [api, user]);
 
   const navigator = useNavigate()
 

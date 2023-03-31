@@ -83,7 +83,7 @@ export default function OrdersPage() {
 
     const [orderBy, setOrderBy] = useState('name');
 
-    const [filterName, setFilterName] = useState('');
+    const [filterName] = useState('');
 
     const [rowsPerPage, setRowsPerPage] = useState(5);
 

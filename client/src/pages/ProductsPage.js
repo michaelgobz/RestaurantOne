@@ -17,13 +17,16 @@ export default function ProductsPage() {
   console.log(api);
   // menus state
   const [menus, setMenus] = useState();
-  // request options
-  const requestOptions = {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
-  };
+
 
   useEffect(() => {
+
+    // request options
+    const requestOptions = {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    };
+
     // fetch the data
     fetch(api, requestOptions).then((response) => response.json())
       .then((data) => {
@@ -32,7 +35,7 @@ export default function ProductsPage() {
       }).catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [api]);
   sessionStorage.setItem('signup', 'true')
   const [openFilter, setOpenFilter] = useState(false);
 

@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 // @mui
-import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox, Typography } from '@mui/material';
+import { Stack, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // components
-import Iconify from '../../../components/iconify';
 
 
 // ----------------------------------------------------------------------
@@ -18,10 +17,8 @@ export default function ConfirmAccount() {
     const navigator = useNavigate()
 
     // get data from the form
-    const [token, setToken] = useState('');
     const [data, setData] = useState({
-        email: '',
-        password: '',
+        token: ''
     });
 
     const requestOptions = {

@@ -24,14 +24,17 @@ const SORT_OPTIONS = [
 export default function RestaurantsPage() {
 
   const api = `${process.env.REACT_APP_API}/dashboard/restaurants`;
-  const requestOptions = {
-    method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
-  };
 
   const [restaurants, setRestaurants] = useState();
 
   useEffect(() => {
+
+    // request options
+    const requestOptions = {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    };
+
     fetch(api, requestOptions).then((response) => response.json())
       .then((data) => {
         console.log(data.restaurants);
@@ -40,7 +43,7 @@ export default function RestaurantsPage() {
         console.log(error);
       });
 
-  }, [api, requestOptions]);
+  }, [api]);
 
   return (
     <>

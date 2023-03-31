@@ -1,6 +1,11 @@
+import propTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
+
+LoadingSpinner.propTypes = {
+    text: PropTypes.string,
+};
 
 const LoadingSpinner = ({ text = 'loading...' }) => {
     return (

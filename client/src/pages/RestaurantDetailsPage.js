@@ -9,17 +9,19 @@ const RestaurantDetailContainer = () => {
     const [item, setItem] = useState(null);
     const { restaurantId } = useParams();
 
-    const requestOptions = {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    };
+
 
     const url = `${process.env.REACT_APP_API}/dashboard/restaurants/${restaurantId}`;
 
     // fetch the data
     useEffect(() => {
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        };
+
         fetch(url, requestOptions).then((response) => response.json())
 
             .then((data) => {
@@ -27,7 +29,7 @@ const RestaurantDetailContainer = () => {
             }).catch((error) => {
                 console.log(error);
             });
-    }, [url, , requestOptions]);
+    }, [url]);
 
 
     return (
