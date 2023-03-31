@@ -15,6 +15,7 @@ export default function ConfirmAccount() {
     const url = `${process.env.REACT_APP_API}${confirm}/${sessionStorage.getItem('verification_token')}`;
     console.log(url)
     const navigator = useNavigate()
+    const [token] = useState('');
 
     // get data from the form
     const [data, setData] = useState({

@@ -21,6 +21,9 @@ export default function UpdatePassword() {
 
     // get data from the form
     const [showPassword, setShowPassword] = useState(false);
+    const [newPassword] = useState('');
+    const [confirmPassword] = useState('');
+
     const [data, setData] = useState({
         password: '',
         confirmedPassword: '',

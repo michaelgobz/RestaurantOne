@@ -31,6 +31,7 @@ export default function LoginForm() {
   });
 
   const [variant, setVariant] = useState('soft');
+  const [open] = useState(false);
 
 
   const requestOptions = {
