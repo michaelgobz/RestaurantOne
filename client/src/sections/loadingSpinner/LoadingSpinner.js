@@ -3,9 +3,6 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 
-LoadingSpinner.propTypes = {
-    text: propTypes.string,
-};
 
 const LoadingSpinner = ({ text = 'loading...' }) => {
     (
@@ -17,6 +14,10 @@ const LoadingSpinner = ({ text = 'loading...' }) => {
         </>
 
     )
+};
+
+LoadingSpinner.propTypes = {
+    text: propTypes.string,
 };
 
 export default LoadingSpinner;
