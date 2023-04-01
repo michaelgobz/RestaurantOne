@@ -2,9 +2,9 @@
 
 from ..db import DBClient
 
-Db = DBClient(host='34.165.84.79', port=5432,
-              user='RestaurantAdmin', password='RestaurantAdmin',
-              db='OpenRestaurant')
+Db = DBClient(host='restaurant-one.database.windows.net', port=1433,
+              user='michael', password='Leahjanelle@0949',
+              db='data')
 
 declarative_base = Db.get_engine()
 

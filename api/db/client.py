@@ -3,9 +3,14 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
 
-def _get_connection_string(host, port, user, password, db) -> str:
+def _get_connection_string(host, port, user, password, db, provider) -> str:
     """get connection string"""
-    return f"postgresql://{user}:{password}@{host}:{port}/{db}"
+    if provider == 'sqlserver':
+        return f"jdbc:sqlserver://{host}:{port};database={db};user={user}@restaurant-one" \
+               f";password={password};encrypt=true;trustServerCertificate=false;" \
+               f"hostNameInCertificate=*.database.windows.net;loginTimeout=30;"
+    elif provider == 'postgresql':
+        return f"postgresql://{user}:{password}@{host}:{port}/{db}"
 
 
 class DBClient:
@@ -36,7 +41,7 @@ class DBClient:
         """initialize app"""
         app.config['SQLALCHEMY_DATABASE_URI'] = \
             _get_connection_string(self.host, self.port, self.user,
-                                        self.password, self.db)
+                                   self.password, self.db,'sqlserver')
         app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
         self.__engine.init_app(app)
         self.__migrate = Migrate(app, self.__engine)

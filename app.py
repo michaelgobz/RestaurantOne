@@ -16,11 +16,11 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = getenv('SECRET_KEY')
 
-# Setup the Flask-JWT-Extended extension
+# Set up the Flask-JWT-Extended extension
 app.config['JWT_SECRET_KEY'] = getenv('SECRET_KEY')
 jwt = JWTManager(app)
 
-# Initializing CORS for cross origin requests
+# Initializing CORS for cross-origin requests
 CORS(app, resources={r'/*': {'origins': '*'}}, supports_credentials=True)
 
 
