@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import LoadingSpinner from '../sections/LoadingSpinner/LoadingSpinner';
+import LoadingSpinner from '../sections/LoadingSpinner';
 import ProductDetails from '../sections/products/ProductDetails';
 
 
