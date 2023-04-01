@@ -6,9 +6,7 @@ from flask_migrate import Migrate
 def _get_connection_string(host, port, user, password, db, provider) -> str:
     """get connection string"""
     if provider == 'sqlserver':
-        return f"jdbc:sqlserver://{host}:{port};database={db};user={user}@restaurant-one" \
-               f";password={password};encrypt=true;trustServerCertificate=false;" \
-               f"hostNameInCertificate=*.database.windows.net;loginTimeout=30;"
+        return f"mssql+pymssql://{user}:{password}@{host}:{port}/{db}"
     elif provider == 'postgresql':
         return f"postgresql://{user}:{password}@{host}:{port}/{db}"
 
