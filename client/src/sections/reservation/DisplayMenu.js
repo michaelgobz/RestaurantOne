@@ -13,7 +13,7 @@ export default function DisplayMenu({ menus }) {
     return (
         <>
             {
-                menus.map((menu) => {
+                menus.map((menu) => 
                     (
                         <>
                             <Typography variant="h4" component="h1" gutterBottom>
@@ -25,8 +25,7 @@ export default function DisplayMenu({ menus }) {
                             </Typography>
                             <Divider sx={{ my: 5 }} />
                             {
-                                menu.items.map((item) => {
-                                    (
+                            menu.items.map((item) => (
 
                                         <>
                                             <Typography variant="body3" gutterBottom>
@@ -40,11 +39,11 @@ export default function DisplayMenu({ menus }) {
                                             </Typography>
                                         </>
                                     )
-                                })
+                            )
                             }
                         </>
                     )
-                })
+                )
             }
 
         </>

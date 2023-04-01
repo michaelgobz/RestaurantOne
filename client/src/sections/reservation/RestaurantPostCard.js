@@ -1,9 +1,8 @@
 import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 // @mui
 import { alpha, styled } from '@mui/material/styles';
-import { Box, Card, Grid, Avatar, Typography, CardContent, Rating, Button, Stack } from '@mui/material';
+import { Box, Card, Grid, Typography, CardContent, Rating, Button, Stack } from '@mui/material';
 // utils
 import { fShortenNumber } from '../../utils/formatNumber';
 //
@@ -51,7 +50,6 @@ RestaurantPostCard.propTypes = {
 
 export default function RestaurantPostCard({ restaurant }) {
 
-  const navigate = useNavigate()
   const { avatar, name, location, description } = restaurant;
 
 

@@ -62,15 +62,11 @@ localStorage.setItem('newReservation', JSON.stringify([]))
 export default function NewReservation() {
 
   const [activeStep, setActiveStep] = useState(0);
-  const [open, setOpen] = useState(false);
+  const [open] = useState(false);
   const [variant, setVariant] = useState('soft');
   const { restaurantId } = useParams('restaurantId');
 
   localStorage.setItem('newReservation', JSON.stringify({}))
-
-
-  const reservationUrl = `${process.env.REACT_APP_API}/dashboard/reservations/${sessionStorage.getItem('user')}/${restaurantId}`
-
 
   const navigate = useNavigate()
 
@@ -83,9 +79,12 @@ export default function NewReservation() {
     }
   }
 
-  const reservation = JSON.parse(localStorage.getItem('newReservation'))
+
 
   const CreateReservation = () => {
+    const reservationUrl = `${process.env.REACT_APP_API}/dashboard/reservations/${sessionStorage.getItem('user')}/${restaurantId}`
+
+    const reservation = JSON.parse(localStorage.getItem('newReservation'))
 
     useEffect(() => {
 
@@ -196,4 +195,4 @@ export default function NewReservation() {
       </Container>
     </ThemeProvider>
   );
-} 
+}

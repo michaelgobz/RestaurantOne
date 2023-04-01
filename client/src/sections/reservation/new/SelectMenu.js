@@ -51,16 +51,16 @@ export default function SelectMenu() {
         console.log(data.restaurant.menus)
         menuItems = (data.restaurant.menus);
 
-        const items = menuItems.map((item) => {
-          return item.items
-        })
+        const items = menuItems.map((item) =>
+          item.items
+        )
         console.log(items)
 
-        const menuNames = items.map((item) => {
-          return item.map((item) => {
-            return item.name
-          })
-        })
+        const menuNames = items.map((item) =>
+          item.map((item) =>
+            item.name
+          )
+        )
         const flattened = menuNames.flat()
         setMenuNames(flattened)
       }
@@ -68,7 +68,7 @@ export default function SelectMenu() {
         console.log(error)
       });
     });
-  }, []);
+  }, [api]);
 
 
   const handleChange = (event) => {
