@@ -1,4 +1,3 @@
-import { useState, useContext } from "react";
 import PropTypes from "prop-types";
 import { Link } from 'react-router-dom';
 // mui components
@@ -12,7 +11,6 @@ import Box from '@mui/material/Box';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 // custom components
 // context
-import { CartContext } from '../../contexts/CartContext';
 import GoBackButton from '../../utils/GoBackButton';
 import RestaurantDetailsDescription from "./RestaurantDescription";
 

@@ -24,19 +24,6 @@ const MenuProps = {
 
 // menu items go here
 
-const names = [
-  'Oliver Hansen',
-  'Van Henry',
-  'April Tucker',
-  'Ralph Hubbard',
-  'Omar Alexander',
-  'Carlos Abbott',
-  'Miriam Wagner',
-  'Bradley Wilkerson',
-  'Virginia Andrews',
-  'Kelly Snyder',
-];
-
 
 export default function SelectMenu() {
   const [name, setName] = React.useState([]);
@@ -46,16 +33,18 @@ export default function SelectMenu() {
 
   const api = `${process.env.REACT_APP_API}/dashboard/restaurants/${restaurantId}`;
 
-  const requestOptions = {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-
-    },
-  };
-
 
   React.useEffect(() => {
+
+    const requestOptions = {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+
+      },
+    };
+
+
     let menuItems = [];
     fetch(api, requestOptions).then((response) => {
       response.json().then((data) => {
@@ -80,9 +69,6 @@ export default function SelectMenu() {
       });
     });
   }, []);
-
-
-
 
 
   const handleChange = (event) => {

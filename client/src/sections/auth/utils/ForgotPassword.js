@@ -17,7 +17,7 @@ export default function ForgotPassword() {
     const navigator = useNavigate()
 
     // get data from the form
-    const [email, setEmail] = useState('');
+    const [email] = useState('');
     const [data, setData] = useState({
         email: ''
     });

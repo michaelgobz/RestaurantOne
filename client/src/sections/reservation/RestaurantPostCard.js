@@ -3,9 +3,8 @@ import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 // @mui
 import { alpha, styled } from '@mui/material/styles';
-import { Box, Card, Grid, Avatar, Typography, CardContent, Rating, Button, Stack, avatarClasses } from '@mui/material';
+import { Box, Card, Grid, Avatar, Typography, CardContent, Rating, Button, Stack } from '@mui/material';
 // utils
-import { fDate } from '../../utils/formatTime';
 import { fShortenNumber } from '../../utils/formatNumber';
 //
 import SvgColor from '../../components/svg-color';
@@ -27,14 +26,6 @@ const StyledTitle = styled(Link)({
   WebkitBoxOrient: 'vertical',
 });
 
-const StyledAvatar = styled(Avatar)(({ theme }) => ({
-  zIndex: 9,
-  width: 32,
-  height: 32,
-  position: 'absolute',
-  left: theme.spacing(3),
-  bottom: theme.spacing(-2),
-}));
 
 const StyledInfo = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -63,9 +54,6 @@ export default function RestaurantPostCard({ restaurant }) {
   const navigate = useNavigate()
   const { avatar, name, location, description } = restaurant;
 
-  const HandleReservation = () => {
-    navigate('/customer/restaurants')
-  }
 
   const POST_INFO = [
     { number: 1, icon: 'eva:message-circle-fill' },

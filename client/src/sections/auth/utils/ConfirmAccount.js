@@ -35,7 +35,6 @@ export default function ConfirmAccount() {
             fetch(url, requestOptions)
                 .then((response) => {
                     if (response.status === 200) {
-                        const session = response.json()
                         navigator('/auth/login')
                     } else {
                         console.log('some error has happened')

@@ -8,7 +8,7 @@ LoadingSpinner.propTypes = {
 };
 
 const LoadingSpinner = ({ text = 'loading...' }) => {
-    return (
+    (
         <>
             <Box display='flex' flexDirection='column' alignItems='center' mt={10}>
                 <CircularProgress />

@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Link } from 'react-router-dom';
 // mui components
@@ -13,8 +13,6 @@ import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 // custom components
 import SnackBar from '../snackbar/SnackBar';
 // context
-import { CartContext } from '../../contexts/CartContext';
-import ItemCount from './ProductItemCount';
 import GoBackButton from '../../utils/GoBackButton';
 import ProductDetailsDescription from "./ProductDescription";
 
@@ -36,14 +34,13 @@ ProductDetails.propTypes = {
 
 export default function ProductDetails({ Product }) {
 
-  // const { addItemToCart, isInCart } = useContext(CartContext);
-  const { name, price, description, duration, avatar, rating, foods, category, id } = Product;
-  const { showSnackbar, setShowSnackbar } = useState(false)
+  const { name, price, description, duration, rating, foods, category, id } = Product;
+  const { showSnackbar } = useState(false)
   const [data, setData] = useState({});
 
   useEffect(() => {
-    setData({ description, duration, rating, foods, category })
-  }, [])
+    setData({ name, description, duration, rating, foods, category })
+  }, [name, description, duration, rating, foods, category])
 
 
   return (

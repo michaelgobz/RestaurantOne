@@ -11,7 +11,6 @@ import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
 export default function FindTable() {
   const [time, setTime] = React.useState('');
-  const [selectedDate, setSelectedDate] = React.useState(new Date());
   const [occasion, setOccasion] = React.useState('');
   const [noOfPeople, setNoOfPeople] = React.useState(0);
   const [TableEnvironment, setTableEnvironment] = React.useState('');

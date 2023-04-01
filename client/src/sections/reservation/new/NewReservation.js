@@ -61,30 +61,16 @@ localStorage.setItem('newReservation', JSON.stringify([]))
 
 export default function NewReservation() {
 
-  const [menuItems, setMenuItems] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [activeStep, setActiveStep] = useState(0);
   const [open, setOpen] = useState(false);
   const [variant, setVariant] = useState('soft');
-  const restaurantId = useParams().restaurantId;
+  const { restaurantId } = useParams('restaurantId');
 
   localStorage.setItem('newReservation', JSON.stringify({}))
 
-  const handleClose = () => {
-    setOpen(false);
-  };
 
-  const api = `${process.env.REACT_APP_API}/dashboard/restaurants/${restaurantId}`;
   const reservationUrl = `${process.env.REACT_APP_API}/dashboard/reservations/${sessionStorage.getItem('user')}/${restaurantId}`
 
-  const requestOptions = {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-
-    },
-  };
 
   const navigate = useNavigate()
 
@@ -97,8 +83,10 @@ export default function NewReservation() {
     }
   }
 
+  const reservation = JSON.parse(localStorage.getItem('newReservation'))
+
   const CreateReservation = () => {
-    const reservation = JSON.parse(localStorage.getItem('newReservation'))
+
     useEffect(() => {
 
       const requestOptions = {
@@ -140,7 +128,7 @@ export default function NewReservation() {
           console.log(error)
         }
         )
-    }, [])
+    }, [reservationUrl, reservation])
   }
 
 
