@@ -25,8 +25,6 @@ class User(db.Model):
                            onupdate=datetime.utcnow)
 
     payment_methods = db.relationship('PaymentMethod', backref='user', lazy=True)
-    orders = db.relationship("Order", backref="user")
-    reservations = db.relationship('Reservation', backref='user')
     restaurants = db.relationship('Restaurant', backref='manager')
     orders = db.relationship("Order", backref="users")
     reservations = db.relationship('Reservation', backref='users')
