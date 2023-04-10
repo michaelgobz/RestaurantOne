@@ -6,7 +6,7 @@ import SimpleLayout from './layouts/simple';
 import RestaurantsPage from './pages/RestaurantPage';
 import OrderPage from './pages/OrdersPage';
 import LoginPage from './pages/LoginPage';
-import SignUpPage from './pages/signupPage';
+import SignUpPage from './pages/SignupPage';
 import Page404 from './pages/Page404';
 import ProductsPage from './pages/ProductsPage';
 import Checkout from './sections/checkouts/Checkout'
