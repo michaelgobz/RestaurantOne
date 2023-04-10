@@ -35,7 +35,7 @@ const RestaurantDetailContainer = () => {
     return (
         // needs to be changed to restaurant details
         item ? <RestaurantDetails Restaurant={item} />
-            : <LoadingSpinner />);
+            : <LoadingSpinner text='Getting restaurant details ...' />);
 
 };
 

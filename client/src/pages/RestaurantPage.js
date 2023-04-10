@@ -77,7 +77,7 @@ export default function RestaurantsPage() {
 
             </>
             :
-            <LoadingSpinner />
+            <LoadingSpinner text='loading Places ...'/>
         }
       </Container>
     </>

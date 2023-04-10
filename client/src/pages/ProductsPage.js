@@ -16,7 +16,7 @@ export default function ProductsPage() {
   const api = `${process.env.REACT_APP_API}/dashboard/menus`;
   console.log(api);
   // menus state
-  const [menus, setMenus] = useState();
+  const [menus, setMenus] = useState(undefined);
 
 
   useEffect(() => {
@@ -53,7 +53,7 @@ export default function ProductsPage() {
         <title> Your Cravings | Open Restaurant </title>
       </Helmet>
       {
-        menus ?
+        menus ? 
           <Container>
 
             <Typography variant="h4" sx={{ mb: 5 }}>
@@ -81,7 +81,7 @@ export default function ProductsPage() {
             }
           </Container>
           :
-          <LoadingSpinner />
+          <LoadingSpinner text='Getting what you Love most ... ' />
       }
     </>
   );
