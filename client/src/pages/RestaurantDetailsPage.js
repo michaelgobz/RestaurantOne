@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import RestaurantDetails from '../sections/reservation/RestaurantDetails';
-import {LoadingSpinner} from '../sections/LoadingSpinner';
+import {LoadingSpinner} from '../sections/loadingspinner';
 
 
 

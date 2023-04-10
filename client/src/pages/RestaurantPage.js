@@ -5,7 +5,7 @@ import { Grid, Container, Stack, Typography } from '@mui/material';
 // components
 import { RestaurantPostCard, RestaurantPostsSort } from '../sections/reservation';
 // mock
-import {LoadingSpinner} from '../sections/LoadingSpinner';
+import {LoadingSpinner} from '../sections/loadingspinner';
 
 // ----------------------------------------------------------------------
 

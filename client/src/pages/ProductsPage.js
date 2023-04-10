@@ -2,7 +2,7 @@ import { Helmet } from 'react-helmet-async';
 import { useEffect, useState } from 'react';
 // @mui
 import { Container, Stack, Typography } from '@mui/material';
-import {LoadingSpinner} from '../sections/LoadingSpinner';
+import {LoadingSpinner} from '../sections/loadingspinner';
 // components
 import { ProductSort, ProductList, ProductFilterSidebar } from '../sections/products';
 
