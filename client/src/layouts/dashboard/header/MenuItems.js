@@ -34,6 +34,12 @@ export function MenuItems() {
                         navigator("customer/reservations")
                     }}
                     label="Find a Spot" />
+                <Tab value="three"
+                    onFocus={() => {
+                        setValue("three")
+                        navigator("business/portfolio")
+                    }}
+                    label="For Business" />
             </Tabs>
         </>
     );

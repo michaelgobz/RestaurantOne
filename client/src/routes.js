@@ -16,6 +16,7 @@ import ConfirmAccountPage from './pages/ConfirmAccountPage';
 import UpdatePasswordPage from './pages/UpdatePasswordPage'
 import ProductDetailContainer from './pages/ProductDetailPage';
 import RestaurantsDetailsContainer from './pages/RestaurantDetailsPage';
+import PortfolioPage from './pages/PortifolioPage';
 
 
 
@@ -86,6 +87,10 @@ export default function Router() {
     {
       path: 'auth/forgot-password',
       element: <ForgotPasswordPage />
+    },
+    {
+      path: 'business/portfolio',
+      element: <PortfolioPage />
     },
     {
       element: <SimpleLayout />,
