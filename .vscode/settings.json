@@ -41,6 +41,7 @@
         "sismember",
         "smembers",
         "sqlalchemy",
+        "sqlserver",
         "srem",
         "swipeable",
         "tabpanel",
