@@ -7,7 +7,7 @@ from api.core.base import declarative_base as db
 
 class ReservationReview(db.Model):
     """Review model"""
-    __tablename__ = 'reviews'
+    __tablename__ = 'reservation_reviews'
     id = db.Column(db.String(50), primary_key=True)
     reservation_id = db.Column(db.String(50), db.ForeignKey('reservations.id'))
     restaurant_id = db.Column(db.String(50), db.ForeignKey('restaurants.id'))
@@ -28,7 +28,7 @@ class ReservationReview(db.Model):
 
 class MenuItemReview(db.Model):
     """Review model"""
-    __tablename__ = 'reviews'
+    __tablename__ = 'menuitem_reviews'
     id = db.Column(db.String(50), primary_key=True)
     menu_item_id = db.Column(db.String(50), db.ForeignKey('menu_items.id'))
     review_item_id = db.Column(db.String(50), db.ForeignKey('review_items.id'))
@@ -53,8 +53,9 @@ class ReviewItem(db.Model):
     rating = db.Column(db.Integer, nullable=False, default=0)
     description = db.Column(db.String(255), nullable=False)
     message = db.Column(db.String(255), nullable=False)
-    created_at = db.Column(db.DateTime, nullable=False,
-                           default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow())
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow(),
+                           onupdate=datetime.utcnow())
 
     # json serialization
     @property
