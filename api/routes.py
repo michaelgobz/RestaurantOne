@@ -14,10 +14,10 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import contains_eager
 
 # models
-from api.db_models import (Address, Cart, CartItem, Menu, MenuItem, Order,
-                           OrderItem, Payment, PaymentMethod, Reservation,
-                           Restaurant, Shipment, Transaction, User,
-                           VerificationToken)
+from api.models import (Address, Cart, CartItem, Menu, MenuItem, Order,
+                        OrderItem, Payment, PaymentMethod, Reservation,
+                        Restaurant, Shipment, Transaction, User,
+                        VerificationToken)
 from app import db
 
 # load env variables
