@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { useNavigate } from 'react-router';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Paper from '@mui/material/Paper';
@@ -8,6 +8,9 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
+import Modal from '@mui/joy/Modal';
+import ModalClose from '@mui/joy/ModalClose';
+import ModalDialog from '@mui/joy/ModalDialog';
 import Typography from '@mui/material/Typography';
 import { createTheme } from '@mui/material/styles';
 import FindTable from './FindTable';
@@ -15,8 +18,7 @@ import SelectMenu from './SelectMenu';
 import ContactDetails from './ContactDetails';
 import PaymentForm from './PaymentForm';
 import Review from './Review';
-import ThemeProvider from '../../../theme'
-
+import ThemeProvider from '../../../theme';
 
 
 function Copyright() {
@@ -32,7 +34,7 @@ function Copyright() {
   );
 }
 
-const steps = ['Choose a Table','Add your details','Choose a Menu','Payment details', 'Review'];
+const steps = ['Choose a Table', 'Add your details', 'Choose a Menu', 'Payment details', 'Review'];
 
 function getStepContent(step) {
   switch (step) {
@@ -53,14 +55,81 @@ function getStepContent(step) {
 
 const theme = createTheme();
 
+localStorage.setItem('newReservation', JSON.stringify([]))
+
+
+
 export default function NewReservation() {
 
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = useState(0);
+  const [open] = useState(false);
+  const [variant, setVariant] = useState('soft');
+  const { restaurantId } = useParams('restaurantId');
+
+  localStorage.setItem('newReservation', JSON.stringify({}))
 
   const navigate = useNavigate()
+
   const HandleClick = () => {
-    navigate('/')
+    if (sessionStorage.getItem('token') === null) {
+      navigate('/auth/login')
+    } else {
+      CreateReservation()
+      navigate('/customers/restaurants/')
+    }
   }
+
+
+
+  const CreateReservation = () => {
+    const reservationUrl = `${process.env.REACT_APP_API}/dashboard/reservations/${sessionStorage.getItem('user')}/${restaurantId}`
+
+    const reservation = JSON.parse(localStorage.getItem('newReservation'))
+
+    useEffect(() => {
+
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${sessionStorage.getItem('token')}`
+        },
+        body: JSON.stringify(reservation)
+      };
+      fetch(reservationUrl
+        , requestOptions)
+        .then(response => response.json().then(data => {
+          if (response.status === 200) {
+            console.log(data.message)
+            // display a model to show the user that the reservation was successful
+            if (data.message === 'Reservation created successfully') {
+              <Modal open={open} onClose={() => setVariant(undefined)}>
+                <ModalDialog
+                  aria-labelledby="variant-modal-title"
+                  aria-describedby="variant-modal-description"
+                  variant={variant}
+                >
+                  <ModalClose />
+                  <Typography id="variant-modal-title" component="h2" level="inherit">
+                    New Reservation
+                  </Typography>
+                  <Typography id="variant-modal-description" textColor="inherit">
+                    {data.message}
+                  </Typography>
+                </ModalDialog>
+              </Modal>
+
+            }
+          } else {
+            console.log('some thing went wrong')
+          }
+        })).catch(error => {
+          console.log(error)
+        }
+        )
+    }, [reservationUrl, reservation])
+  }
+
 
   const handleNext = () => {
     setActiveStep(activeStep + 1);
@@ -72,12 +141,12 @@ export default function NewReservation() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="lg" maxLength="lg" sx={{ mb: 4 }}>
+      <Container component="main" maxWidth="ls" maxLength="ls" sx={{ mb: 4 }}>
         <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}>
           <Typography component="h1" variant="h4" align="center">
-            Reserve
+            Reserve A Table
           </Typography>
-          <Stepper activeStep={activeStep} sx={{ pt: 3, pb: 5 }}>
+          <Stepper activeStep={activeStep} sx={{ pt: 2, pb: 1 }}>
             {steps.map((label) => (
               <Step key={label}>
                 <StepLabel>{label}</StepLabel>
@@ -87,30 +156,29 @@ export default function NewReservation() {
           {activeStep === steps.length ? (
             <>
               <Typography variant="h5" gutterBottom>
-                Thank you for your order.
+                Your Reservation Has been Made
               </Typography>
               <Typography variant="subtitle1">
-                Your order number is #2001539. We have emailed your order
-                confirmation, and will send you an update when your order has
-                shipped.
+                Thank you for your reservation. We will contact you shortly to confirm your reservation.
               </Typography>
               <Button
-                  variant="contained"
-                  onClick={HandleClick}
-                  sx={{ mt: 3, ml: 1 }}
-                >
-            Get More
-                </Button>
+                variant="contained"
+                onClick={HandleClick}
+                sx={{ mt: 3, ml: 1 }}
+              >
+                Make another reservation
+
+              </Button>
             </>
           ) : (
             <>
-              {getStepContent(activeStep)}
-              <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                {activeStep !== 0 && (
-                  <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
-                    Back
-                  </Button>
-                )}
+                {getStepContent(activeStep)}
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  {activeStep !== 0 && (
+                    <Button onClick={handleBack} sx={{ mt: 3, ml: 1 }}>
+                      Back
+                    </Button>
+                  )}
 
                 <Button
                   variant="contained"

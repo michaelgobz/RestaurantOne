@@ -1,10 +1,15 @@
 import { Helmet } from 'react-helmet-async';
+import { useState, useEffect } from 'react';
 // @mui
-import { Grid, Button, Container, Stack, Typography } from '@mui/material';
+import { Grid, Container, Stack, Typography } from '@mui/material';
 // components
-import { RestaurantPostCard, RestaurantPostsSort, RestaurantSearch ,ReservationCard } from '../sections/reservation';
+import { RestaurantPostCard, RestaurantPostsSort } from '../sections/reservation';
 // mock
-import POSTS from '../_mock/blog';
+import {LoadingSpinner} from '../sections/loadingspinner';
+
+// ----------------------------------------------------------------------
+
+
 
 // ----------------------------------------------------------------------
 
@@ -17,6 +22,29 @@ const SORT_OPTIONS = [
 // ----------------------------------------------------------------------
 
 export default function RestaurantsPage() {
+
+  const api = `${process.env.REACT_APP_API}/dashboard/restaurants`;
+
+  const [restaurants, setRestaurants] = useState();
+
+  useEffect(() => {
+
+    // request options
+    const requestOptions = {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    };
+
+    fetch(api, requestOptions).then((response) => response.json())
+      .then((data) => {
+        console.log(data.restaurants);
+        setRestaurants(data.restaurants);
+      }).catch((error) => {
+        console.log(error);
+      });
+
+  }, [api]);
+
   return (
     <>
       <Helmet>
@@ -29,36 +57,28 @@ export default function RestaurantsPage() {
            Find your Table for any Treat
           </Typography>
         </Stack>
+        {
+          restaurants ?
 
-        <Stack mb={5} direction="row" alignItems="center" justifyContent="space-between">
-          <RestaurantSearch posts={POSTS} />
-          <RestaurantPostsSort options={SORT_OPTIONS} />
-        </Stack>
+            <>
+              <Stack mb={5} direction="row" alignItems="center" justifyContent="space-between">
+                <RestaurantPostsSort options={SORT_OPTIONS} />
+              </Stack>
 
-        <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
-          Top Cuisines near Legos
-        </Typography>
-        <Grid container spacing={3}>
-          {POSTS.map((post, index) => (
-            <RestaurantPostCard key={post.id} post={post} index={index} />
-          ))}
-        </Grid>
-        <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
-          Experiences Trending near kigali
-        </Typography>
-        <Grid container spacing={3}>
-          {POSTS.map((post, index) => (
-            <RestaurantPostCard key={post.id} post={post} index={index} />
-          ))}
-        </Grid>
-        <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
-          Popular Restaurants Lome'
-        </Typography>
-        <Grid container spacing={3}>
-          {POSTS.map((post, index) => (
-            <RestaurantPostCard key={post.id} post={post} index={index} />
-          ))}
-        </Grid>
+              <Typography variant="h4" sx={{ mb: 5, mt: 5 }}>
+                Top Cuisines 
+              </Typography>
+
+              <Grid container spacing={3}>
+                {restaurants.map((restaurant) => (
+                  <RestaurantPostCard key={restaurant.id} restaurant={restaurant} />
+                ))}
+              </Grid>
+
+            </>
+            :
+            <LoadingSpinner text='loading Places ...'/>
+        }
       </Container>
     </>
   );

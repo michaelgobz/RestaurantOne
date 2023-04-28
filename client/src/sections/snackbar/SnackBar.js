@@ -2,11 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Alert, Snackbar } from '@mui/material';
 
-
-
-SnackBar.prototypes = {
-    message: PropTypes.string.isRequired,
-    severity: PropTypes.string.isRequired,
+SnackBar.propTypes = {
+    message: PropTypes.string,
+    severity: PropTypes.string,
 };
 
 export default function SnackBar({ message, severity }) {

@@ -3,6 +3,10 @@ import { useNavigate } from 'react-router';
 // @mui
 import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
+import Modal from '@mui/joy/Modal';
+import ModalClose from '@mui/joy/ModalClose';
+import ModalDialog from '@mui/joy/ModalDialog';
+
 // components
 import Iconify from '../../../components/iconify';
 
@@ -11,7 +15,7 @@ import Iconify from '../../../components/iconify';
 
 export default function LoginForm() {
 
-  const recoverPassword = `${process.env.REACT_APP_CLIENT}/auth/forgot-password`;
+  const recoverPassword = `${process.env.REACT_APP_CLIENT}/auth/forgot_password`;
 
   const login = '/auth/login'
 
@@ -20,25 +24,16 @@ export default function LoginForm() {
   const navigator = useNavigate()
 
   // get data from the form
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [data, setData] = useState({
     email: '',
     password: '',
   });
 
-  const HandleSetEmail = (e) => {
-    setEmail(e.target.email)
-  }
+  const [variant, setVariant] = useState('soft');
+  const [open] = useState(false);
 
-  const HandleSetPassword = (e) => {
-    setPassword(e.target.password)
-  }
-  const form = {
-    email,
-    password
-  }
+
   const requestOptions = {
     method: 'POST',
     mode: 'cors',
@@ -56,11 +51,27 @@ export default function LoginForm() {
             console.log(data)
             if (response.status === 200) {
               sessionStorage.setItem('auth', 'true')
-              sessionStorage.setItem('token', data.token)
-              sessionStorage.setItem('user', data.user)
+              sessionStorage.setItem('token', data.access_token)
+              sessionStorage.setItem('user', data.user_id)
               navigator('/customer/products')
-            } else {
-              console.log('some error has happened')
+            } else if (response === 401) {
+              // show model to the user that the login was not successful
+
+              <Modal open={open} onClose={() => setVariant(undefined)}>
+                <ModalDialog
+                  aria-labelledby="variant-modal-title"
+                  aria-describedby="variant-modal-description"
+                  variant={variant}
+                >
+                  <ModalClose />
+                  <Typography id="variant-modal-title" component="h2" level="inherit">
+                    Login Error
+                  </Typography>
+                  <Typography id="variant-modal-description" textColor="inherit">
+                    'some error has happened check you internet connection'
+                  </Typography>
+                </ModalDialog>
+              </Modal>
             }
           })
         }).catch((reason) => {
@@ -78,9 +89,6 @@ export default function LoginForm() {
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
-  const HandleChange = (e) => {
-    setData({ ...data, [e.target.name]: e.target.value });
-  };
 
   return (
     <>

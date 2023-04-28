@@ -7,8 +7,6 @@ import { styled } from '@mui/material/styles';
 import { fCurrency } from '../../utils/formatNumber';
 // components
 import Label from '../../components/label';
-import { ColorPreview } from '../../components/color-utils';
-import Iconify from '../../components/iconify';
 
 // ----------------------------------------------------------------------
 
@@ -27,15 +25,15 @@ ShopProductCard.propTypes = {
 };
 
 export default function ShopProductCard({ product }) {
-  const { name, cover, price, colors, status, priceSale } = product;
+  const { name, avatar, price, description, rating, duration, id } = product;
 
   return (
     <Card>
       <Box sx={{ pt: '100%', position: 'relative' }}>
-        {status && (
+        {duration && (
           <Label
             variant="filled"
-            color={(status === 'sale' && 'error') || 'info'}
+            color="info"
             sx={{
               zIndex: 9,
               top: 16,
@@ -44,10 +42,10 @@ export default function ShopProductCard({ product }) {
               textTransform: 'uppercase',
             }}
           >
-            {status}
+            {`delivered ${duration} mins`}
           </Label>
         )}
-        <StyledProductImg alt={name} src={cover} />
+        <StyledProductImg alt={name} src={avatar} />
       </Box>
 
       <Stack spacing={2} sx={{ p: 3 }}>
@@ -58,27 +56,27 @@ export default function ShopProductCard({ product }) {
         </Link>
 
         <Stack direction="column" alignItems="center" justifyContent="space-between">
-          <ColorPreview colors={colors} />
-          <Typography variant="subtitle1">
-            <Typography
+          <Typography
               component="span"
               variant="body1"
               sx={{
-                color: 'text.disabled',
-                textDecoration: 'line-through',
+                color: 'text.secondary',
+                my: 0.5,
+
               }}
             >
-              {priceSale && fCurrency(priceSale)}
-            </Typography>
-            &nbsp;
+            {description}
+          </Typography> 
+          <Typography variant="subtitle1" sx={{ my: 0.5 }}>
             {fCurrency(price)}
           </Typography>
+
           <Stack direction="column" alignItems="center" justifyContent="space-between" mb={0.2} mt={0.2}>
-            <Rating variant="small" value={2} disabled sx={{ mb: 2, mt: 2 }} />
-            <Button variant="small" component={Link} to='/customer/products/details'
-            sx={{ mb: 0.1, mt: 0.1 }}>
+            <Rating variant="small" value={rating} disabled sx={{ mb: 2, mt: 2 }} />
+            <Button variant="small" component={Link} to={`/customer/products/details/${id}`}
+              sx={{ mb: 0.1, mt: 0.1 }}>
               view
-          </Button>
+            </Button>
           </Stack>
         </Stack>
       </Stack>

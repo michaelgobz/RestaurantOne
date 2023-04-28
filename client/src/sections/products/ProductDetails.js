@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { Link } from 'react-router-dom';
 // mui components
@@ -13,31 +13,35 @@ import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 // custom components
 import SnackBar from '../snackbar/SnackBar';
 // context
-import { CartContext } from '../../contexts/CartContext';
-import ItemCount from './ProductItemCount';
 import GoBackButton from '../../utils/GoBackButton';
 import ProductDetailsDescription from "./ProductDescription";
 
-/**
- * ProductDetails.propTypes = {
+ProductDetails.propTypes = {
   Product: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
     price: PropTypes.number.isRequired,
     description: PropTypes.object.isRequired,
-    imgPath: PropTypes.string.isRequired,
-    stock: PropTypes.number.isRequired,
+    avatar: PropTypes.string.isRequired,
+    duration: PropTypes.number.isRequired,
+    category: PropTypes.string.isRequired,
+    foods: PropTypes.string.isRequired,
+    rating: PropTypes.number.isRequired,
   })
- * 
- * 
- */
+};
 
 
 
-export default function ProductDetails() {
+export default function ProductDetails({ Product }) {
 
-  // const { addItemToCart, isInCart } = useContext(CartContext);
-  const { showSnackbar, setShowSnackbar } = useState(false)
+  const { name, price, description, duration, rating, foods, category, id } = Product;
+  const { showSnackbar } = useState(false)
+  const [data, setData] = useState({});
+
+  useEffect(() => {
+    setData({ name, description, duration, rating, foods, category })
+  }, [name, description, duration, rating, foods, category])
+
 
   return (
     <>
@@ -65,7 +69,7 @@ export default function ProductDetails() {
             <GoBackButton sx={{ my: 5 }} />
 
             <Typography component='h5' variant='h6' textAlign='center' sx={{ my: 5 }}>
-              ${1000}
+              {`$ ${price}`}
             </Typography>
           </Box>
         </Grid>
@@ -76,21 +80,21 @@ export default function ProductDetails() {
             textAlign: 'center',
             fontSize: '1.5rem',
           }} gutterBottom>
-            Chicken in Rough Pocket
+            {name}
           </Typography>
           <Divider sx={{ my: 5 }} />
 
-          <ProductDetailsDescription />
+          <ProductDetailsDescription data={data} />
           <Divider sx={{ mb: 2 }} />
 
           <Box display='flex' justifyContent={'center'} my>
 
               <Button
               variant='contained'
-                startIcon={<AssignmentTurnedInIcon />}
+              startIcon={<AssignmentTurnedInIcon />}
               component={Link}
               sx={{ my: 5 }}
-              to='/customer/checkout'
+              to={`/customer/checkout/${id}`}
               >
               Add to cart
             </Button>

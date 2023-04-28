@@ -1,28 +1,41 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import RestaurantDetails from '../sections/reservation/RestaurantDetails';
-import LoadingSpinner from '../sections/loadingSpinner/LoadingSpinner';
+import {LoadingSpinner} from '../sections/loadingspinner';
 
 
 
 const RestaurantDetailContainer = () => {
     const [item, setItem] = useState(null);
-    const { itemId } = useParams();
-    const [loading, setLoading] = useState(true);
+    const { restaurantId } = useParams();
 
-    const requestOptions = {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    };
 
-    const url = `${process.env.REACT_APP_API}/restaurants/${itemId}`;
+
+    const url = `${process.env.REACT_APP_API}/dashboard/restaurants/${restaurantId}`;
+
+    // fetch the data
+    useEffect(() => {
+        const requestOptions = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        };
+
+        fetch(url, requestOptions).then((response) => response.json())
+
+            .then((data) => {
+                setItem(data.restaurant);
+            }).catch((error) => {
+                console.log(error);
+            });
+    }, [url]);
+
 
     return (
         // needs to be changed to restaurant details
-        item ? <RestaurantDetails />
-            : <RestaurantDetails />);
+        item ? <RestaurantDetails Restaurant={item} />
+            : <LoadingSpinner text='Getting restaurant details ...' />);
 
 };
 

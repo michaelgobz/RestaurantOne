@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 // @mui
-import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox, Typography } from '@mui/material';
+import { Stack, IconButton, InputAdornment, TextField } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // components
 import Iconify from '../../../components/iconify';
@@ -20,9 +20,10 @@ export default function UpdatePassword() {
     const navigator = useNavigate()
 
     // get data from the form
-    const [newPassword, setNewPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [newPassword] = useState('');
+    const [confirmPassword] = useState('');
+
     const [data, setData] = useState({
         password: '',
         confirmedPassword: '',

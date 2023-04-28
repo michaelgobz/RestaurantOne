@@ -6,6 +6,9 @@ import ListItemText from '@mui/material/ListItemText';
 import Grid from '@mui/material/Grid';
 
 
+
+// reservation summary goes here
+
 const products = [
   {
     name: 'Product 1',

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router'
 // @mui
-import { Link, Stack, IconButton, InputAdornment, TextField, Checkbox, Typography } from '@mui/material';
+import { Stack, IconButton, InputAdornment, TextField, Checkbox, Typography } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // components
 import Iconify from '../../../components/iconify';
@@ -14,12 +14,6 @@ export default function SignUpForm() {
 
   const navigator = useNavigate()
   const [showPassword, setShowPassword] = useState(false);
-  const [firstname, setFirstname] = useState('')
-  const [lastname, setLastname] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [retypePassword, setRetypePassword] = useState('')
-  const [phoneNumber, setPhoneNumber] = useState('')
 
   const [data, setData] = useState({
     firstname: '', lastname: '', email: '', password: '', retypePassword: '',
@@ -43,11 +37,9 @@ export default function SignUpForm() {
         response.json().then((data) => {
           console.log(data)
           if (response.status === 200) {
-            const session = response.body
-            console.log(session)
+            console.log(data.token)
             // we need to get varification token form the response
-            sessionStorage.setItem(session.key, session.value)
-            sessionStorage.setItem('auth', 'true')
+            sessionStorage.setItem('verification_token', data.token)
             navigator('/auth/confirm-account')
             // need to verify the user
           } else {

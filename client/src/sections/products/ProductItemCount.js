@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import InputAdornment from '@mui/material/InputAdornment';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import FormControl from '@mui/material/FormControl';
@@ -12,6 +13,12 @@ import Button from '@mui/material/Button';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 // custom components
 import { useCounter } from '../../hooks/useCounter';
+
+ItemCount.propTypes = {
+    stock: PropTypes.number,
+    initial: PropTypes.number,
+    onAdd: PropTypes.func,
+};
 
 const ItemCount = ({ stock = 0, initial = 1, onAdd }) => {
     const { counter, increment, decrement } = useCounter(initial);

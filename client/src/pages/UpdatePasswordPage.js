@@ -3,13 +3,9 @@ import { Helmet } from 'react-helmet-async';
 
 // @mui
 import { styled } from '@mui/material/styles';
-import { Container, Typography, Divider, Stack, Button } from '@mui/material';
-import { CenterFocusStrong } from '@mui/icons-material';
-// hooks
-import useResponsive from '../hooks/useResponsive';
+import { Container, Typography, Divider } from '@mui/material';
 
 // components
-
 import UpdatePassword from '../sections/auth/utils/PasswordUpdate';
 
 
@@ -22,15 +18,6 @@ const StyledRoot = styled('div')(({ theme }) => ({
     },
 }));
 
-const StyledSection = styled('div')(({ theme }) => ({
-    width: '100%',
-    maxWidth: 480,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    boxShadow: theme.customShadows.card,
-    backgroundColor: theme.palette.background.default,
-}));
 
 const StyledContent = styled('div')(({ theme }) => ({
     maxWidth: 480,
@@ -46,8 +33,6 @@ const StyledContent = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function UpdatePasswordPage() {
-
-    const mdUp = useResponsive('up', 'md')
 
     return (
         <>

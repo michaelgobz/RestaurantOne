@@ -26,6 +26,7 @@
         "jsonify",
         "labelledby",
         "lastname",
+        "Legos",
         "malesuada",
         "nocheck",
         "noopener",
@@ -34,11 +35,13 @@
         "Reataurant",
         "sadd",
         "scard",
+        "Selecteds",
         "setdata",
         "simplebar",
         "sismember",
         "smembers",
         "sqlalchemy",
+        "sqlserver",
         "srem",
         "swipeable",
         "tabpanel",
@@ -47,6 +50,7 @@
         "USERLIST",
         "varification",
         "venv",
+        "webapps",
         "webstack"
     ],
     "editor.formatOnSave": true,
@@ -65,7 +69,10 @@
     "editor.defaultFormatter": "vscode.typescript-language-features"
 },
 "editor.fontSize": 18,
-"files.autoSave": "afterDelay"
+"files.autoSave": "afterDelay",
+"githubPullRequests.ignoredPullRequestBranches": [
+    "main"
+]
    
 
 }

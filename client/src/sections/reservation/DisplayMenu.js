@@ -1,35 +1,50 @@
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
+import PropTypes from 'prop-types';
 
 
 
-export default function DisplayMenu() {
+DisplayMenu.propTypes = {
+    menus: PropTypes.array.isRequired
+}
+
+
+export default function DisplayMenu({ menus }) {
     return (
         <>
-            <Typography variant="h4" component="h1" gutterBottom>
-                Dinner Menu
-            </Typography>
-            <Divider sx={{ my: 5 }} />
-            <Typography variant="body3" gutterBottom>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                malesuada, nisl eget aliquam tincidunt, nunc elit aliquam erat,
-                vitae aliquam nisl nunc eget lorem. Sed euismod, nisl nec
-                tincidunt aliquam, nunc elit aliquam erat, vitae aliquam nisl
-                nunc eget lorem. Sed euismod, nisl nec tincidunt aliquam, nunc
-                elit aliquam erat, vitae aliquam nisl nunc eget lorem. Sed
-                euismod, nisl nec tincidunt aliquam, nunc elit aliquam erat,
-            </Typography>
-            <Typography variant="h4" component="h1" gutterBottom>
-                Lunch Menu
-            </Typography>
-            <Divider sx={{ my: 5 }} />
-            <Typography variant="body3" gutterBottom>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                malesuada, nisl eget aliquam tincidunt, nunc elit aliquam erat,
-                vitae aliquam nisl nunc eget lorem. Sed euismod, nisl nec
-                tincidunt aliquam, nunc elit aliquam erat, vitae aliquam nisl
-                nunc eget lorem. Sed euismod, nisl nec tincidunt aliquam, nunc
-            </Typography>
+            {
+                menus.map((menu) => 
+                    (
+                        <>
+                            <Typography variant="h4" component="h1" gutterBottom>
+                                {menu.name}
+                            </Typography>
+                            <Divider sx={{ my: 5 }} />
+                            <Typography variant="body3" gutterBottom>
+                                {menu.description}
+                            </Typography>
+                            <Divider sx={{ my: 5 }} />
+                            {
+                            menu.items.map((item) => (
+
+                                        <>
+                                            <Typography variant="body3" gutterBottom>
+                                                {item.name}
+                                            </Typography>
+                                            <Typography variant="body3" gutterBottom>
+                                                {item.description}
+                                            </Typography>
+                                            <Typography variant="body3" gutterBottom>
+                                                {item.price}
+                                            </Typography>
+                                        </>
+                                    )
+                            )
+                            }
+                        </>
+                    )
+                )
+            }
 
         </>
 

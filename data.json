@@ -1,0 +1,160 @@
+{
+    "restaurant1": {
+      "id": "a85e6300-f88b-457d-8877-baa5ea652f60",
+      "name": "The Spicy Noodle",
+      "location": "kenya , Nairobi",
+      "isOperational" : true,
+      "isOrderFulfilling": true,
+      "customers": 50,
+      "offers":"None for now",
+      "avatar": "https://drive.google.com/file/d/1ueEzsAoj0dRs2imaJ-Nn7FuQuccySrAV/view?usp=share_link",
+      "description": "The Spicy Noodle is a Chinese restaurant that offers a variety of noodle dishes, including lo mein, chow mein, and dan dan noodles. They are known for their spicy Sichuan-style dishes."
+    },
+    "restaurant2": {
+      "id": "04a317e4-672b-4a09-8a96-86e1e6403e79",
+      "name": "The Burger Joint",
+      "location": "Nigeria , Legos",
+      "isOperational" : true,
+      "isOrderFulfilling": true,
+      "customers": 30,
+      "offers":"None for now",
+      "avatar": "https://drive.google.com/file/d/1cxkfJMi1sWRpbhfvmIapBG8z-zuX5YOQ/view?usp=share_link",
+      "description": "The Burger Joint is a restaurant that specializes in burgers, fries, and milkshakes. They are known for their classic cheeseburgers that are made with fresh beef and topped with all the fixings."
+    },
+    "restaurant3": {
+        "name": "The Pizza Place",
+      "location": "Uganda, Kampala",
+      "isOperational" : true,
+      "isOrderFulfilling": true,
+      "customers": 150,
+      "offers":"Offer code TPP-2023 to get 50% off your next purchase",
+      "avatar": "https://drive.google.com/file/d/1LUw7rRHqz4WYVlIaTzqLXEXZnLqeQIEV/view?usp=share_link",
+        "description": "The Pizza Place is an Italian restaurant that offers a variety of pizza toppings, including pepperoni, sausage, mushrooms, and olives. They are known for their thin-crust pizzas that are cooked to perfection."
+    },
+    "restaurant4": {
+        "name": "The Taco Stand",
+      "location": "Lome, Togo",
+      "isOperational" : true,
+      "isOrderFulfilling": true,
+      "customers": 50,
+      "offers":"None for now",
+      "avatar": "https://drive.google.com/file/d/168HZXWc1S9AjFLe16ArRPPw7MLDjfy4s/view?usp=share_link",
+        "description": "The Taco Stand is a Mexican restaurant that offers a variety of tacos, burritos, and quesadillas. They are known for their homemade salsas and guacamole."
+    },
+    "restaurant5": {
+        "name": "The Salad Bar",
+      "location": "Ghana, Accra",
+      "isOperational" : true,
+      "isOrderFulfilling": true,
+      "customers": 50,
+      "offers":"None for now",
+      "avatar":"https://drive.google.com/file/d/1T6eXjXcOKo-R5uT2YbRpltYEUuyu1-so/view?usp=share_link",
+        "description": "The Salad Bar is a healthy restaurant that offers a variety of salads, wraps, and smoothies. They are known for their fresh ingredients and homemade dressings."
+    },
+
+  "Menu1": {
+    "id": "78124e18-fa79-4829-b4cc-e0ad141e240a",
+    "name": "Break Fast À la carte menu",
+    "description": " Offers the best in line with your morning routeen",
+    "category": "À la carte menu"
+  },
+  "Menu2": {
+    "id": "51970c13-eb48-4942-bd32-8ee3ca6b4c1f",
+    "name": "Daily Lunch Treat",
+    "description": " Offers the best in line at the toop of the Day cravings",
+    "category": "Fixed Menu"
+
+  },
+  "Menu3": {
+    "name": "Wines Dinner with Your Favourite test",
+    "description": " Offers the best in line with chilling and relation on the evenings",
+    "category": "Wine and Beverage Menu"
+
+  },
+  "Menu4": {
+    "name": "Chicken And everything in between",
+    "description": " Offers the best in line with your Love of the white meat bird",
+    "category": "À la carte menu"
+
+  },
+  "Menu5": {
+    "name": "Break Fast À la carte menu",
+    "description": " Offers the best in line with your morning routeen",
+    "category": "À la carte menu"
+  },
+  "menuItem1": {
+    "name": "Roasted Chicken",
+    "description": "Roasted Chicken wth barbecue source served with mushroom source",
+    "foods": "mushroom, whole chicken, barbecue sources",
+    "price": 40.0,
+    "isAvailable": true,
+    "isDeliverable": true,
+    "durationOfPreparation": 4,
+    "rating": 5,
+    "avatar":"https://drive.google.com/file/d/1DzgS5uAGXcYKBwco8qRQd4RuxcJ47XhF/view?usp=share_link"
+  },
+  "menuItem2": {
+    "name": "Grilled Chicken Burger",
+    "description": "Chicken stake with in burger flavour",
+    "foods": "burger, chicken breast",
+    "price": 30.0,
+    "isAvailable": true,
+    "isDeliverable": true,
+    "durationOfPreparation": 30,
+    "rating": 4,
+    "avatar":"https://drive.google.com/file/d/1N6PNrXwvVLq0KmhayDkYvNoHtlRtYI9O/view?usp=share_link"
+  },
+  "menuItem3": {
+    "name": "Grilled Chicken Wrap",
+    "description": "Grilled chicken with wrap flavour",
+    "foods": "chicken 3 things with wrap bakes",
+    "price": 12.0,
+    "isAvailable": true,
+    "isDeliverable": true,
+    "durationOfPreparation": 45,
+    "rating": 1,
+    "avatar":"https://drive.google.com/file/d/1xpRULGWUNGrOeqrZv6yeLi_tqESdjC9F/view?usp=share_link"
+  },
+  "menuItem4": {
+    "name": "Chicken Wings (6 pcs)",
+    "description": "6 pieces of backed chicken  ginger flavour",
+    "foods": "Chicken wings , ginger, onion rings",
+    "price": 25.0,
+    "isAvailable": true,
+    "isDeliverable": true,
+    "durationOfPreparation": 40,
+    "rating": 3,
+    "avatar":"https://drive.google.com/file/d/1MwlLNQOlx8BXvQ0pbSXnVkQ3BLui2HAi/view?usp=sharing"
+  },
+  "menuItem5": {
+    "name": "Deep Fired Chicken",
+    "description": "Chicken Fired with onions and served with vegetable source",
+    "foods": "Chicken,onion rings,vegetable source",
+    "price": 15.0,
+    "isAvailable": true,
+    "isDeliverable": true,
+    "durationOfPreparation": 30,
+    "rating": 2,
+    "avatar":"https://drive.google.com/file/d/1YUKpFCUnA9Z1Mr3NX5bGJnP81gsVcLLc/view?usp=share_link"
+  },
+  "user1": {
+    "email":"michael@gobz.tech",
+    "first_name":"Michael",
+    "last_name": "Goboola",
+    "role":"admin",
+    "password":"Leah@0949",
+    "phonenumber":"+256758591449"
+  },
+  "user2": {
+    "email":"michael@gobz.live",
+    "first_name":"Michael",
+    "last_name": "Goboola",
+    "role":"customer",
+    "password":"Leah@0949",
+    "phonenumber":"+256758591449"
+  },
+  "keys": {
+
+  }
+
+}

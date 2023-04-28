@@ -6,10 +6,17 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 
 export default function ContactDetails() {
+
+  const [email, setEmail] = React.useState('');
+  const [phoneNumber, setPhoneNumber] = React.useState('');
+  const [timeOfArrival, setTimeOfArrival] = React.useState('');
+  const [firstName, setFirstName] = React.useState('');
+  const [lastName, setLastName] = React.useState('');
+
   return (
     <>
       <Typography variant="h6" gutterBottom>
-        Tell us about your crew
+        ContactDetails
       </Typography>
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6}>
@@ -18,6 +25,8 @@ export default function ContactDetails() {
             id="firstName"
             name="firstName"
             label="First name"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
             fullWidth
             autoComplete="given-name"
             variant="standard"
@@ -29,78 +38,53 @@ export default function ContactDetails() {
             id="lastName"
             name="lastName"
             label="Last name"
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)} 
             fullWidth
             autoComplete="family-name"
             variant="standard"
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} sm={6}>
           <TextField
             required
-            id="address1"
-            name="address1"
-            label="Address line 1"
-            fullWidth
-            autoComplete="shipping address-line1"
+            id="email"
+            name="email"
+            label="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             variant="standard"
-          />
+            fullWidth />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={12} sm={6}>
           <TextField
-            id="address2"
-            name="address2"
-            label="Address line 2"
-            fullWidth
-            autoComplete="shipping address-line2"
+            required
+            id="phone"
+            name="phone Number"
+            label="Phone Number"
+            value={phoneNumber}
             variant="standard"
+            onChange={(e) => setPhoneNumber(e.target.value)}
+            fullWidth
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
             required
-            id="city"
-            name="city"
-            label="City"
-            fullWidth
-            autoComplete="shipping address-level2"
+            id="time of arrival"
+            name="time of arrival"
+            label="Time of Arrival"
+            value={timeOfArrival}
             variant="standard"
+            onChange={(e) => setTimeOfArrival(e.target.value)}
+            fullWidth
           />
         </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            id="state"
-            name="state"
-            label="State/Province/Region"
-            fullWidth
-            variant="standard"
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            id="zip"
-            name="zip"
-            label="Zip / Postal code"
-            fullWidth
-            autoComplete="shipping postal-code"
-            variant="standard"
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            id="country"
-            name="country"
-            label="Country"
-            fullWidth
-            autoComplete="shipping country"
-            variant="standard"
-          />
-        </Grid>
+
         <Grid item xs={12}>
           <FormControlLabel
             control={<Checkbox color="secondary" name="saveAddress" value="yes" />}
-            label="Use this address for payment details"
+            label="I confirm the details are correct and concent to being contacted by the restaurant"
           />
         </Grid>
       </Grid>

@@ -6,7 +6,7 @@ import SimpleLayout from './layouts/simple';
 import RestaurantsPage from './pages/RestaurantPage';
 import OrderPage from './pages/OrdersPage';
 import LoginPage from './pages/LoginPage';
-import SignUpPage from './pages/signupPage';
+import SignUpPage from './pages/SignupPage';
 import Page404 from './pages/Page404';
 import ProductsPage from './pages/ProductsPage';
 import Checkout from './sections/checkouts/Checkout'
@@ -16,6 +16,7 @@ import ConfirmAccountPage from './pages/ConfirmAccountPage';
 import UpdatePasswordPage from './pages/UpdatePasswordPage'
 import ProductDetailContainer from './pages/ProductDetailPage';
 import RestaurantsDetailsContainer from './pages/RestaurantDetailsPage';
+import PortfolioPage from './pages/PortifolioPage';
 
 
 
@@ -36,15 +37,15 @@ export default function Router() {
           element: <ProductsPage />
         },
         {
-          path: 'customer/products/details',
+          path: 'customer/products/details/:itemId',
           element: <ProductDetailContainer />
         },
         {
-          path: 'customer/restaurants/',
+          path: 'customer/restaurants/:restaurantId',
           element: <RestaurantsDetailsContainer />
         },
         {
-          path: 'customer/checkout',
+          path: 'customer/checkout/:productId',
           element: <Checkout />,
         },
         {
@@ -52,7 +53,7 @@ export default function Router() {
           element: <RestaurantsPage />,
         },
         {
-          path: "/customer/reservations/new",
+          path: "/customer/reservations/new/:restaurantId",
           element: <NewReservation />
         }
         ,
@@ -86,6 +87,10 @@ export default function Router() {
     {
       path: 'auth/forgot-password',
       element: <ForgotPasswordPage />
+    },
+    {
+      path: 'business/portfolio',
+      element: <PortfolioPage />
     },
     {
       element: <SimpleLayout />,
