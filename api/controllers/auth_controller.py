@@ -53,7 +53,8 @@ class AuthController:
             self.get_controller().get_db_client().get_session().add(new_user)
 
             # generate verification token
-            new_user_created = self.get_controller().get_db_client().get_session().query(User). \
+            new_user_created = self.get_controller().get_db_client()\
+                .get_session().query(User).\
                 filter_by(email=data.get('email')).first()
             token = encode({'email': new_user_created.email},
                            os.environ.get('SECRET_KEY'), algorithm="HS256")

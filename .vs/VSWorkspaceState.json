@@ -1,8 +1,12 @@
 {
   "ExpandedNodes": [
     "",
-    "\\api"
+    "\\api",
+    "\\api\\controllers",
+    "\\api\\core",
+    "\\api\\db",
+    "\\api\\models"
   ],
-  "SelectedNode": "\\api\\routes.py",
+  "SelectedNode": "\\app.py",
   "PreviewInSolutionExplorer": false
 }
