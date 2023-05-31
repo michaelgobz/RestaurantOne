@@ -7,19 +7,27 @@ from uuid import uuid4
 from datetime import datetime
 from jwt import encode
 from flask import jsonify
+from flask_jwt_extended import create_access_token
 from sqlalchemy.exc import IntegrityError
 from ..models import User, VerificationToken
-from .base_controller import api_controller as Controller
+from .base_controller import BaseController
 
 
 class AuthController:
     """ The authentication controller for all controllers in the api """
+    _controller:BaseController = None
+
+    def __init__(self, controller:BaseController):
+        self._controller = controller
+
+    def get_controller(self):
+        return self._controller
 
     def signup(self):
         """ The signup method for the authentication controller. """
         """Sign up a new user"""
         # get user info from request
-        data = Controller.get_request.get_json()
+        data = self.get_controller().get_request().get_json()
 
         password = data.get('password')
 
@@ -42,10 +50,10 @@ class AuthController:
 
         # try to add user to database
         try:
-            Controller.get_db_client.get_session().add(new_user)
+            self.get_controller().get_db_client().get_session().add(new_user)
 
             # generate verification token
-            new_user_created = Controller.get_db_client.get_session().query(User). \
+            new_user_created = self.get_controller().get_db_client().get_session().query(User). \
                 filter_by(email=data.get('email')).first()
             token = encode({'email': new_user_created.email},
                            os.environ.get('SECRET_KEY'), algorithm="HS256")
@@ -56,15 +64,47 @@ class AuthController:
                                                         token=token,
                                                         created_at=datetime.utcnow(),
                                                         user_id=new_user.id)
-            Controller.get_db_client.get_session().add(user_verification_token)
-            Controller.get_db_client.get_session().commit()
+            self.get_controller().get_db_client().get_session().add(user_verification_token)
+            self.get_controller().get_db_client().get_session().commit()
 
-            return jsonify({'message': 'user created successfully',  # noqa: F706
+            return jsonify({'message': 'user created successfully',
                         'redirect': 'login',
                         'details': 'check your email to confirm your account',
                         'token': token})
         except IntegrityError:
-            Controller.get_db_client.get_session().rollback()
+            self.get_controller().get_db_client().get_session().rollback()
 
             return jsonify({'error':
                             'Email already registered  or server error or token error'})
+
+
+    def login(self):
+        """ login method to authenticate users"""
+
+        # get user info from request
+        email = self.get_controller().get_request().json.get('email')
+        password = self.get_controller().get_request().json.get('password')
+
+        # query the user email and password
+        user = self.get_controller().get_db_client().get_session()\
+        .query(User).filter_by(email=email).first()
+        # hash the password and compare with the password in the database
+        if user is None:
+            return jsonify({'error': 'Incorrect email or password'}), 401
+        else:
+            salt = user.salt
+        user_password = user.password
+        #b = bytes(user_password,'utf-8')
+        hashed_password = bcrypt.hashpw(password.encode(
+            'utf-8'), bytes(salt, 'utf-8'))
+
+        if user and user_password == hashed_password.decode('utf-8'):
+            # generate a JWT token with user ID as the identity
+            access_token = create_access_token(identity=user.id)
+
+        # send the token back to the client
+            return jsonify({'access_token': access_token,
+                        'message': 'Successfully logged in',
+                        'user_id': user.id})
+        else:
+            return jsonify({'error': 'Incorrect email or password'}), 401

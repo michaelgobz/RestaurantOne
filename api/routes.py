@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 from flask import Blueprint, abort, jsonify, redirect, request, url_for
 from flask_jwt_extended import (create_access_token, get_jwt, get_jwt_identity,
                                 jwt_required)
-from .controllers import AuthController
+from .controllers import AuthController , BaseController
 from jwt import decode, encode
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import contains_eager
@@ -19,7 +19,7 @@ from api.models import (Address, Cart, CartItem, Menu, MenuItem, Order,
                         OrderItem, Payment, PaymentMethod, Reservation,
                         Restaurant, Shipment, Transaction, User,
                         VerificationToken)
-# from app import db
+from app import db
 
 # load env variables
 dotenv_path = join(dirname(__file__), '.env')
@@ -32,7 +32,8 @@ blacklist = set()
 
 # controllers
 
-auth = AuthController()
+controller = BaseController(request, db)
+auth = AuthController(controller)
 
 
 # initial route
