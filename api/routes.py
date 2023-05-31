@@ -70,12 +70,8 @@ def login():
 @api.route('/auth/logout', methods=['POST'], strict_slashes=False)
 @jwt_required()  # uth headers should be set with the correct token
 def logout():
-    # Blacklist the current access token so that it can no longer be used
-    jti = get_jwt()['jti']
-    blacklist.add(jti)
-
-    # Return a response indicating success
-    return jsonify({'message': 'Successfully logged out'}), 200
+    """Logout a user"""
+    return auth.logout()
 
 
 @api.route('/auth/reset_password', methods=['POST'], strict_slashes=False)
