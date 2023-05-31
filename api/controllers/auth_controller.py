@@ -81,7 +81,6 @@ class AuthController:
 
     def login(self):
         """ login method to authenticate users"""
-
         # get user info from request
         email = self.get_controller().get_request().json.get('email')
         password = self.get_controller().get_request().json.get('password')
