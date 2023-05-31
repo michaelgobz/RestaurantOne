@@ -114,7 +114,10 @@ def login():
     # query the user email and password
     user = db.get_session().query(User).filter_by(email=email).first()
     # hash the password and compare with the password in the database
-    salt = user.salt
+    if user is None:
+        return jsonify({'error': 'Incorrect email or password'}), 401
+    else:
+        salt = user.salt
     user_password = user.password
     # b = bytes(user_password,'utf-8')
     hashed_password = bcrypt.hashpw(password.encode(
