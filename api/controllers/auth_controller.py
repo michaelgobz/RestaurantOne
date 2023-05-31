@@ -110,22 +110,85 @@ class AuthController:
         else:
             return jsonify({'error': 'Incorrect email or password'}), 401
         
+        
     def confirm_account(self, token:str):
         """ confirm account method to authenticate users"""
         # get user info from request
-       
-
+        
         payload = decode(token, os.environ.get('SECRET_KEY'), algorithms=['HS256'])
         email = payload['email']
         user = self.get_controller().get_db_client().get_session()\
             .query(User).filter_by(email=email).first()
-        if user:
+        token = self.get_controller().get_db_client().get_session()\
+            .query(VerificationToken).filter_by(user_id=user.id).first()
+            
+        if user and token == payload['token']:
             user.is_verified = True
             self.get_controller().get_db_client().get_session().commit()
+            # send confirmation email
             return jsonify({'message': 'Account confirmed successfully',
                         'redirect': 'login',
                         'details': 'welcome to the Restaurant One'})
         else:
             return jsonify({'error': 'Account not found'})
         
+    def request_reset_password(self):
+        """ request reset password method to authenticated users"""
         
+        email = self.get_controller().get_request().request.json.get('email')
+        user = self.get_controller().get_db_client().get_session()\
+            .query(User).filter_by(email=email).first()
+        # check for the email in the database
+        if email is None:
+            return jsonify({'error': 'Email is required'})
+        elif user is None:
+            return jsonify({'error': 'Email does not exist'})
+        elif user.email == email:
+            secret = os.environ.get('SECRET_KEY')
+            # generate token and send to the user email
+            token = encode({'set_password': 'true', 'user_id': user.id},
+                       secret, algorithm="HS256")
+            # store the password reset token in the database
+            user.password_reset_token = token
+            # sent token to the user email.
+            self.get_controller().get_db_client().get_session().commit()
+            return jsonify({'message': 'token is sent to your email',
+                        'token': token
+                        })
+            
+    def reset_password(self, token:str):
+        """ reset password method to authenticated users"""
+        payload = decode(token, os.environ.get('SECRET_KEY'), algorithms=['HS256'])
+        user_id = payload['user_id']
+        if user_id and payload['set_password'] == 'true':
+            user = self.get_controller().get_db_client().get_session().query(User).filter_by(id=user_id).first()
+            password = self.get_controller().get_request().json.get('password')
+        # generate salt and hash the password
+            salt = user.salt
+            password_hash = bcrypt.hashpw(password.encode('utf-8'), salt)
+            user.password = password_hash
+            self.get_controller().get_db_client().get_session().commit()
+
+            return jsonify({'message': 'password reset successful',
+                    'details': 'login to continue'})
+        else:
+            return jsonify({'error': 'user not found'})
+        
+        
+    def get_user(self, user_id):
+        """ get user method to authenticated users"""
+        user = self.get_controller().get_db_client().get_session().query(User).filter_by(id=user_id).first()
+        if user:
+            return jsonify({'user': user.serialize()})
+        else:
+            return jsonify({'error': 'user not found'})
+        
+    def delete_user(self, user_id):
+        """ delete user method to authenticated users"""
+        user = self.get_controller().get_db_client().get_session().query(User).filter_by(id=user_id).first()
+        if user:
+            self.get_controller().get_db_client().get_session().delete(user)
+            self.get_controller().get_db_client().get_session().commit()
+            return jsonify({'message': 'user deleted successfully'})
+        else:
+            return jsonify({'error': 'user not found'})

@@ -79,7 +79,7 @@ def logout():
 
 
 @api.route('/auth/reset_password', methods=['POST'], strict_slashes=False)
-def reset_password():
+def request_reset_password():
     """Reset password for a user
     Returns:
         _type_: token
@@ -105,7 +105,7 @@ def reset_password():
 
 
 @api.route('/auth/reset_password/<token>', methods=['POST'], strict_slashes=False)
-def set_password(token):
+def set_new_password(token):
     payload = decode(token, os.environ.get('SECRET_KEY'), algorithms=['HS256'])
     user_id = payload['user_id']
     user = db.get_session().query(User).filter_by(id=user_id).first()
@@ -126,17 +126,7 @@ def confirm_account(token):
     Returns:
         _type_: message
     """
-    payload = decode(token, os.environ.get('SECRET_KEY'), algorithms=['HS256'])
-    email = payload['email']
-    user = db.get_session().query(User).filter_by(email=email).first()
-    if user:
-        user.is_verified = True
-        db.get_session().commit()
-        return jsonify({'message': 'Account confirmed successfully',
-                        'redirect': 'login',
-                        'details': 'welcome to the Restaurant One'})
-    else:
-        return jsonify({'error': 'Account not found'})
+    return auth.confirm_account(token)
 
 
 @api.route('/admin/verification/<user_id>', methods=['GET'], strict_slashes=False)
