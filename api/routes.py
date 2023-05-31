@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 from flask import Blueprint, abort, jsonify, redirect, request, url_for
 from flask_jwt_extended import (create_access_token, get_jwt, get_jwt_identity,
                                 jwt_required)
+from .controllers import AuthController
 from jwt import decode, encode
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import contains_eager
@@ -18,7 +19,7 @@ from api.models import (Address, Cart, CartItem, Menu, MenuItem, Order,
                         OrderItem, Payment, PaymentMethod, Reservation,
                         Restaurant, Shipment, Transaction, User,
                         VerificationToken)
-from app import db
+# from app import db
 
 # load env variables
 dotenv_path = join(dirname(__file__), '.env')
@@ -29,10 +30,12 @@ api = Blueprint('api', __name__, url_prefix='/api/v1/')
 
 blacklist = set()
 
+# controllers
+
+auth = AuthController()
+
 
 # initial route
-
-
 @api.route('/')
 def home():
     return jsonify({
@@ -54,8 +57,10 @@ def home():
 
 @api.route('/auth/signup', methods=['POST'], strict_slashes=False)
 def signup():
+
     """Sign up a new user"""
     # get user info from request
+    """
     data = request.get_json()
 
     password = data.get('password')
@@ -103,6 +108,9 @@ def signup():
         db.get_session().rollback()
         return jsonify({'error':
                             'Email already registered  or server error or token error'})
+    """
+    auth.signup()
+
 
 
 @api.route('/auth/login', methods=['POST'], strict_slashes=False)

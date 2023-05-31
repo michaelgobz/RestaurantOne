@@ -2,7 +2,7 @@
 
 import typing as Typing
 import requests
-from ...api.db import db
+from  import db
 from flask import Blueprint, abort, jsonify, redirect, request, url_for
 from flask_jwt_extended import (create_access_token, get_jwt, get_jwt_identity,
                                 )
