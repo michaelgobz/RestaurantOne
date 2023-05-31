@@ -16,10 +16,12 @@ from .base_controller import BaseController
 class AuthController:
     """ The authentication controller for all controllers in the api """
     _controller:BaseController = None
+    _blacklist:set = None
 
     def __init__(self, controller:BaseController):
         """ The constructor for the authentication controller. """
         self._controller = controller
+        self._blacklist = set()
 
     def get_controller(self):
         """ The get method for the authentication controller. """
@@ -192,3 +194,11 @@ class AuthController:
             return jsonify({'message': 'user deleted successfully'})
         else:
             return jsonify({'error': 'user not found'})
+    def logout(self):
+        """ logout user method to authenticated users"""
+        jti = self._controller.get_access_token()
+        self._blacklist.add(jti)
+
+    #   Return a response indicating success
+        return jsonify({'message': 'Successfully logged out',
+                        'status': 'logout successful'}), 20

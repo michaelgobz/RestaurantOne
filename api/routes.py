@@ -82,42 +82,14 @@ def logout():
 def request_reset_password():
     """Reset password for a user
     Returns:
-        _type_: token
+        _type_: token       
     """
-    email = request.json.get('email')
-    user = db.get_session().query(User).filter_by(email=email).first()
-    # check for the email in the database
-    if email is None:
-        return jsonify({'error': 'Email is required'})
-    elif user is None:
-        return jsonify({'error': 'Email does not exist'})
-    elif user.email == email:
-        secret = os.environ.get('SECRET_KEY')
-        # generate token and send to the user email
-        token = encode({'set_password': 'true', 'user_id': user.id},
-                       secret, algorithm="HS256")
-        # store the password reset token in the database
-        user.password_reset_token = token
-        db.get_session().commit()
-        return jsonify({'message': 'token is sent to your email',
-                        'token': token
-                        })
-
+    return auth.request_reset_password()
 
 @api.route('/auth/reset_password/<token>', methods=['POST'], strict_slashes=False)
 def set_new_password(token):
-    payload = decode(token, os.environ.get('SECRET_KEY'), algorithms=['HS256'])
-    user_id = payload['user_id']
-    user = db.get_session().query(User).filter_by(id=user_id).first()
-    password = request.json.get('password')
-    # generate salt and hash the password
-    salt = bcrypt.gensalt()
-    password_hash = bcrypt.hashpw(password.encode('utf-8'), salt)
-    user.password = password_hash
-    db.get_session().commit()
-
-    return jsonify({'message': 'password reset successful',
-                    'details': 'login to continue'})
+    """Reset password for a user"""
+    return auth.reset_password(token)
 
 
 @api.route('/auth/confirm_account/<token>', methods=['GET'], strict_slashes=False)
