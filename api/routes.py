@@ -46,7 +46,7 @@ def home():
         "location": "Africa",
         "year": 2023,
         "month": "March",
-        "Version": "1.0.0",
+        "Version": "1.2.0",
         "Project": "Alx-webstack project",
         "supervisor": "Alx-SE Mentors",
         "api-prefix": "api/v1",
@@ -60,12 +60,12 @@ def home():
 @api.route('/auth/signup', methods=['POST'], strict_slashes=False)
 def signup():
     """Sign up a new user"""
-    auth.signup()
+    return auth.signup()
 
 @api.route('/auth/login', methods=['POST'], strict_slashes=False)
 def login():
     """Login a user"""
-    auth.login()
+    return auth.login()
 
 @api.route('/auth/logout', methods=['POST'], strict_slashes=False)
 @jwt_required()  # uth headers should be set with the correct token
