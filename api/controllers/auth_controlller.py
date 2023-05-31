@@ -58,12 +58,13 @@ class AuthController:
                                                         user_id=new_user.id)
             Controller.get_db_client.get_session().add(user_verification_token)
             Controller.get_db_client.get_session().commit()
-            
+
             return jsonify({'message': 'user created successfully',  # noqa: F706
                         'redirect': 'login',
                         'details': 'check your email to confirm your account',
                         'token': token})
         except IntegrityError:
             Controller.get_db_client.get_session().rollback()
+
             return jsonify({'error':
                             'Email already registered  or server error or token error'})
