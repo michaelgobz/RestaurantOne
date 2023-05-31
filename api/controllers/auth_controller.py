@@ -2,13 +2,13 @@
 
 
 import os
-import bcrypt
 from uuid import uuid4
 from datetime import datetime
-from jwt import encode
+import bcrypt
+from jwt import decode, encode
 from flask import jsonify
 from flask_jwt_extended import create_access_token
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.exc import IntegrityError 
 from ..models import User, VerificationToken
 from .base_controller import BaseController
 
@@ -18,13 +18,14 @@ class AuthController:
     _controller:BaseController = None
 
     def __init__(self, controller:BaseController):
+        """ The constructor for the authentication controller. """
         self._controller = controller
 
     def get_controller(self):
+        """ The get method for the authentication controller. """
         return self._controller
 
     def signup(self):
-        """ The signup method for the authentication controller. """
         """Sign up a new user"""
         # get user info from request
         data = self.get_controller().get_request().get_json()
@@ -108,3 +109,23 @@ class AuthController:
                         'user_id': user.id})
         else:
             return jsonify({'error': 'Incorrect email or password'}), 401
+        
+    def confirm_account(self, token:str):
+        """ confirm account method to authenticate users"""
+        # get user info from request
+       
+
+        payload = decode(token, os.environ.get('SECRET_KEY'), algorithms=['HS256'])
+        email = payload['email']
+        user = self.get_controller().get_db_client().get_session()\
+            .query(User).filter_by(email=email).first()
+        if user:
+            user.is_verified = True
+            self.get_controller().get_db_client().get_session().commit()
+            return jsonify({'message': 'Account confirmed successfully',
+                        'redirect': 'login',
+                        'details': 'welcome to the Restaurant One'})
+        else:
+            return jsonify({'error': 'Account not found'})
+        
+        
