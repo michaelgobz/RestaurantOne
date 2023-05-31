@@ -39,6 +39,7 @@ auth = AuthController(controller)
 # initial route
 @api.route('/')
 def home():
+    """ The home route """
     return jsonify({
         "message": "welcome to the Restaurant One",
         "company": "RestaurantOne",
@@ -58,91 +59,13 @@ def home():
 
 @api.route('/auth/signup', methods=['POST'], strict_slashes=False)
 def signup():
-
     """Sign up a new user"""
-    # get user info from request
-    """
-    data = request.get_json()
-
-    password = data.get('password')
-
-    # generate salt and hash the password
-    salt = bcrypt.gensalt(rounds=12, prefix=b'2b')
-    salt_to_string = salt.decode('utf-8')
-    password_hash = bcrypt.hashpw(password.encode('utf-8'), salt)
-
-    # create a new user object
-    new_user = User(id=str(uuid4()),
-                    email=data.get('email'),
-                    password=password_hash.decode('utf-8'),
-                    first_name=data.get('firstname'),
-                    last_name=data.get('lastname'),
-                    role='customer',
-                    salt=salt_to_string,
-                    phone_number=data.get('Phonenumber'),
-                    created_at=datetime.utcnow(),
-                    updated_at=datetime.utcnow())
-
-    # try to add user to database
-    try:
-        db.get_session().add(new_user)
-
-        # generate verification token
-        new_user_created = db.get_session().query(User). \
-            filter_by(email=data.get('email')).first()
-        token = encode({'email': new_user_created.email},
-                       os.environ.get('SECRET_KEY'), algorithm="HS256")
-        # send verification email
-
-        # store the verification token in the database
-        user_verification_token = VerificationToken(id=str(uuid4()),
-                                                    token=token,
-                                                    created_at=datetime.utcnow(),
-                                                    user_id=new_user.id)
-        db.get_session().add(user_verification_token)
-        db.get_session().commit()
-        return jsonify({'message': 'user created successfully',
-                        'redirect': 'login',
-                        'details': 'check your email to confirm your account',
-                        'token': token})
-    except IntegrityError:
-        db.get_session().rollback()
-        return jsonify({'error':
-                            'Email already registered  or server error or token error'})
-    """
     auth.signup()
-
-
 
 @api.route('/auth/login', methods=['POST'], strict_slashes=False)
 def login():
-    # get user info from request
-    email = request.json.get('email')
-    password = request.json.get('password')
-
-    # query the user email and password
-    user = db.get_session().query(User).filter_by(email=email).first()
-    # hash the password and compare with the password in the database
-    if user is None:
-        return jsonify({'error': 'Incorrect email or password'}), 401
-    else:
-        salt = user.salt
-    user_password = user.password
-    # b = bytes(user_password,'utf-8')
-    hashed_password = bcrypt.hashpw(password.encode(
-        'utf-8'), bytes(salt, 'utf-8'))
-
-    if user and user_password == hashed_password.decode('utf-8'):
-        # generate a JWT token with user ID as the identity
-        access_token = create_access_token(identity=user.id)
-
-        # send the token back to the client
-        return jsonify({'access_token': access_token,
-                        'message': 'Successfully logged in',
-                        'user_id': user.id})
-    else:
-        return jsonify({'error': 'Incorrect email or password'}), 401
-
+    """Login a user"""
+    auth.login()
 
 @api.route('/auth/logout', methods=['POST'], strict_slashes=False)
 @jwt_required()  # uth headers should be set with the correct token
