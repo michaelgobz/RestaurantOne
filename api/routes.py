@@ -45,9 +45,8 @@ def home():
         "company": "RestaurantOne",
         "location": "Africa",
         "year": 2023,
-        "month": "March",
         "Version": "1.2.0",
-        "Project": "Alx-webstack project",
+        "Project": "Reservation System",
         "supervisor": "Alx-SE Mentors",
         "api-prefix": "api/v1",
         "authors": "@michaelGoboola and @jedBahena"
