@@ -9,6 +9,7 @@ from dotenv import load_dotenv
 from flask import Blueprint, abort, jsonify, redirect, request, url_for
 from flask_jwt_extended import (create_access_token, get_jwt, get_jwt_identity,
                                 jwt_required)
+from .controllers import AuthController , BaseController
 from jwt import decode, encode
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import contains_eager
@@ -29,20 +30,23 @@ api = Blueprint('api', __name__, url_prefix='/api/v1/')
 
 blacklist = set()
 
+# controllers
+
+controller = BaseController(request, db)
+auth = AuthController(controller)
+
 
 # initial route
-
-
 @api.route('/')
 def home():
+    """ The home route """
     return jsonify({
         "message": "welcome to the Restaurant One",
         "company": "RestaurantOne",
         "location": "Africa",
         "year": 2023,
-        "month": "March",
-        "Version": "1.0.0",
-        "Project": "Alx-webstack project",
+        "Version": "1.2.0",
+        "Project": "Reservation System",
         "supervisor": "Alx-SE Mentors",
         "api-prefix": "api/v1",
         "authors": "@michaelGoboola and @jedBahena"
@@ -55,137 +59,32 @@ def home():
 @api.route('/auth/signup', methods=['POST'], strict_slashes=False)
 def signup():
     """Sign up a new user"""
-    # get user info from request
-    data = request.get_json()
-
-    password = data.get('password')
-
-    # generate salt and hash the password
-    salt = bcrypt.gensalt(rounds=12, prefix=b'2b')
-    salt_to_string = salt.decode('utf-8')
-    password_hash = bcrypt.hashpw(password.encode('utf-8'), salt)
-
-    # create a new user object
-    new_user = User(id=str(uuid4()),
-                    email=data.get('email'),
-                    password=password_hash.decode('utf-8'),
-                    first_name=data.get('firstname'),
-                    last_name=data.get('lastname'),
-                    role='customer',
-                    salt=salt_to_string,
-                    phone_number=data.get('Phonenumber'),
-                    created_at=datetime.utcnow(),
-                    updated_at=datetime.utcnow())
-
-    # try to add user to database
-    try:
-        db.get_session().add(new_user)
-
-        # generate verification token
-        new_user_created = db.get_session().query(User). \
-            filter_by(email=data.get('email')).first()
-        token = encode({'email': new_user_created.email},
-                       os.environ.get('SECRET_KEY'), algorithm="HS256")
-        # send verification email
-
-        # store the verification token in the database
-        user_verification_token = VerificationToken(id=str(uuid4()),
-                                                    token=token,
-                                                    created_at=datetime.utcnow(),
-                                                    user_id=new_user.id)
-        db.get_session().add(user_verification_token)
-        db.get_session().commit()
-        return jsonify({'message': 'user created successfully',
-                        'redirect': 'login',
-                        'details': 'check your email to confirm your account',
-                        'token': token})
-    except IntegrityError:
-        db.get_session().rollback()
-        return jsonify({'error':
-                            'Email already registered  or server error or token error'})
-
+    return auth.signup()
 
 @api.route('/auth/login', methods=['POST'], strict_slashes=False)
 def login():
-    # get user info from request
-    email = request.json.get('email')
-    password = request.json.get('password')
-
-    # query the user email and password
-    user = db.get_session().query(User).filter_by(email=email).first()
-    # hash the password and compare with the password in the database
-    if user is None:
-        return jsonify({'error': 'Incorrect email or password'}), 401
-    else:
-        salt = user.salt
-    user_password = user.password
-    # b = bytes(user_password,'utf-8')
-    hashed_password = bcrypt.hashpw(password.encode(
-        'utf-8'), bytes(salt, 'utf-8'))
-
-    if user and user_password == hashed_password.decode('utf-8'):
-        # generate a JWT token with user ID as the identity
-        access_token = create_access_token(identity=user.id)
-
-        # send the token back to the client
-        return jsonify({'access_token': access_token,
-                        'message': 'Successfully logged in',
-                        'user_id': user.id})
-    else:
-        return jsonify({'error': 'Incorrect email or password'}), 401
-
+    """Login a user"""
+    return auth.login()
 
 @api.route('/auth/logout', methods=['POST'], strict_slashes=False)
 @jwt_required()  # uth headers should be set with the correct token
 def logout():
-    # Blacklist the current access token so that it can no longer be used
-    jti = get_jwt()['jti']
-    blacklist.add(jti)
-
-    # Return a response indicating success
-    return jsonify({'message': 'Successfully logged out'}), 200
+    """Logout a user"""
+    return auth.logout()
 
 
 @api.route('/auth/reset_password', methods=['POST'], strict_slashes=False)
-def reset_password():
+def request_reset_password():
     """Reset password for a user
     Returns:
-        _type_: token
+        _type_: token       
     """
-    email = request.json.get('email')
-    user = db.get_session().query(User).filter_by(email=email).first()
-    # check for the email in the database
-    if email is None:
-        return jsonify({'error': 'Email is required'})
-    elif user is None:
-        return jsonify({'error': 'Email does not exist'})
-    elif user.email == email:
-        secret = os.environ.get('SECRET_KEY')
-        # generate token and send to the user email
-        token = encode({'set_password': 'true', 'user_id': user.id},
-                       secret, algorithm="HS256")
-        # store the password reset token in the database
-        user.password_reset_token = token
-        db.get_session().commit()
-        return jsonify({'message': 'token is sent to your email',
-                        'token': token
-                        })
-
+    return auth.request_reset_password()
 
 @api.route('/auth/reset_password/<token>', methods=['POST'], strict_slashes=False)
-def set_password(token):
-    payload = decode(token, os.environ.get('SECRET_KEY'), algorithms=['HS256'])
-    user_id = payload['user_id']
-    user = db.get_session().query(User).filter_by(id=user_id).first()
-    password = request.json.get('password')
-    # generate salt and hash the password
-    salt = bcrypt.gensalt()
-    password_hash = bcrypt.hashpw(password.encode('utf-8'), salt)
-    user.password = password_hash
-    db.get_session().commit()
-
-    return jsonify({'message': 'password reset successful',
-                    'details': 'login to continue'})
+def set_new_password(token):
+    """Reset password for a user"""
+    return auth.reset_password(token)
 
 
 @api.route('/auth/confirm_account/<token>', methods=['GET'], strict_slashes=False)
@@ -194,17 +93,7 @@ def confirm_account(token):
     Returns:
         _type_: message
     """
-    payload = decode(token, os.environ.get('SECRET_KEY'), algorithms=['HS256'])
-    email = payload['email']
-    user = db.get_session().query(User).filter_by(email=email).first()
-    if user:
-        user.is_verified = True
-        db.get_session().commit()
-        return jsonify({'message': 'Account confirmed successfully',
-                        'redirect': 'login',
-                        'details': 'welcome to the Restaurant One'})
-    else:
-        return jsonify({'error': 'Account not found'})
+    return auth.confirm_account(token)
 
 
 @api.route('/admin/verification/<user_id>', methods=['GET'], strict_slashes=False)

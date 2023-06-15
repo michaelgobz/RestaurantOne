@@ -1,37 +1,40 @@
 """ The base controller for all controllers in the routes. """
 
 import typing as Typing
-import requests
-from ...api.db import db
-from flask import Blueprint, abort, jsonify, redirect, request, url_for
-from flask_jwt_extended import (create_access_token, get_jwt, get_jwt_identity,
-                                )
+from flask_jwt_extended import get_jwt, get_jwt_identity
+                                
 
 
 class BaseController:
     """ The base controller for all controllers in the routes. """
-    _request: Typing.Optional[requests.Request] = None
-    _db_client: Typing.Optional[db] = None
+    _request = None
+    _db_client = None
     _access_token: Typing.Optional[str] = None
 
-    def __init__(self, request, db):
+    def __init__(self, request, db_client):  # noqa: F811
         """ The constructor for the base controller. """
         self.request = request
-        self.db_client = db
+        self.db_client = db_client
 
-    def get_request(self) -> requests.Request:
+    def get_request(self):
         """ The get method for the base controller. """
         return self.request
+    
+    def get_current_user(self):
+        """ The get current user method for the base controller. """
+        return get_jwt_identity()
 
     def get_access_token(self) -> str:
-        """ The get method for the base controller. """
+        """ The get access token method for the base controller. """
         token = get_jwt()['jti']
-        self.access_token = token
-        return self.access_token
+        self._access_token = token
+        return self._access_token
 
-    def get_db_client(self) -> db:
-        """ The get method for the base controller. """
+    def get_db_client(self):
+        """ The get db client method for the base controller. """
         return self.db_client
-
-
-api_controller = BaseController(request, db)
+    
+    def send_mail_message(self, email, subject, body):
+        """ The send mail message method for the base controller. """
+    
+    
