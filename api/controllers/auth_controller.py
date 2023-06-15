@@ -1,5 +1,6 @@
-""" The authentication controller for all controllers in the api """
-
+ """ 
+ The authentication controller for all controllers in the api 
+ """  # noqa: E999
 
 import os
 from uuid import uuid4
@@ -163,7 +164,8 @@ class AuthController:
         payload = decode(token, os.environ.get('SECRET_KEY'), algorithms=['HS256'])
         user_id = payload['user_id']
         if user_id and payload['set_password'] == 'true':
-            user = self.get_controller().get_db_client().get_session().query(User).filter_by(id=user_id).first()
+            user = self.get_controller().get_db_client().get_session().query(User)\
+                .filter_by(id=user_id).first()
             password = self.get_controller().get_request().json.get('password')
         # generate salt and hash the password
             salt = user.salt
@@ -179,7 +181,8 @@ class AuthController:
         
     def get_user(self, user_id):
         """ get user method to authenticated users"""
-        user = self.get_controller().get_db_client().get_session().query(User).filter_by(id=user_id).first()
+        user = self.get_controller().get_db_client().get_session().query(User)\
+            .filter_by(id=user_id).first()
         if user:
             return jsonify({'user': user.serialize()})
         else:
@@ -187,7 +190,8 @@ class AuthController:
         
     def delete_user(self, user_id):
         """ delete user method to authenticated users"""
-        user = self.get_controller().get_db_client().get_session().query(User).filter_by(id=user_id).first()
+        user = self.get_controller().get_db_client().get_session().query(User)\
+            .filter_by(id=user_id).first()
         if user:
             self.get_controller().get_db_client().get_session().delete(user)
             self.get_controller().get_db_client().get_session().commit()
