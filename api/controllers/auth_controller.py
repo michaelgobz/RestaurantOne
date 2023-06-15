@@ -1,6 +1,4 @@
- """ 
- The authentication controller for all controllers in the api 
- """  # noqa: E999
+""" The authentication controller for all controllers in the api """  # noqa: E999
 
 import os
 from uuid import uuid4
