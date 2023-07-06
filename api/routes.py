@@ -46,7 +46,7 @@ def home():
         "location": "Africa",
         "year": 2023,
         "Version": "1.2.0",
-        "Project": "Reservation System",
+        "Project": "Restaurant Reservation System",
         "supervisor": "Alx-SE Mentors",
         "api-prefix": "api/v1",
         "authors": "@michaelGoboola and @jedBahena"
