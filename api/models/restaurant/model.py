@@ -22,6 +22,9 @@ class Restaurant(db.Model):
     avatar = db.Column(db.String(3000), nullable=True)
     created_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow)
+    is_order_taking = db.Column(db.Boolean, nullable=False, default=True)
+    subscription = db.Column(db.String(50), nullable=True)  # free, premium, gold
+    
 
     updated_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow,
@@ -35,6 +38,9 @@ class Restaurant(db.Model):
     shipments = db.relationship('Shipment', backref='restaurants')
     orders = db.relationship('Order', backref='restaurants')
     reservations = db.relationship('Reservation', backref='restaurants')
+    payments = db.relationship('Payment', backref='restaurants')
+    payment_methods = db.relationship('PaymentMethod', backref='restaurants')
+    
 
     # json serialization
     @property
