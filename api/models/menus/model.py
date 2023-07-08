@@ -17,13 +17,12 @@ class Menu(db.Model):
                            default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow,
-                           onupdate=datetime.utcnow)
+                           onupdate=datetime.utcnow),
+    isAvailable = db.Column(db.Boolean, nullable=False, default=True)
     restaurant_id = db.Column(db.String(50),
                               db.ForeignKey('restaurants.id'), nullable=False)
     items = db.relationship('MenuItem',
                             backref='menu', cascade="all, delete-orphan")
-    carts = db.relationship('CartItem', backref='menu_item')
-    reservations = db.relationship('Reservation', backref='menu_item')
 
     # json serialization
     @property
@@ -38,8 +37,6 @@ class Menu(db.Model):
             'updated_at': self.updated_at,
             'restaurant_id': self.restaurant_id,
             'items': [item.serialize for item in self.items],
-            'carts': [cart.serialize for cart in self.carts],
-            'reservations': [reservation.serialize for reservation in self.reservations]
         }
 
 
@@ -63,6 +60,8 @@ class MenuItem(db.Model):
     updated_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow,
                            onupdate=datetime.utcnow)
+    carts = db.relationship('CartItem', backref='menu_item')
+    reservations = db.relationship('Reservation', backref='menu_item')
     menu_id = db.Column(db.String(50), db.ForeignKey('menus.id'), nullable=False)
 
     # json serialization
@@ -83,5 +82,7 @@ class MenuItem(db.Model):
             'avatar': self.avatar,
             'created_at': self.created_at,
             'updated_at': self.updated_at,
-            'menu_id': self.menu_id
+            'menu_id': self.menu_id,
+            'carts': [cart.serialize for cart in self.carts],
+            'reservations': [reservation.serialize for reservation in self.reservations]
         }
