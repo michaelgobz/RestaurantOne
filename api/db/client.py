@@ -39,7 +39,7 @@ class DBClient:
         """initialize app"""
         app.config['SQLALCHEMY_DATABASE_URI'] = \
             _get_connection_string(self.host, self.port, self.user,
-                                   self.password, self.db,'sqlserver')
+                                   self.password, self.db,'postgresql')
         app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
         self.__engine.init_app(app)
         self.__migrate = Migrate(app, self.__engine)

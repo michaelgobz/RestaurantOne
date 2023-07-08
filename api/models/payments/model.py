@@ -19,6 +19,8 @@ class PaymentMethod(db.Model):
     created_at = db.Column(db.DateTime, default=datetime.utcnow, nullable=True)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow)
     payments = db.relationship('Payment', backref='payment_method', lazy=True)
+    restaurants = db.relationship('Restaurant', backref='payment_method', lazy=True)
+    
 
     # json serializer
     @property
