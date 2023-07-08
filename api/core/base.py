@@ -2,7 +2,7 @@
 
 from ..db import DBClient
 
-Db = DBClient(host='restaurant-one-v1.database.windows.net', port=1433,
+Db = DBClient(host='localhost', port=5433,
               user='RestaurantOne', password='JedMichael2023',
               db='restaurant')
 
