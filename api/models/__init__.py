@@ -12,12 +12,14 @@ from .reviews.model import ReviewItem, ReservationReview, MenuItemReview
 from .shipment.model import Shipment, ShipmentMethod
 from .tokens.model import VerificationToken
 from .user.model import User
+from .tenants.model import Tenant
 
 __all__ = ['User', 'Address',
            'UserAddress', 'MenuItem',
            'Menu', 'OrderItem',
            'Order', 'PaymentMethod',
            'Payment', 'Transaction',
+           'Tenant', 
            'Reservation', 'Restaurant',
            'ShipmentMethod', 'Shipment',
            'Invoice', 'InvoiceItem',
