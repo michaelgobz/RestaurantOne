@@ -99,5 +99,3 @@ class ReservationsController:
         reservation.cancelled = True
         self.get_controller().get_db_client().get_session().commit()
         return reservation
-    
-    
