@@ -9,19 +9,22 @@ from .payments.model import Payment, PaymentMethod, Transaction
 from .reservations.model import Reservation
 from .restaurant.model import Restaurant
 from .reviews.model import ReviewItem, ReservationReview, MenuItemReview
-from .shipment.model import Shipment, ShipmentMethod
+from .shipment.model import Shippment, ShippingMethods
 from .tokens.model import VerificationToken
 from .user.model import User
 from .tenants.model import Tenant
+from .subscription.model import Subscription
+from .tracking.model import TrackingToken
 
 __all__ = ['User', 'Address',
            'UserAddress', 'MenuItem',
            'Menu', 'OrderItem',
            'Order', 'PaymentMethod',
            'Payment', 'Transaction',
-           'Tenant', 
+           'Tenant', 'TrackingToken',
+           'Subscription'
            'Reservation', 'Restaurant',
-           'ShipmentMethod', 'Shipment',
+           'ShippingMethods', 'Shippment',
            'Invoice', 'InvoiceItem',
            'Event', 'EventItem',
            'InvoiceItem', 'Event',

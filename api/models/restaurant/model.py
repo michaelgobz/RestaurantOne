@@ -47,21 +47,21 @@ class Restaurant(db.Model):
     def serialize(self):
         """Return object data in easily serializable format"""
         return {
-            'id': self.id,
-            'name': self.name,
-            'description': self.description,
-            'location': self.location,
-            'is_operational': self.is_operational,
-            'order_fulfilling': self.order_fulfilling,
-            'customers': self.customers,
-            'offers': self.offers,
-            'suppliers': self.suppliers,
-            'avatar': self.avatar,
-            'created_at': self.created_at,
-            'updated_at': self.updated_at,
-            'manager_id': self.manager_id,
-            'menus': [menu.serialize for menu in self.menus],
-            'shipments': [shipment.serialize for shipment in self.shipments],
-            'orders': [order.serialize for order in self.orders],
-            'reservations': [reservation.serialize for reservation in self.reservations]
+            'Id': self.id,
+            'Name': self.name,
+            'Description': self.description,
+            'Location': self.location,
+            'IsOperational': self.is_operational,
+            'OrderFulFilling': self.order_fulfilling,
+            'Customers': self.customers,
+            'Offers': self.offers,
+            'Suppliers': self.suppliers,
+            'Avatar': self.avatar,
+            'CreatedAt': self.created_at,
+            'UpdatedAt': self.updated_at,
+            'Manager_id': self.manager_id,
+            'Menus': [menu.serialize for menu in self.menus],
+            'Shipments': [shipment.serialize for shipment in self.shipments],
+            'Orders': [order.serialize for order in self.orders],
+            'Reservations': [reservation.serialize for reservation in self.reservations]
         }

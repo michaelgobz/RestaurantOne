@@ -18,7 +18,9 @@ class Information(db.Model):
     def serialize(self):
         """Return object data in easily serializable format"""
         return {
-            'id': self.id
+            'Id': self.id,
+            'ShortMessage': self.short_description,
+            'Details': self.detailed_description
         }
 
 
@@ -46,6 +48,7 @@ class EventItem(db.Model):
     id = db.Column(db.String(50), primary_key=True)
     event = db.Column(db.String(50), default="", nullable=True)
     owner = db.Column(db.String(50), default="", nullable=True)
+    name = db.Column(db.String(50), default="", nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow())
     updated_at = db.Column(db.DateTime, default=datetime.utcnow())
     info = db.relationship("Information", backref="event_items")
@@ -55,6 +58,9 @@ class EventItem(db.Model):
     def serialize(self):
         """Return object data in easily serializable format"""
         return {
-            'id': self.id,
-            'event': self.event
+            'Id': self.id,
+            'Event': self.event,
+            'Owner' : self.owner,
+            'OwnerName': self.name,
+            'Information':[info.serialize for info in self.info]
         }

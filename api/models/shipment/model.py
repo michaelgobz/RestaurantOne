@@ -5,7 +5,7 @@ from datetime import datetime
 from api.core.base import declarative_base as db
 
 
-class ShipmentMethod(db.Model):
+class ShippingMethods(db.Model):
     """Shipment method model"""
     __tablename__ = 'shipment_methods'
     id = db.Column(db.String(50), primary_key=True)
@@ -18,32 +18,39 @@ class ShipmentMethod(db.Model):
                            default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow,
                            )
+    provider = db.Column(db.String(50), nullable=True);
 
     # json serializer
     @property
     def serialize(self):
         """Return object data in easily serializable format"""
         return {
-            'id': self.id,
-            'name': self.name,
-            'description': self.description,
-            'tax': self.tax,
-            'charge': self.charge,
-
+            'Id': self.id,
+            'Name': self.name,
+            'Description': self.description,
+            'Tax': self.tax,
+            'Charge': self.charge,
+            'Provider':self.provider
         }
 
 
-class Shipment(db.Model):
+class Shippment(db.Model):
     """Shipment model"""
     __tablename__ = 'shipments'
     id = db.Column(db.String(50), primary_key=True)
     restaurant_id = db.Column(db.String(50), db.ForeignKey('restaurants.id'))
+    user_id = db.Column(db.String(50), db.ForeignKey('users.id'))
+    carts = db.relationship('Cart', secondary='shipments', back_populates='shipments')
+    shipping_method = db.Column(db.String(50), db.ForeignKey('ship.id'))
 
     # json serializer
     @property
     def serialize(self):
         """Return object data in easily serializable format"""
         return {
-            'id': self.id,
-            'restaurant_id': self.restaurant_id
+            'Id': self.id,
+            'RestaurantId': self.restaurant_id,
+            'User': self.user_id,
+            'ShippingMethod': self.shipping_method,
+            'Carts':[cart.serialize for cart in self.carts]
         }

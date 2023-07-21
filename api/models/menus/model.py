@@ -29,14 +29,14 @@ class Menu(db.Model):
     def serialize(self):
         """Return object data in easily serializable format"""
         return {
-            'id': self.id,
-            'name': self.name,
-            'description': self.description,
-            'category': self.category,
-            'created_at': self.created_at,
-            'updated_at': self.updated_at,
-            'restaurant_id': self.restaurant_id,
-            'items': [item.serialize for item in self.items],
+            'Id': self.id,
+            'Name': self.name,
+            'Description': self.description,
+            'Category': self.category,
+            'CreatedAt': self.created_at,
+            'UpdatedAt': self.updated_at,
+            'RestaurantId': self.restaurant_id,
+            'Items': [item.serialize for item in self.items],
         }
 
 
@@ -69,20 +69,20 @@ class MenuItem(db.Model):
     def serialize(self):
         """Return object data in easily serializable format"""
         return {
-            'id': self.id,
-            'name': self.name,
-            'description': self.description,
-            'foods': self.foods,
-            'category': self.category,
-            'price': self.price,
-            'isAvailable': self.is_available,
-            'isDeliverable': self.is_deliverable,
-            'rating': self.rating,
-            'duration': self.duration_of_preparation,
-            'avatar': self.avatar,
-            'created_at': self.created_at,
-            'updated_at': self.updated_at,
-            'menu_id': self.menu_id,
-            'carts': [cart.serialize for cart in self.carts],
-            'reservations': [reservation.serialize for reservation in self.reservations]
+            'Id': self.id,
+            'Name': self.name,
+            'Description': self.description,
+            'Foods': self.foods,
+            'Category': self.category,
+            'Price': self.price,
+            'IsAvailable': self.is_available,
+            'IsDeliverable': self.is_deliverable,
+            'Rating': self.rating,
+            'Duration': self.duration_of_preparation,
+            'Avatar': self.avatar,
+            'CreatedAt': self.created_at,
+            'UpdatedAt': self.updated_at,
+            'MenuId': self.menu_id,
+            'Carts': [cart.serialize for cart in self.carts],
+            'Reservations': [reservation.serialize for reservation in self.reservations]
         }
