@@ -40,20 +40,21 @@ class User(db.Model):
     def serialize(self):
         """Return object data in easily serializable format"""
         return {
-            'id': self.id,
-            'email': self.email,
-            'first_name': self.first_name,
-            'last_name': self.last_name,
-            'role': self.role,
-            'created_at': self.created_at,
-            'phone_number': self.phone_number,
-            'is_verified': self.is_verified,
-            'password_reset_token': self.password_reset_token,
-            'updated_at': self.updated_at,
-            'payment_methods': [payment_method.serialize
+            'Id': self.id,
+            'Email': self.email,
+            'FirstName': self.first_name,
+            'LastName': self.last_name,
+            'Role': self.role,
+            'CreatedAt': self.created_at,
+            'PhoneNumber': self.phone_number,
+            'IsVerified': self.is_verified,
+            # TODO: this token should be in a redis cache in version 2.1
+            'PasswordResetToken': self.password_reset_token,
+            'UpdatedAt': self.updated_at,
+            'PaymentMethods': [payment_method.serialize
                                 for payment_method in self.payment_methods],
-            'orders': [order.serialize for order in self.orders],
-            'reservations': [reservation.serialize for reservation in self.reservations],
-            'restaurants': [restaurant.serialize for restaurant in self.restaurants],
-            'addresses': [address.serialize for address in self.addresses],
+            'Orders': [order.serialize for order in self.orders],
+            'Reservations': [reservation.serialize for reservation in self.reservations],
+            'Restaurants': [restaurant.serialize for restaurant in self.restaurants],
+            'Addresses': [address.serialize for address in self.addresses],
         }
