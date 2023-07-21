@@ -10,3 +10,5 @@ class RedisClient():
     def get_redis(self):
         """ get redis instance tied to flask app """
         return self.__redis
+    
+    
