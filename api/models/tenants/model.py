@@ -13,6 +13,7 @@ class Tenant(db.Model):
     name = db.Column(db.String(50), nullable=False)
     owner_id = db.Column(db.String(50), db.ForeignKey("users.id"))
     description = db.Column(db.String(255), nullable=False)
+    subscription_id = db.Column(db.String(50), db.ForeignKey("subscriptions.id"))
     created_at = db.Column(db.DateTime, default=datetime.utcnow())
     updated_at = db.Column(
         db.DateTime, default=datetime.utcnow(), onupdate=datetime.utcnow()
@@ -23,4 +24,8 @@ class Tenant(db.Model):
     @property
     def serialize(self):
         """Return object data in easily serializable format"""
-        return {"id": self.id, "name": self.name, "description": self.description}
+        return {"id": self.id, 
+                "name": self.name, 
+                "description": self.description,
+                "SubscriptionId": self.subscription_id
+                }

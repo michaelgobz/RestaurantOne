@@ -19,6 +19,7 @@ class Order(db.Model):
     status = db.Column(db.String(255), default='pending')
     notes = db.Column(db.String(255), nullable=True)
     payments = db.relationship('Payment', backref='order', lazy=True)
+    balance= db.Column(db.Float, default_value=0.0)
     created_at = db.Column(db.DateTime, default=datetime.utcnow(), nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow(),
                            onupdate=datetime.utcnow())
@@ -28,39 +29,40 @@ class Order(db.Model):
     def serialize(self):
         """Return object data in easily serializable format"""
         return {
-            'id': self.id,
-            'user_id': self.user_id,
-            'restaurant_id': self.restaurant_id,
-            'total_price': self.total_price,
-            'address': self.address,
-            'status': self.status,
-            'notes': self.notes,
-            'created_at': self.created_at,
-            'updated_at': self.updated_at,
-            'items': [item.serialize for item in self.items],
-            'payments': [payment.serialize for payment in self.payments]
+            'Id': self.id,
+            'UserId': self.user_id,
+            'RestaurantId': self.restaurant_id,
+            'TotalPrice': self.total_price,
+            'Address': self.address,
+            'Status': self.status,
+            'Notes': self.notes,
+            'Balances': self.balance,
+            'CreatedAt': self.created_at,
+            'UpdatedAt': self.updated_at,
+            'Items': [item.serialize for item in self.items],
+            'Payments': [payment.serialize for payment in self.payments]
         }
 
 
 class OrderItem(db.Model):
     """OrderItem model"""
-    __tablename__ = 'order_items'
+    __tablename__ = 'OrderItems'
 
     id = db.Column(db.String(50), primary_key=True)
     order_id = db.Column(db.String(50), db.ForeignKey('orders.id'), nullable=False)
-    menu_id = db.Column(db.String(50), db.ForeignKey('menus.id'), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Float(precision=2), nullable=False)
+    cart_id = db.Column(db.Column(db.String(50), db.ForeignKey('carts.id')))
+    vat_tax = db.Column(db.Float, default_value=0.0 ,nullable=False )
 
     # json serializer
     @property
     def serialize(self):
         """Return object data in easily serializable format"""
         return {
-            'id': self.id,
-            'order_id': self.order_id,
-            'menu_id': self.menu_id,
-            'quantity': self.quantity,
-            'price': self.price
-
+            'Id': self.id,
+            'OrderId': self.order_id,
+            'Quantity': self.quantity,
+            'Price': self.price,
+            'VAT': self.vat_tax
         }

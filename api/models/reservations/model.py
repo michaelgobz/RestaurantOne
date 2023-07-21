@@ -30,6 +30,8 @@ class Reservation(db.Model):
     price = db.Column(db.Float, nullable=True, default=0.0)
     created_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow)
+    reservation_fee = db.Column(db.Float, default_value=0.0)
+    final_fee = db.Column(db.Float, default_value=0.0)
     updated_at = db.Column(db.DateTime, nullable=False,
                            default=datetime.utcnow,
                            onupdate=datetime.utcnow)
@@ -39,20 +41,22 @@ class Reservation(db.Model):
     def serialize(self):
         """Return object data in easily serializable format"""
         return {
-            'id': self.id,
-            'user_id': self.user_id,
-            'restaurant_id': self.restaurant_id,
-            'menu_id': self.menu_id,
-            'description': self.description,
-            'duration': self.duration,
-            'start': self.start,
-            'end': self.end,
-            'nb_of_person': self.nb_of_person,
-            'menu_item_id': self.menu_item_id,
-            'additional_info': self.additional_info,
-            'tables': self.tables,
-            'category': self.category,
-            'price': self.price,
-            'created_at': self.created_at,
-            'updated_at': self.updated_at
+            'Id': self.id,
+            'UserId': self.user_id,
+            'RestaurantId': self.restaurant_id,
+            'MenuId': self.menu_id,
+            'Description': self.description,
+            'Duration': self.duration,
+            'Start': self.start,
+            'End': self.end,
+            'NumberOfPersons': self.nb_of_person,
+            'MenuItem': self.menu_item_id,
+            'AdditionalInfo': self.additional_info,
+            'Tables': self.tables,
+            'Category': self.category,
+            'Price': self.price,
+            'ReservationFee': self.reservation_fee,
+            'FinalFee': self.final_fee,
+            'CreatedAt': self.created_at,
+            'UpdatedAt': self.updated_at
         }
