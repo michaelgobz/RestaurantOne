@@ -25,12 +25,12 @@ class ShippingMethods(db.Model):
     def serialize(self):
         """Return object data in easily serializable format"""
         return {
-            'id': self.id,
-            'name': self.name,
-            'description': self.description,
-            'tax': self.tax,
-            'charge': self.charge,
-            'provider':self.provider
+            'Id': self.id,
+            'Name': self.name,
+            'Description': self.description,
+            'Tax': self.tax,
+            'Charge': self.charge,
+            'Provider':self.provider
         }
 
 
@@ -48,8 +48,8 @@ class Shippment(db.Model):
     def serialize(self):
         """Return object data in easily serializable format"""
         return {
-            'id': self.id,
-            'Restaurant_id': self.restaurant_id,
+            'Id': self.id,
+            'RestaurantId': self.restaurant_id,
             'User': self.user_id,
             'ShippingMethod': self.shipping_method,
             'Carts':[cart.serialize for cart in self.carts]
