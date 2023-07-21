@@ -32,11 +32,11 @@ class Cart(db.Model):
 
 class CartItem(db.Model):
     """cart items database model"""
-    __tablename__ = 'cart_items'
+    __tablename__ = 'CartItems'
 
     id = db.Column(db.String(50), primary_key=True)
     cart_id = db.Column(db.String(50), db.ForeignKey('carts.id'), nullable=False)
-    menu_id = db.Column(db.String(50), db.ForeignKey('menus.id'), nullable=False)
+    menu_items_id = db.Column(db.String(50), db.ForeignKey('menu_items.id'), nullable=False)
     price = db.Column(db.Float, nullable=False)
     quantity = db.Column(db.Integer, nullable=False, default=1)
 
