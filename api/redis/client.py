@@ -11,4 +11,14 @@ class RedisClient():
         """ get redis instance tied to flask app """
         return self.__redis
     
+    def get_user(self):
+        """ get user"""
+        pass
+    def create_topic(self, key, info):
+        """ create a topic"""
+        pass
+    def retrieve_payload(self, key):
+        """ return the cached pay load"""
+        pass
     
+        
