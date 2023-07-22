@@ -1,4 +1,4 @@
-""" events enum"""
+""" Events enum"""
 
 from enum import Enum
 
@@ -11,94 +11,94 @@ class BaseEventEnum(Enum):
 
 
 class AccountEvents(BaseEventEnum):
-    """account events"""
+    """account Events"""
     MANAGE_USERS = "account.manage_users"
     MANAGE_STAFF = "account.manage_staff"
     IMPERSONATE_USER = "account.impersonate_user"
 
 
 
-class MenuPermissions(BasePermissionEnum):
+class MenuEvents(BaseEventEnum):
     MANAGE_MENUS = "menu.manage_menus"
 
 
-class CheckoutPermissions(BasePermissionEnum):
+class CheckoutEvents(BaseEventEnum):
     MANAGE_CHECKOUTS = "checkout.manage_checkouts"
     HANDLE_CHECKOUTS = "checkout.handle_checkouts"
     HANDLE_TAXES = "checkout.handle_taxes"
     MANAGE_TAXES = "checkout.manage_taxes"
 
-class ReservationPermissions(BasePermissionEnum):
-    """Reservation Permissions"""
+class ReservationEvents(BaseEventEnum):
+    """Reservation Events"""
     MANAGE_RESERVATIONS = 'reservation.manage_reservation'
 
-class OrderPermissions(BasePermissionEnum):
-    """Order  permissions"""
+class OrderEvents(BaseEventEnum):
+    """Order  Events"""
     MANAGE_ORDERS = "order.manage_orders"
 
 
-class PaymentPermissions(BasePermissionEnum):
-    """payments permissions"""
+class PaymentEvents(BaseEventEnum):
+    """payments Events"""
     HANDLE_PAYMENTS = "payment.handle_payments"
 
 
 
-class ProductPermissions(BasePermissionEnum):
-    """Product permissions"""
+class ProductEvents(BaseEventEnum):
+    """Product Events"""
     MANAGE_PRODUCTS = "product.manage_products"
 
 
-class ProductTypePermissions(BasePermissionEnum):
-    """product type permissions"""
+class ProductTypeEvents(BaseEventEnum):
+    """product type Events"""
     MANAGE_PRODUCT_TYPES_AND_ATTRIBUTES = "product.manage_product_types_and_attributes"
 
 
-class ShippingPermissions(BasePermissionEnum):
-    """shipping permissions"""
+class ShippingEvents(BaseEventEnum):
+    """shipping Events"""
     MANAGE_SHIPPING = "shipping.manage_shipping"
 
 
 
 
-PERMISSIONS_ENUMS = [
-    AccountPermissions,
-    CheckoutPermissions,
-    MenuPermissions,
-    ReservationPermissions,
-    OrderPermissions,
-    PaymentPermissions,
-    ProductPermissions,
-    ProductTypePermissions,
-    ShippingPermissions,
+Events_ENUMS = [
+    AccountEvents,
+    CheckoutEvents,
+    MenuEvents,
+    ReservationEvents,
+    OrderEvents,
+    PaymentEvents,
+    ProductEvents,
+    ProductTypeEvents,
+    ShippingEvents,
 ]
 
 
 def get_events_codename():
     """get the event codename"""
-    permissions_values = [
+    events_values = [
         enum.codename
-        for permission_enum in PERMISSIONS_ENUMS
-        for enum in permission_enum
+        for event_enum in Events_ENUMS
+        for enum in event_enum
     ]
-    return permissions_values
+    return events_values
 
 
-def get_permissions_enum_list():
-    """get the permissions enum"""
-    permissions_list = [
+def get_events_enum_list():
+    """get the Events enum"""
+    events_list = [
         (enum.name, enum.value)
-        for permission_enum in PERMISSIONS_ENUMS
-        for enum in permission_enum
+        for event_enum in Events_ENUMS
+        for enum in event_enum
     ]
-    return permissions_list
+    return events_list
 
 
-def get_permissions_enum_dict():
-    """get the permissions enmu dict"""
+def get_events_enum_dict():
+    """get the Events enmu dict"""
     return {
         enum.name: enum
-        for permission_enum in PERMISSIONS_ENUMS
-        for enum in permission_enum
+        for event_enum in Events_ENUMS
+        for enum in event_enum
     }
 
-# these are permissions need an used hand in hand with the flask_permissions
+# these are Events need an used hand in hand with the flask_Events
